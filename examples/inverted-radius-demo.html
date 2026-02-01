@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish - Inverted Border Radius Demo</title>
+  <link rel="stylesheet" href="../global/global.css">
+  <link rel="stylesheet" href="../global/inverted-radius.css">
+  <style>
+    body {
+      font-family: var(--font-plain);
+      background: var(--color-surface);
+      color: var(--color-text);
+      padding: var(--s2);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: var(--s3);
+      margin-bottom: var(--s1);
+    }
+    
+    h2 {
+      font-size: var(--s1);
+      margin-top: var(--s2);
+      margin-bottom: var(--s0);
+      color: var(--color-accent);
+    }
+    
+    p {
+      max-width: 70ch;
+      margin-bottom: var(--s1);
+      color: var(--color-text-muted);
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--s1);
+      margin-bottom: var(--s2);
+    }
+    
+    .demo-item {
+      aspect-ratio: 1;
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: var(--s-1);
+      text-align: center;
+      padding: var(--s0);
+    }
+    
+    .demo-item--alt {
+      background: var(--brand-complement);
+    }
+    
+    .demo-item--muted {
+      background: var(--color-surface-raised);
+      color: var(--color-text);
+      border: 2px solid var(--color-border);
+    }
+    
+    .demo-wide {
+      aspect-ratio: 3/1;
+    }
+    
+    .demo-tall {
+      aspect-ratio: 1/2;
+    }
+    
+    pre {
+      background: var(--color-surface-sunken);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+      overflow-x: auto;
+      font-size: var(--s-1);
+      margin-bottom: var(--s1);
+      font-family: var(--font-mono);
+    }
+    
+    code {
+      font-family: var(--font-mono);
+    }
+    
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s0);
+      margin-bottom: var(--s1);
+      align-items: center;
+    }
+    
+    .controls label {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    
+    .controls input[type="range"] {
+      width: 150px;
+    }
+    
+    .radius-value {
+      font-family: var(--font-mono);
+      min-width: 4ch;
+    }
+    
+    /* Technique comparison */
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s1);
+      margin-bottom: var(--s2);
+    }
+    
+    @media (max-width: 600px) {
+      .comparison {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .comparison-item {
+      text-align: center;
+    }
+    
+    .comparison-item .demo-item {
+      margin-bottom: var(--s-1);
+    }
+    
+    .comparison-item p {
+      font-size: var(--s-1);
+      margin: 0;
+    }
+    
+    /* Interactive playground */
+    .playground {
+      padding: var(--s1);
+      background: var(--color-surface-sunken);
+      border-radius: var(--s0);
+      margin-bottom: var(--s2);
+    }
+    
+    .playground-preview {
+      display: flex;
+      justify-content: center;
+      padding: var(--s2);
+    }
+    
+    .playground-box {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, var(--color-accent), var(--brand-complement));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: var(--s0);
+      transition: all 0.3s ease;
+    }
+    
+    /* Real-world examples */
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--s2);
+      margin-bottom: var(--s2);
+    }
+    
+    /* Tab connector example */
+    .tab-bar {
+      display: flex;
+      background: var(--color-surface-sunken);
+      padding: var(--s-1) var(--s0) 0;
+      gap: var(--s-2);
+    }
+    
+    .tab {
+      padding: var(--s-1) var(--s0);
+      background: var(--color-surface);
+      border-radius: var(--s-1) var(--s-1) 0 0;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .tab.active {
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+    }
+    
+    .tab-content {
+      background: var(--color-surface);
+      padding: var(--s0);
+      min-height: 100px;
+    }
+    
+    /* Card with notch */
+    .notched-card {
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+      padding: var(--s1);
+      position: relative;
+      --invert-radius: 15px;
+      --notch-width: 60px;
+    }
+    
+    .notched-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: var(--notch-width);
+      height: var(--invert-radius);
+      background: var(--color-surface);
+      border-radius: 0 0 var(--invert-radius) var(--invert-radius);
+    }
+    
+    /* Ticket example */
+    .ticket-example {
+      background: linear-gradient(to right, var(--color-accent), var(--brand-complement));
+      color: white;
+      padding: var(--s1) var(--s2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      --invert-radius: 20px;
+    }
+    
+    .ticket-left {
+      font-weight: bold;
+    }
+    
+    .ticket-right {
+      text-align: right;
+      font-size: var(--s-1);
+    }
+    
+    /* Scalloped edge example */
+    .scalloped-banner {
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+      padding: var(--s1) var(--s1) calc(var(--s1) + 10px);
+      text-align: center;
+      font-weight: bold;
+      --invert-radius: 10px;
+    }
+    
+    /* Browser tab connector */
+    .browser-tab-demo {
+      background: var(--color-surface-sunken);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+    }
+    
+    .browser-tabs {
+      display: flex;
+      gap: 2px;
+      padding-top: var(--s-1);
+    }
+    
+    .browser-tab {
+      padding: var(--s-1) var(--s0);
+      background: var(--color-surface);
+      border-radius: var(--s-1) var(--s-1) 0 0;
+      position: relative;
+      font-size: var(--s-1);
+    }
+    
+    .browser-tab.active {
+      background: white;
+    }
+    
+    /* The magic: inverted corners that connect to the bar */
+    .browser-tab.active::before,
+    .browser-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 10px;
+      height: 10px;
+      background: white;
+    }
+    
+    .browser-tab.active::before {
+      left: -10px;
+      mask-image: radial-gradient(circle at 100% 0, transparent 10px, black 10px);
+    }
+    
+    .browser-tab.active::after {
+      right: -10px;
+      mask-image: radial-gradient(circle at 0 0, transparent 10px, black 10px);
+    }
+    
+    .browser-content {
+      background: white;
+      padding: var(--s0);
+      min-height: 60px;
+      color: var(--color-dark);
+    }
+  </style>
+</head>
+<body>
+  <h1>🧝 Inverted Border Radius</h1>
+  <p>
+    CSS <code>border-radius</code> only curves outward. To create <strong>inward curves</strong> 
+    (scalloped corners, notches, ticket punches), we use <code>mask-image</code> with 
+    <code>radial-gradient</code>. Based on <a href="https://css-tip.com/inverted-radius/">Temani Afif's technique</a>.
+  </p>
+
+  <h2>How It Works</h2>
+  <p>
+    The mask uses a radial gradient where the center (at the corner) is <strong>transparent</strong> 
+    and everything outside is <strong>black</strong> (visible). Multiple gradients combine to create 
+    the effect on multiple corners.
+  </p>
+  
+  <pre><code>/* Simple inverted corner */
+.element {
+  mask-image: radial-gradient(
+    circle at 0 0,           /* Position: top-left corner */
+    transparent var(--r),    /* Transparent circle = the "bite" */
+    black calc(var(--r) + 1px)  /* Hard edge to visible */
+  );
+}</code></pre>
+
+  <h2>Interactive Playground</h2>
+  <div class="playground">
+    <div class="controls">
+      <label>
+        Radius: 
+        <input type="range" id="radiusSlider" min="0" max="80" value="20">
+        <span class="radius-value" id="radiusValue">20px</span>
+      </label>
+      <label>
+        <input type="checkbox" id="tlCheck" checked> TL
+      </label>
+      <label>
+        <input type="checkbox" id="trCheck" checked> TR
+      </label>
+      <label>
+        <input type="checkbox" id="blCheck" checked> BL
+      </label>
+      <label>
+        <input type="checkbox" id="brCheck" checked> BR
+      </label>
+    </div>
+    <div class="playground-preview">
+      <div class="playground-box" id="playgroundBox">
+        Drag the slider!
+      </div>
+    </div>
+  </div>
+
+  <h2>All Four Corners</h2>
+  <div class="demo-grid">
+    <div class="demo-item inverted-corners" style="--invert-radius: 20px;">
+      .inverted-corners
+    </div>
+    <div class="demo-item inverted-corners demo-item--alt" style="--invert-radius: 30px;">
+      30px radius
+    </div>
+    <div class="demo-item inverted-corners demo-item--muted" style="--invert-radius: 40px;">
+      40px radius
+    </div>
+    <div class="demo-item inverted-corners" style="--invert-radius: 50px;">
+      50px (large)
+    </div>
+  </div>
+
+  <h2>Individual Corners</h2>
+  <div class="comparison">
+    <div class="comparison-item">
+      <div class="demo-item inverted-corner-tl" style="--invert-radius: 30px;">TL</div>
+      <p>.inverted-corner-tl</p>
+    </div>
+    <div class="comparison-item">
+      <div class="demo-item demo-item--alt inverted-corner-tr" style="--invert-radius: 30px;">TR</div>
+      <p>.inverted-corner-tr</p>
+    </div>
+    <div class="comparison-item">
+      <div class="demo-item inverted-corner-bl" style="--invert-radius: 30px;">BL</div>
+      <p>.inverted-corner-bl</p>
+    </div>
+    <div class="comparison-item">
+      <div class="demo-item demo-item--alt inverted-corner-br" style="--invert-radius: 30px;">BR</div>
+      <p>.inverted-corner-br</p>
+    </div>
+  </div>
+
+  <h2>Edge Pairs</h2>
+  <div class="demo-grid">
+    <div class="demo-item demo-wide inverted-corners-top" style="--invert-radius: 25px;">
+      .inverted-corners-top
+    </div>
+    <div class="demo-item demo-wide demo-item--alt inverted-corners-bottom" style="--invert-radius: 25px;">
+      .inverted-corners-bottom
+    </div>
+    <div class="demo-item demo-tall inverted-corners-left" style="--invert-radius: 25px;">
+      .inverted-<br>corners-<br>left
+    </div>
+    <div class="demo-item demo-tall demo-item--alt inverted-corners-right" style="--invert-radius: 25px;">
+      .inverted-<br>corners-<br>right
+    </div>
+  </div>
+
+  <h2>Ticket / Coupon Style</h2>
+  <p>Semi-circular cutouts from the sides, like a tear-off ticket.</p>
+  <div class="demo-grid">
+    <div class="demo-item demo-wide ticket" style="--invert-radius: 20px;">
+      .ticket (horizontal)
+    </div>
+    <div class="demo-item demo-wide demo-item--alt ticket-vertical" style="--invert-radius: 20px;">
+      .ticket-vertical
+    </div>
+  </div>
+  
+  <div class="ticket-example ticket" style="--invert-radius: 25px; margin-bottom: var(--s2);">
+    <div class="ticket-left">
+      🎫 ADMIT ONE<br>
+      <small>General Admission</small>
+    </div>
+    <div class="ticket-right">
+      ROW A<br>
+      SEAT 42
+    </div>
+  </div>
+
+  <h2>Scalloped Edges</h2>
+  <p>Repeating inverted curves along an edge (decorative).</p>
+  <div class="demo-grid">
+    <div class="demo-item demo-wide scalloped-top" style="--invert-radius: 12px;">
+      .scalloped-top
+    </div>
+    <div class="demo-item demo-wide demo-item--alt scalloped-bottom" style="--invert-radius: 12px;">
+      .scalloped-bottom
+    </div>
+    <div class="demo-item demo-tall scalloped-left" style="--invert-radius: 12px;">
+      .scalloped-<br>left
+    </div>
+    <div class="demo-item demo-tall demo-item--alt scalloped-right" style="--invert-radius: 12px;">
+      .scalloped-<br>right
+    </div>
+  </div>
+  
+  <div class="scalloped-banner scalloped-bottom" style="--invert-radius: 8px; margin-bottom: var(--s2);">
+    🎉 SALE - 50% OFF EVERYTHING! 🎉
+  </div>
+
+  <h2>Real-World Example: Browser Tabs</h2>
+  <p>
+    The classic browser tab connector uses inverted corners to create the smooth 
+    curve where the active tab meets the content area.
+  </p>
+  
+  <div class="browser-tab-demo">
+    <div class="browser-tabs">
+      <div class="browser-tab active">Dashboard</div>
+      <div class="browser-tab">Settings</div>
+      <div class="browser-tab">Help</div>
+    </div>
+    <div class="browser-content">
+      The active tab's bottom corners curve <em>inward</em> to connect smoothly with the content below.
+      This uses <code>::before</code> and <code>::after</code> pseudo-elements with mask-image.
+    </div>
+  </div>
+
+  <h2>Custom Element: &lt;i-nelu&gt;</h2>
+  <p>Elvish primitive for easy inverted corners. "Nelu" = hollow/concave in Sindarin.</p>
+  
+  <div class="demo-grid">
+    <i-nelu class="demo-item" style="--nelu-radius: 25px;">
+      Default (all corners)
+    </i-nelu>
+    <i-nelu corners="top" class="demo-item demo-item--alt" style="--nelu-radius: 25px;">
+      corners="top"
+    </i-nelu>
+    <i-nelu corners="bottom" class="demo-item" style="--nelu-radius: 25px;">
+      corners="bottom"
+    </i-nelu>
+    <i-nelu shape="ticket" class="demo-item demo-item--alt" style="--nelu-radius: 20px;">
+      shape="ticket"
+    </i-nelu>
+  </div>
+
+  <h2>Combining with Regular border-radius</h2>
+  <p>Mix rounded and inverted corners on the same element.</p>
+  
+  <div class="demo-grid">
+    <div class="demo-item rounded-top-inverted-bottom" style="--border-radius: 20px; --invert-radius: 20px;">
+      Rounded top<br>Inverted bottom
+    </div>
+  </div>
+
+  <h2>CSS Code Reference</h2>
+  <pre><code>/* All corners inverted */
+.inverted-corners {
+  --invert-radius: 20px;
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent var(--r), black calc(var(--r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent var(--r), black calc(var(--r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent var(--r), black calc(var(--r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent var(--r), black calc(var(--r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* Ticket style (side cutouts) */
+.ticket {
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent var(--r), black calc(var(--r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--r), black calc(var(--r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+  mask-repeat: no-repeat;
+}
+
+/* Scalloped edge (repeating) */
+.scalloped-bottom {
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 50% 100%, transparent var(--r), black calc(var(--r) + 1px));
+  mask-position: 0 0, center bottom;
+  mask-size: 100% calc(100% - var(--r)), calc(var(--r) * 2) calc(var(--r) * 2);
+  mask-repeat: no-repeat, repeat-x;
+}</code></pre>
+
+  <script>
+    // Interactive playground
+    const slider = document.getElementById('radiusSlider');
+    const radiusValue = document.getElementById('radiusValue');
+    const playgroundBox = document.getElementById('playgroundBox');
+    const corners = { tl: true, tr: true, bl: true, br: true };
+    
+    function updateMask() {
+      const r = slider.value + 'px';
+      radiusValue.textContent = r;
+      
+      const gradients = [];
+      const positions = [];
+      const sizes = [];
+      
+      if (corners.tl) {
+        gradients.push(`radial-gradient(circle at 0 0, transparent 0, transparent ${r}, black calc(${r} + 1px))`);
+        positions.push('top left');
+        sizes.push('51% 51%');
+      }
+      if (corners.tr) {
+        gradients.push(`radial-gradient(circle at 100% 0, transparent 0, transparent ${r}, black calc(${r} + 1px))`);
+        positions.push('top right');
+        sizes.push('51% 51%');
+      }
+      if (corners.bl) {
+        gradients.push(`radial-gradient(circle at 0 100%, transparent 0, transparent ${r}, black calc(${r} + 1px))`);
+        positions.push('bottom left');
+        sizes.push('51% 51%');
+      }
+      if (corners.br) {
+        gradients.push(`radial-gradient(circle at 100% 100%, transparent 0, transparent ${r}, black calc(${r} + 1px))`);
+        positions.push('bottom right');
+        sizes.push('51% 51%');
+      }
+      
+      if (gradients.length === 0) {
+        playgroundBox.style.maskImage = 'none';
+      } else {
+        playgroundBox.style.maskImage = gradients.join(', ');
+        playgroundBox.style.maskPosition = positions.join(', ');
+        playgroundBox.style.maskSize = sizes.join(', ');
+        playgroundBox.style.maskRepeat = 'no-repeat';
+      }
+    }
+    
+    slider.addEventListener('input', updateMask);
+    
+    ['tl', 'tr', 'bl', 'br'].forEach(corner => {
+      const checkbox = document.getElementById(corner + 'Check');
+      checkbox.addEventListener('change', () => {
+        corners[corner] = checkbox.checked;
+        updateMask();
+      });
+    });
+    
+    updateMask();
+  </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+/**
+ * Elvish - Inverted Border Radius (Scalloped Corners)
+ * 
+ * Creates inward-curving corners using CSS masks. Since border-radius
+ * only supports outward curves, we use radial-gradient masks to "bite"
+ * into the corners.
+ * 
+ * Browser Support:
+ * - Chrome/Edge: ✅ Full support
+ * - Safari: ✅ Full support (needs -webkit- prefix for older versions)
+ * - Firefox: ✅ Full support
+ * 
+ * Techniques:
+ * 1. Simple: Single radial-gradient per corner (circular cut)
+ * 2. Smooth: Multiple gradients with curvature (Temani Afif technique)
+ * 
+ * Usage:
+ *   .element {
+ *     --invert-radius: 20px;  // Size of the inward curve
+ *     @apply inverted-corners; // Or use utility class
+ *   }
+ * 
+ * Based on work by Temani Afif (css-tip.com)
+ */
+
+/* ==========================================================================
+   CONFIGURATION
+   ========================================================================== */
+
+:root {
+  /* Default invert radius size */
+  --invert-radius: 1rem;
+  
+  /* For smooth curves: outer corner radius (optional) */
+  --invert-outer-radius: 0px;
+}
+
+/* ==========================================================================
+   SIMPLE INVERTED CORNERS (Circular Cut)
+   
+   Uses radial-gradient to create circular "bites" at corners.
+   Simple but effective for most use cases.
+   ========================================================================== */
+
+/**
+ * All corners inverted
+ * 
+ * How it works:
+ * - Four radial gradients, one per corner
+ * - Each gradient is transparent in a circle, black outside
+ * - mask-size: 50% 50% ensures gradients don't overlap
+ * - mask-composite (implicit intersect) combines them
+ */
+.inverted-corners,
+[data-corners="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%; /* Slight overlap to prevent seams */
+  mask-repeat: no-repeat;
+}
+
+/* Individual corner utilities */
+.inverted-corner-tl,
+[data-corner-tl="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-tr,
+[data-corner-tr="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-bl,
+[data-corner-bl="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-br,
+[data-corner-br="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+/* Horizontal pairs */
+.inverted-corners-top,
+[data-corners-top="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, top right, bottom;
+  mask-size: 51% 51%, 51% 51%, 100% 50%;
+  mask-repeat: no-repeat;
+}
+
+.inverted-corners-bottom,
+[data-corners-bottom="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% 50%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* Vertical pairs */
+.inverted-corners-left,
+[data-corners-left="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, bottom left, right;
+  mask-size: 51% 51%, 51% 51%, 50% 100%;
+  mask-repeat: no-repeat;
+}
+
+.inverted-corners-right,
+[data-corners-right="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left, top right, bottom right;
+  mask-size: 50% 100%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   SMOOTH INVERTED CORNERS (With Curvature)
+   
+   Temani Afif's technique: Uses multiple gradients to create smooth
+   transitions between the inverted corner and the element edges.
+   
+   Variables:
+   --invert-radius (--r): Size of the inward curve
+   --invert-outer-radius (--s): Curvature smoothness (outer radius)
+   ========================================================================== */
+
+.inverted-corners-smooth,
+[data-corners="inverted-smooth"] {
+  --_r: var(--invert-outer-radius, 0.5rem); /* Outer corner radius */
+  --_s: var(--invert-radius, 1.5rem);       /* Size of inner curve */
+  
+  border-radius: var(--_r);
+  
+  /* Reusable gradient components */
+  --_m: / calc(2 * var(--_r)) calc(2 * var(--_r)) 
+        radial-gradient(#000 70%, #0000 72%) no-repeat;
+  
+  /* Top-right corner mask (can be extended for all corners) */
+  mask:
+    right calc(var(--_s) + var(--_r)) top 0 var(--_m),
+    right calc(var(--_s) + var(--_r)) var(--_m),
+    radial-gradient(var(--_s) at 100% 0, #0000 99%, #000 calc(100% + 1px)) 
+      calc(-1 * var(--_r)) var(--_r) no-repeat,
+    conic-gradient(
+      at calc(100% - var(--_s) - 2 * var(--_r)) calc(var(--_s) + 2 * var(--_r)),
+      #0000 25%, #000 0
+    );
+}
+
+/* ==========================================================================
+   NOTCH VARIANTS
+   
+   Single-edge notches (like browser tabs or card connectors)
+   ========================================================================== */
+
+/* Top notch (like a browser tab connection) */
+.notch-top,
+[data-notch="top"] {
+  --_r: var(--invert-radius, 1rem);
+  --_x: var(--notch-offset, 50%); /* Horizontal position */
+  --_w: var(--notch-width, 4rem); /* Width of the notch */
+  
+  mask-image: 
+    /* Left side of notch */
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Right side of notch */
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Fill the rest */
+    linear-gradient(black, black);
+  mask-position: 
+    calc(var(--_x) - var(--_w) / 2 - var(--_r)) 0,
+    calc(var(--_x) + var(--_w) / 2) 0,
+    0 var(--_r);
+  mask-size: 
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    100% calc(100% - var(--_r));
+  mask-repeat: no-repeat;
+}
+
+/* Bottom notch */
+.notch-bottom,
+[data-notch="bottom"] {
+  --_r: var(--invert-radius, 1rem);
+  --_x: var(--notch-offset, 50%);
+  --_w: var(--notch-width, 4rem);
+  
+  mask-image: 
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    calc(var(--_x) - var(--_w) / 2 - var(--_r)) 0,
+    calc(var(--_x) + var(--_w) / 2) 0,
+    0 0;
+  mask-size: 
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    100% calc(100% - var(--_r));
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   SCALLOPED EDGES
+   
+   Repeating inverted curves along an edge (decorative)
+   ========================================================================== */
+
+.scalloped-top,
+[data-scalloped="top"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    center top,
+    0 var(--_r);
+  mask-size: 
+    var(--_size) var(--_size),
+    100% calc(100% - var(--_r));
+  mask-repeat: 
+    repeat-x,
+    no-repeat;
+}
+
+.scalloped-bottom,
+[data-scalloped="bottom"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 
+    0 0,
+    center bottom;
+  mask-size: 
+    100% calc(100% - var(--_r)),
+    var(--_size) var(--_size);
+  mask-repeat: 
+    no-repeat,
+    repeat-x;
+}
+
+.scalloped-left,
+[data-scalloped="left"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    left center,
+    var(--_r) 0;
+  mask-size: 
+    var(--_size) var(--_size),
+    calc(100% - var(--_r)) 100%;
+  mask-repeat: 
+    repeat-y,
+    no-repeat;
+}
+
+.scalloped-right,
+[data-scalloped="right"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 
+    0 0,
+    right center;
+  mask-size: 
+    calc(100% - var(--_r)) 100%,
+    var(--_size) var(--_size);
+  mask-repeat: 
+    no-repeat,
+    repeat-y;
+}
+
+/* ==========================================================================
+   TICKET/COUPON STYLE
+   
+   Semi-circles cut from sides (like a tear-off ticket)
+   ========================================================================== */
+
+.ticket,
+[data-shape="ticket"] {
+  --_r: var(--invert-radius, 0.75rem);
+  
+  mask-image: 
+    /* Left cutout */
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Right cutout */
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+  mask-repeat: no-repeat;
+}
+
+.ticket-vertical,
+[data-shape="ticket-vertical"] {
+  --_r: var(--invert-radius, 0.75rem);
+  
+  mask-image: 
+    /* Top cutout */
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Bottom cutout */
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom;
+  mask-size: 100% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   COMBINING WITH REGULAR BORDER-RADIUS
+   
+   Mix inverted and regular corners
+   ========================================================================== */
+
+/* Regular top corners, inverted bottom corners */
+.rounded-top-inverted-bottom {
+  --_r: var(--invert-radius, 1rem);
+  --_br: var(--border-radius, 1rem);
+  
+  border-radius: var(--_br) var(--_br) 0 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% calc(100% - var(--_r)), 51% calc(var(--_r) + 1px), 51% calc(var(--_r) + 1px);
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   CSS FUNCTIONS FOR CALCULATIONS (Chrome 139+)
+   
+   Helper functions for dynamic inverted radius calculations.
+   Note: CSS @function can't return gradient values, but can help with
+   the numeric calculations used in positioning.
+   ========================================================================== */
+
+/* Safe invert radius: clamps to 0 when container is too small */
+@function --safe-invert-radius(--radius, --min-container: 0px) {
+  /* Only apply inversion if container is large enough */
+  result: clamp(0px, calc((100cqi - var(--min-container)) * 999), var(--radius));
+}
+
+/* Calculate mask position offset based on radius */
+@function --invert-offset(--radius, --outer-radius: 0px) {
+  result: calc(var(--radius) + var(--outer-radius));
+}
+
+/* Calculate the combined dimension for smooth corners */
+@function --invert-dimension(--radius, --outer-radius) {
+  result: calc(var(--radius) + var(--outer-radius));
+}
+
+/* ==========================================================================
+   ELVISH PRIMITIVE: i-nelu (inverted/scalloped)
+   
+   Custom element for easy inverted corners.
+   Sindarin: "nelu" could mean "hollow/concave"
+   ========================================================================== */
+
+i-nelu {
+  display: block;
+  
+  /* Apply inverted corners by default */
+  --_r: var(--nelu-radius, var(--invert-radius, 1rem));
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* Attribute variants */
+i-nelu[corners="top"] {
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, top right, bottom;
+  mask-size: 51% 51%, 51% 51%, 100% 50%;
+}
+
+i-nelu[corners="bottom"] {
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% 50%, 51% 51%, 51% 51%;
+}
+
+i-nelu[shape="ticket"] {
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+}
+
+i-nelu[shape="scalloped"] {
+  --_size: calc(var(--_r) * 2);
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom, left center, right center;
+  mask-size: var(--_size) var(--_size);
+  mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+}
