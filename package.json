@@ -1,14 +1,15 @@
 {
   "name": "elvish-css",
   "version": "1.0.0",
-  "description": "Intrinsic CSS layout-first styling primitives with Sindarin names",
+  "description": "Intrinsic CSS layout-first styling primitives with Elvish (Sindarin) names",
   "keywords": [
     "css",
     "layout",
     "custom-elements",
     "web-components",
     "intrinsic-design",
-    "view-transitions"
+    "view-transitions",
+    "elvish"
   ],
   "author": "Mark Manley",
   "license": "MIT",

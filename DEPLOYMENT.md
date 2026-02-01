@@ -10,12 +10,12 @@ After publishing to npm, Elvish is automatically available via unpkg or jsDelivr
 
 ```html
 <!-- unpkg -->
-<link rel="stylesheet" href="https://unpkg.com/elvish-layout@2.0.0/dist/elvish.min.css">
-<script src="https://unpkg.com/elvish-layout@2.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.0.0/dist/elvish.min.css">
+<script src="https://unpkg.com/elvish-css@1.0.0/dist/elvish.iife.js"></script>
 
 <!-- jsDelivr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-layout@2.0.0/dist/elvish.min.css">
-<script src="https://cdn.jsdelivr.net/npm/elvish-layout@2.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.min.css">
+<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.iife.js"></script>
 ```
 
 ### Option 2: Self-Hosted
@@ -37,16 +37,16 @@ After publishing to npm, Elvish is automatically available via unpkg or jsDelivr
 ### Option 3: npm Package
 
 ```bash
-npm install elvish-layout
+npm install elvish-css
 ```
 
 ```javascript
 // ES Modules
-import 'elvish-layout/css';
-import { transition, transitionTheme } from 'elvish-layout';
+import 'elvish-css/css';
+import { transition, transitionTheme } from 'elvish-css';
 
 // Or import everything
-import * as Elvish from 'elvish-layout';
+import * as Elvish from 'elvish-css';
 ```
 
 ---
@@ -216,7 +216,7 @@ Usage:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/elvish-layout/dist/elvish.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/elvish-css/dist/elvish.min.css">
 </head>
 <body>
   <i-enedh max="80ch" gutters="var(--s1)">
@@ -226,7 +226,7 @@ Usage:
     </i-hath>
   </i-enedh>
   
-  <script src="https://unpkg.com/elvish-layout/dist/elvish.iife.js"></script>
+  <script src="https://unpkg.com/elvish-css/dist/elvish.iife.js"></script>
 </body>
 </html>
 ```
@@ -234,13 +234,13 @@ Usage:
 ### React / Next.js
 
 ```bash
-npm install elvish-layout
+npm install elvish-css
 ```
 
 ```jsx
 // _app.js or layout.js
-import 'elvish-layout/dist/elvish.css';
-import 'elvish-layout'; // Registers custom elements
+import 'elvish-css/dist/elvish.css';
+import 'elvish-css'; // Registers custom elements
 
 export default function App({ children }) {
   return (
@@ -271,12 +271,12 @@ declare namespace JSX {
 ```astro
 ---
 // Layout.astro
-import 'elvish-layout/dist/elvish.css';
+import 'elvish-css/dist/elvish.css';
 ---
 
 <html>
 <head>
-  <script src="https://unpkg.com/elvish-layout/dist/elvish.iife.js" is:inline></script>
+  <script src="https://unpkg.com/elvish-css/dist/elvish.iife.js" is:inline></script>
 </head>
 <body>
   <i-enedh max="80ch">
@@ -321,9 +321,9 @@ Elvish works seamlessly with Datastar since both use custom elements:
    ```
 
 The package will be available at:
-- npm: `https://www.npmjs.com/package/elvish-layout`
-- unpkg: `https://unpkg.com/elvish-layout/`
-- jsDelivr: `https://cdn.jsdelivr.net/npm/elvish-layout/`
+- npm: `https://www.npmjs.com/package/elvish-css`
+- unpkg: `https://unpkg.com/elvish-css/`
+- jsDelivr: `https://cdn.jsdelivr.net/npm/elvish-css/`
 
 ---
 
@@ -347,7 +347,7 @@ cat dist/elvish.iife.js | openssl dgst -sha384 -binary | openssl base64 -A
 Usage:
 ```html
 <link rel="stylesheet" 
-      href="https://unpkg.com/elvish-layout@2.0.0/dist/elvish.min.css"
+      href="https://unpkg.com/elvish-css@1.0.0/dist/elvish.min.css"
       integrity="sha384-HASH_HERE"
       crossorigin="anonymous">
 ```

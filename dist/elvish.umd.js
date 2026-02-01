@@ -1,8 +1,8 @@
 /**
- * Elvish Layout System v2.0.0
+ * Elvish CSS Layout System v1.0.0
  * Custom Elements for intrinsic CSS layouts
- * 
- * https://github.com/yourusername/elvish-layout
+ *
+ * https://github.com/star-this/elvish-css
  * License: MIT
  */
 

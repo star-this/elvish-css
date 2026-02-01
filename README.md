@@ -1,6 +1,6 @@
 # Elvish - Intrinsic CSS Layout System
 
-A complete implementation of the [Every Layout](https://every-layout.dev) design system as custom elements, with **Sindarin names** from Tolkien's Elvish languages. Extended with modern CSS features including `@function`, `if()`, `sibling-index()`, and typed `attr()`.
+A (mostly) complete design system using custom elements, with **Elvish names** from Tolkien's Sindarin language. Extended with modern CSS features including `@function`, `if()`, `sibling-index()`, and typed `attr()`.
 
 *Mae govannen!* (Well met!)
 
@@ -18,17 +18,17 @@ All layout primitives use Sindarin (Grey-Elvish) names:
 
 | Sindarin | English | Meaning |
 |----------|---------|---------|
-| `<i-hath>` | Stack | "row, series" |
-| `<i-bau>` | Box | "container" |
-| `<i-enedh>` | Center | "middle" |
-| `<i-tiniath>` | Cluster | "small sparks" |
+| `<i-hath>` | Stacked | "row, series" |
+| `<i-bau>` | Quad | "container" |
+| `<i-enedh>` | Centered | "middle" |
+| `<i-tiniath>` | Clustered | "small sparks" |
 | `<i-glan-veleg>` | Sidebar | "clear + mighty" |
-| `<i-gwistindor>` | Switcher | "change-watcher" |
-| `<i-esgal>` | Cover | "screen, hiding" |
+| `<i-gwistindor>` | Switching | "change-watcher" |
+| `<i-esgal>` | Covering | "screen, hiding" |
 | `<i-vircantie>` | Grid | "jewel-pattern" |
-| `<i-gant-thala>` | Frame | "harp-foot (ratio)" |
-| `<i-glan-tholl>` | Reel | "open + hollow" |
-| `<i-fano>` | Imposter | "white phantom" |
+| `<i-gant-thala>` | Aspect | "harp-foot (ratio)" |
+| `<i-glan-tholl>` | Side-Scrolling | "open + hollow" |
+| `<i-fano>` | Overcast | "white phantom" |
 | `<i-thann>` | Icon | "sign, token" |
 | `<i-adleithian>` | Container | "liberator" |
 | `<i-him>` | Sticky | "steadfast" |
@@ -45,24 +45,24 @@ All layout primitives use Sindarin (Grey-Elvish) names:
 
 ```html
 <!-- unpkg -->
-<link rel="stylesheet" href="https://unpkg.com/elvish-layout@2.0.0/dist/elvish.min.css">
-<script src="https://unpkg.com/elvish-layout@2.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.0.0/dist/elvish.min.css">
+<script src="https://unpkg.com/elvish-css@1.0.0/dist/elvish.iife.js"></script>
 
 <!-- jsDelivr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-layout@2.0.0/dist/elvish.min.css">
-<script src="https://cdn.jsdelivr.net/npm/elvish-layout@2.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.min.css">
+<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.iife.js"></script>
 ```
 
 ### npm
 
 ```bash
-npm install elvish-layout
+npm install elvish-css
 ```
 
 ```javascript
 // ES Modules
-import 'elvish-layout/dist/elvish.css';
-import { transition, transitionTheme } from 'elvish-layout';
+import 'elvish-css/dist/elvish.css';
+import { transition, transitionTheme } from 'elvish-css';
 ```
 
 ### Self-Hosted / Ignition
@@ -277,17 +277,17 @@ enableAutoNaming(gridElement, 'card'); // Each child animates independently
 
 | Sindarin | English | Key Props |
 |----------|---------|-----------|
-| `<i-hath>` | Stack | `space`, `recursive`, `split-after` |
-| `<i-bau>` | Box | `padding`, `border-width`, `invert` |
-| `<i-enedh>` | Center | `max`, `gutters`, `intrinsic` |
-| `<i-tiniath>` | Cluster | `space`, `justify`, `align` |
+| `<i-hath>` | Stacked | `space`, `recursive`, `split-after` |
+| `<i-bau>` | Quad | `padding`, `border-width`, `invert` |
+| `<i-enedh>` | Centered | `max`, `gutters`, `intrinsic` |
+| `<i-tiniath>` | Clustered | `space`, `justify`, `align` |
 | `<i-glan-veleg>` | Sidebar | `side`, `side-width`, `content-min` |
-| `<i-gwistindor>` | Switcher | `threshold`, `space`, `limit` |
-| `<i-esgal>` | Cover | `centered`, `space`, `min-height` |
+| `<i-gwistindor>` | Switching | `threshold`, `space`, `limit` |
+| `<i-esgal>` | Covering | `centered`, `space`, `min-height` |
 | `<i-vircantie>` | Grid | `min`, `space` |
-| `<i-gant-thala>` | Frame | `ratio` |
-| `<i-glan-tholl>` | Reel | `item-width`, `space`, `no-bar` |
-| `<i-fano>` | Imposter | `fixed`, `contain`, `margin` |
+| `<i-gant-thala>` | Aspect | `ratio` |
+| `<i-glan-tholl>` | Side-Scrolling | `item-width`, `space`, `no-bar` |
+| `<i-fano>` | Overcast | `fixed`, `contain`, `margin` |
 | `<i-thann>` | Icon | `space`, `label`, `echuiol`, `dhoren` |
 | `<i-adleithian>` | Container | `name` |
 | `<i-him>` | Sticky | `to`, `offset`, `sentinel` |
@@ -353,7 +353,7 @@ Elvish uses a modular scale for harmonious spacing and typography. Choose the ra
 |-------|-------|-----------|----------|
 | **Golden (φ)** | 1.618 | Dramatic, organic | Marketing, CTAs, hero sections |
 | **Silver (√2)** | 1.414 | Subtle, refined | Documentation, dashboards, dense content |
-| **Fifth** | 1.5 | Balanced, musical | General purpose |
+| **Fifth (🎼)** | 1.5 | Balanced, musical | General purpose |
 
 **Default:** Perfect Fifth (1.5) for balanced harmony.
 
@@ -475,17 +475,17 @@ elvish/
 │   ├── transitions.js   # View Transitions helpers
 │   └── global.css       # Imports all CSS
 ├── primitives/          # Sindarin-named layout primitives
-│   ├── hath/            # Stack
-│   ├── bau/             # Box
-│   ├── enedh/           # Center
-│   ├── tiniath/         # Cluster
+│   ├── hath/            # Stacked
+│   ├── bau/             # Quad
+│   ├── enedh/           # Centered
+│   ├── tiniath/         # Clustered
 │   ├── glan-veleg/      # Sidebar
-│   ├── gwistindor/      # Switcher
-│   ├── esgal/           # Cover
+│   ├── gwistindor/      # Switching
+│   ├── esgal/           # Covered
 │   ├── vircantie/       # Grid
-│   ├── gant-thala/      # Frame (aspect)
-│   ├── glan-tholl/      # Reel (side-scroll)
-│   ├── fano/            # Imposter (overlay)
+│   ├── gant-thala/      # Aspect (ratio)
+│   ├── glan-tholl/      # Side-Scrolling 
+│   ├── fano/            # Overcast 
 │   ├── thann/           # Icon
 │   ├── adleithian/      # Container
 │   ├── him/             # Sticky
