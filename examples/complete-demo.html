@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" data-ratio="fifth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish - Complete Demo (Sindarin Edition)</title>
+  <link rel="stylesheet" href="../global/global.css">
+  <link rel="stylesheet" href="../elvish.css">
+  <style>
+    /* Demo-specific styles */
+    body {
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+    
+    .demo-section {
+      padding: var(--s2);
+      border-block-end: var(--border-thick) solid var(--color-border);
+    }
+    
+    /* Prose content stays readable */
+    .demo-section h2,
+    .demo-section > p,
+    .demo-section > .demo-description,
+    .demo-section > pre {
+      max-inline-size: var(--measure, 70ch);
+    }
+    
+    .demo-section h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--s-1) var(--s0);
+      margin-block-end: var(--s-1);
+    }
+    
+    .demo-section h2 .translation {
+      font-size: var(--s-1);
+      font-weight: normal;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+    
+    .demo-section h2 .badge {
+      font-size: var(--s-2);
+      padding: 0.2em 0.6em;
+      border-radius: 999px;
+      font-weight: normal;
+    }
+    
+    .badge.primitive { background: var(--brand-ghost); color: var(--color-accent); }
+    .badge.modern { background: oklch(from var(--color-success) l c h / 0.15); color: var(--color-success); }
+    
+    .demo-description {
+      color: var(--color-text-muted);
+      margin-block-end: var(--s1);
+    }
+    
+    .demo-box {
+      padding: var(--s0);
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+      border-radius: var(--s-2);
+      text-align: center;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .demo-box--alt {
+      background: var(--brand-complement);
+    }
+    
+    .demo-box--muted {
+      background: var(--color-surface-sunken);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+    
+    pre {
+      background: var(--color-surface-sunken);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+      overflow-x: auto;
+      font-size: var(--s-1);
+      margin-block-start: var(--s1);
+      font-family: var(--font-mono);
+    }
+    
+    code {
+      font-family: var(--font-mono);
+      background: var(--color-surface-sunken);
+      padding: 0.1em 0.3em;
+      border-radius: var(--s-3);
+      font-size: 0.9em;
+    }
+    
+    pre code {
+      background: transparent;
+      padding: 0;
+    }
+    
+    /* Ratio card hover */
+    .ratio-card:hover:not(.active) {
+      background: var(--color-surface-raised) !important;
+      border-color: var(--color-text-muted) !important;
+    }
+    
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      inset-block-start: var(--s1);
+      inset-inline-end: var(--s1);
+      padding: var(--s-1);
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--s-1);
+      cursor: pointer;
+      z-index: 100;
+      font-family: inherit;
+      font-size: var(--s1);
+      color: var(--color-text);
+      line-height: 1;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--color-surface-sunken);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌓</button>
+  <button class="debug-toggle" id="debugToggle" aria-label="Toggle debug mode">🔍</button>
+  
+  <style>
+    .debug-toggle {
+      position: fixed;
+      inset-block-start: var(--s1);
+      inset-inline-start: var(--s1);
+      z-index: 100;
+      font-size: var(--s1);
+      padding: var(--s-1);
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--s-1);
+      cursor: pointer;
+    }
+    .debug-toggle:hover {
+      background: var(--color-surface-sunken);
+    }
+    .debug-toggle.active {
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+      border-color: var(--color-accent);
+    }
+    
+    /* Debug mode indicator */
+    body.mellon::before {
+      content: "🔍 Debug Mode (mellon)";
+      position: fixed;
+      inset-block-end: var(--s1);
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+      padding: var(--s-2) var(--s0);
+      background: oklch(30% 0.15 280);
+      color: white;
+      font-size: var(--s-1);
+      font-family: var(--font-mono);
+      border-radius: var(--s-1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+  </style>
+  
+  <script>
+    // View Transitions helper (inline for demo)
+    const startTransition = (callback) => {
+      if (!document.startViewTransition) {
+        callback();
+        return Promise.resolve();
+      }
+      return document.startViewTransition(callback).finished;
+    };
+    
+    // Theme toggle with view transition
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('elvish-theme');
+    if (savedTheme) root.style.colorScheme = savedTheme;
+    
+    themeToggle.addEventListener('click', () => {
+      startTransition(() => {
+        const current = getComputedStyle(root).colorScheme;
+        const newTheme = current === 'dark' ? 'light' : 'dark';
+        root.style.colorScheme = newTheme;
+        localStorage.setItem('elvish-theme', newTheme);
+      });
+    });
+    
+    // Debug toggle
+    const debugToggle = document.getElementById('debugToggle');
+    debugToggle.addEventListener('click', () => {
+      startTransition(() => {
+        document.body.classList.toggle('mellon');
+        debugToggle.classList.toggle('active');
+        debugToggle.textContent = document.body.classList.contains('mellon') ? '✕' : '🔍';
+      });
+    });
+  </script>
+  
+  <div class="ratio-toggle">
+    <span>Ratio:</span>
+    <button data-ratio="golden">φ Golden</button>
+    <button data-ratio="fifth" class="active">1.5 Fifth</button>
+    <button data-ratio="silver">√2 Silver</button>
+  </div>
+  
+  <script>
+    // Ratio toggle with view transition
+    document.querySelectorAll('.ratio-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ratio = btn.dataset.ratio;
+        
+        startTransition(() => {
+          // Update CSS custom property
+          document.documentElement.style.setProperty('--ratio', `var(--ratio-${ratio})`);
+          document.documentElement.dataset.ratio = ratio;
+          
+          // Update measure based on ratio
+          const measures = { golden: '60ch', fifth: '70ch', silver: '80ch' };
+          document.documentElement.style.setProperty('--measure', measures[ratio]);
+        });
+        
+        // Update active button
+        document.querySelectorAll('.ratio-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+  
+  <style>
+    .ratio-toggle {
+      position: fixed;
+      inset-block-start: var(--s1);
+      inset-inline-end: calc(var(--s1) + 3rem);
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+      padding: var(--s-2) var(--s-1);
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--s-1);
+      font-size: var(--s-1);
+      z-index: 100;
+    }
+    .ratio-toggle span { color: var(--color-text-muted); }
+    .ratio-toggle button {
+      padding: 0.2em 0.5em;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--s-2);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      color: var(--color-text);
+    }
+    .ratio-toggle button:hover { background: var(--color-surface-sunken); }
+    .ratio-toggle button.active { 
+      background: var(--color-accent); 
+      color: var(--color-accent-text);
+      border-color: var(--color-accent);
+    }
+  </style>
+
+  <i-enedh max="90vw" gutters="var(--s1)" style="--enedh-max: 90vw; --enedh-gutters: var(--s1);">
+    <i-hath space="var(--s3)" style="--hath-space: var(--s3);">
+      
+      <!-- Header -->
+      <header class="demo-section">
+        <i-hath space="var(--s1)" style="--hath-space: var(--s1);">
+          <h1 style="font-size: var(--s4);">Elvish</h1>
+          <p style="font-size: var(--s1); color: var(--color-text-muted);">
+            Composable layout primitives with Sindarin names. <em>Mae govannen!</em>
+          </p>
+          <i-tiniath space="var(--s0)" style="--tiniath-space: var(--s0);">
+            <span class="demo-box" style="padding: var(--s-1) var(--s0); font-size: var(--s-1);">16 Primitives</span>
+            <span class="demo-box demo-box--alt" style="padding: var(--s-1) var(--s0); font-size: var(--s-1);">Sindarin</span>
+            <span class="demo-box" style="padding: var(--s-1) var(--s0); font-size: var(--s-1);">Intrinsic CSS</span>
+          </i-tiniath>
+        </i-hath>
+      </header>
+
+      <!-- HATH (Stack) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-hath&gt;
+          <span class="translation">"row, series" — Stack</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Injects vertical margin between successive elements. The foundation of vertical rhythm.</p>
+        
+        <i-hath space="var(--s0)" style="--hath-space: var(--s0);">
+          <div class="demo-box">First</div>
+          <div class="demo-box demo-box--alt">Second</div>
+          <div class="demo-box">Third</div>
+        </i-hath>
+        
+        <pre><code>&lt;i-hath space="var(--s0)"&gt;
+  &lt;div&gt;First&lt;/div&gt;
+  &lt;div&gt;Second&lt;/div&gt;
+&lt;/i-hath&gt;</code></pre>
+      </section>
+
+      <!-- ENEDH (Center) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-enedh&gt;
+          <span class="translation">"middle, center" — Horizontal Center</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Horizontally centers content with a maximum width. The foundation of readable typography.</p>
+        
+        <i-hath space="var(--s0)" style="--hath-space: var(--s0);">
+          <i-enedh max="40ch" gutters="var(--s1)" style="--enedh-max: 40ch; background: var(--color-surface-sunken); padding-block: var(--s0);">
+            <p style="text-align: center;">Centered at 40ch max-width</p>
+          </i-enedh>
+          
+          <i-enedh max="60ch" gutters="var(--s1)" style="--enedh-max: 60ch; background: var(--color-surface-sunken); padding-block: var(--s0);">
+            <p style="text-align: center;">Centered at 60ch max-width</p>
+          </i-enedh>
+        </i-hath>
+        
+        <pre><code>&lt;i-enedh max="60ch" gutters="var(--s1)"&gt;
+  &lt;article&gt;Readable prose...&lt;/article&gt;
+&lt;/i-enedh&gt;</code></pre>
+      </section>
+
+      <!-- TINIATH (Cluster) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-tiniath&gt;
+          <span class="translation">"cluster of sparks" — Cluster</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Horizontal group that wraps naturally. Perfect for tags, buttons, icons.</p>
+        
+        <i-tiniath space="var(--s-1)" style="--tiniath-space: var(--s-1);">
+          <div class="demo-box" style="padding: var(--s-1) var(--s0);">Tag</div>
+          <div class="demo-box demo-box--alt" style="padding: var(--s-1) var(--s0);">Another</div>
+          <div class="demo-box" style="padding: var(--s-1) var(--s0);">More Tags</div>
+          <div class="demo-box demo-box--alt" style="padding: var(--s-1) var(--s0);">Wrapping</div>
+          <div class="demo-box" style="padding: var(--s-1) var(--s0);">Naturally</div>
+        </i-tiniath>
+        
+        <pre><code>&lt;i-tiniath space="var(--s-1)"&gt;
+  &lt;span&gt;Tag&lt;/span&gt;
+  &lt;span&gt;Another&lt;/span&gt;
+&lt;/i-tiniath&gt;</code></pre>
+      </section>
+
+      <!-- GLAN-VELEG (Sidebar) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-glan-veleg&gt;
+          <span class="translation">"clear/mighty" — Sidebar</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Sidebar + content that wraps to vertical when narrow. Try resizing!</p>
+        
+        <i-glan-veleg side-width="200px" content-min="50%" space="var(--s1)" style="--glan-veleg-width: 200px; --glan-veleg-content-min: 50%; --glan-veleg-space: var(--s1);">
+          <div class="demo-box" style="min-height: 100px;">Sidebar</div>
+          <div class="demo-box demo-box--alt" style="min-height: 100px;">Main Content</div>
+        </i-glan-veleg>
+        
+        <pre><code>&lt;i-glan-veleg side-width="200px" content-min="50%"&gt;
+  &lt;nav&gt;Sidebar&lt;/nav&gt;
+  &lt;main&gt;Content&lt;/main&gt;
+&lt;/i-glan-veleg&gt;</code></pre>
+      </section>
+
+      <!-- GWISTINDOR (Switcher) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-gwistindor&gt;
+          <span class="translation">"change-watcher" — Switcher</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Horizontal until threshold, then vertical. The "Holy Albatross". Try resizing!</p>
+        
+        <i-gwistindor threshold="45rem" space="var(--s1)" style="--gwistindor-threshold: 45rem; --gwistindor-space: var(--s1);">
+          <div class="demo-box">One</div>
+          <div class="demo-box demo-box--alt">Two</div>
+          <div class="demo-box">Three</div>
+        </i-gwistindor>
+        
+        <pre><code>&lt;i-gwistindor threshold="45rem"&gt;
+  &lt;div&gt;One&lt;/div&gt;
+  &lt;div&gt;Two&lt;/div&gt;
+  &lt;div&gt;Three&lt;/div&gt;
+&lt;/i-gwistindor&gt;</code></pre>
+      </section>
+
+      <!-- VIRCANTIE (Grid) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-vircantie&gt;
+          <span class="translation">"jewel-pattern" — Grid</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Auto-flowing responsive grid. No media queries needed.</p>
+        
+        <i-vircantie min="150px" space="var(--s1)" style="--vircantie-min: 150px; --vircantie-space: var(--s1);">
+          <div class="demo-box">1</div>
+          <div class="demo-box demo-box--alt">2</div>
+          <div class="demo-box">3</div>
+          <div class="demo-box demo-box--alt">4</div>
+          <div class="demo-box">5</div>
+          <div class="demo-box demo-box--alt">6</div>
+        </i-vircantie>
+        
+        <pre><code>&lt;i-vircantie min="150px" space="var(--s1)"&gt;
+  &lt;div&gt;Card&lt;/div&gt;
+  &lt;div&gt;Card&lt;/div&gt;
+&lt;/i-vircantie&gt;</code></pre>
+      </section>
+
+      <!-- ESGAL (Cover/Vertical Center) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-esgal&gt;
+          <span class="translation">"screen, cover" — Vertical Center</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Vertical centering with optional header/footer. Perfect for hero sections.</p>
+        
+        <i-esgal min-height="250px" space="var(--s1)" style="--esgal-min-height: 250px; background: var(--color-surface-sunken); border-radius: var(--s-1);">
+          <header style="text-align: center; color: var(--color-text-muted);">Header</header>
+          <h3 style="text-align: center;" data-centered>Centered Content</h3>
+          <footer style="text-align: center; color: var(--color-text-muted);">Footer</footer>
+        </i-esgal>
+        
+        <pre><code>&lt;i-esgal min-height="250px"&gt;
+  &lt;header&gt;Header&lt;/header&gt;
+  &lt;h1 data-centered&gt;Hero&lt;/h1&gt;
+  &lt;footer&gt;Footer&lt;/footer&gt;
+&lt;/i-esgal&gt;</code></pre>
+      </section>
+
+      <!-- BAU (Box) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-bau&gt;
+          <span class="translation">"container, box" — Box</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">
+          Padded container with <strong>layout-first</strong> philosophy: invisible by default. 
+          Add <code>[border]</code>, <code>[bg]</code>, or <code>[invert]</code> for visual styling.
+          <em>Toggle debug mode (🔍) to see the invisible boxes!</em>
+        </p>
+        
+        <i-hath space="var(--s1)" style="--hath-space: var(--s1);">
+          <!-- Row 1: Layout-first (invisible) -->
+          <p style="font-size: var(--s-1); color: var(--color-text-muted); margin: 0;">Layout-first (invisible by default):</p>
+          <i-tiniath space="var(--s1)" style="--tiniath-space: var(--s1);">
+            <i-bau padding="var(--s1)">Default (invisible)</i-bau>
+            <i-bau padding="var(--s1)">Just padding</i-bau>
+            <i-bau padding="var(--s1)">Structure only</i-bau>
+          </i-tiniath>
+          
+          <!-- Row 2: Explicit styling -->
+          <p style="font-size: var(--s-1); color: var(--color-text-muted); margin: 0;">Explicit styling (opt-in):</p>
+          <i-tiniath space="var(--s1)" style="--tiniath-space: var(--s1);">
+            <i-bau padding="var(--s1)" border>With Border</i-bau>
+            <i-bau padding="var(--s1)" bg>With Background</i-bau>
+            <i-bau padding="var(--s1)" border bg>Border + BG</i-bau>
+            <i-bau padding="var(--s1)" invert>Inverted</i-bau>
+          </i-tiniath>
+        </i-hath>
+        
+        <pre><code>&lt;!-- Layout-first: invisible by default --&gt;
+&lt;i-bau padding="var(--s1)"&gt;Just structure&lt;/i-bau&gt;
+
+&lt;!-- Opt-in visual styling --&gt;
+&lt;i-bau padding="var(--s1)" border&gt;With border&lt;/i-bau&gt;
+&lt;i-bau padding="var(--s1)" bg&gt;With background&lt;/i-bau&gt;
+&lt;i-bau padding="var(--s1)" invert&gt;Inverted colors&lt;/i-bau&gt;</code></pre>
+      </section>
+
+      <!-- GANT-THALA (Frame/Aspect) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-gant-thala&gt;
+          <span class="translation">"harp-foot" — Frame/Aspect Ratio</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Aspect ratio container for media. Click a ratio card to apply it to the preview!</p>
+        
+        <i-glan-veleg side-width="280px" content-min="40%" space="var(--s2)" style="--glan-veleg-width: 280px; --glan-veleg-content-min: 40%; --glan-veleg-space: var(--s2); align-items: start;">
+          <!-- Ratio selector cards -->
+          <i-hath space="var(--s1)" style="--hath-space: var(--s1);">
+            <p style="font-size: var(--s-1); color: var(--color-text-muted); margin: 0;">Select a ratio:</p>
+            
+            <i-tiniath space="var(--s-1)" style="--tiniath-space: var(--s-1);">
+              <!-- Viewport ratio (dynamic) -->
+              <button class="ratio-card" id="viewportRatioCard" data-ratio-w="" data-ratio-h="" onclick="setPreviewRatio(this)" style="
+                padding: var(--s-1) var(--s0);
+                background: var(--color-surface-sunken);
+                border: 2px solid var(--color-border);
+                border-radius: var(--s-2);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: var(--s-1);
+                color: var(--color-text);
+                transition: border-color 0.2s, background 0.2s;
+              ">
+                <span style="display: block; font-weight: 600;" id="viewportRatioLabel">?:?</span>
+                <span style="font-size: var(--s-2); color: var(--color-text-muted);">viewport</span>
+              </button>
+              
+              <!-- 16:9 -->
+              <button class="ratio-card" data-ratio-w="16" data-ratio-h="9" onclick="setPreviewRatio(this)" style="
+                padding: var(--s-1) var(--s0);
+                background: var(--color-surface-sunken);
+                border: 2px solid var(--color-border);
+                border-radius: var(--s-2);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: var(--s-1);
+                color: var(--color-text);
+                transition: border-color 0.2s, background 0.2s;
+              ">
+                <span style="display: block; font-weight: 600;">16:9</span>
+                <span style="font-size: var(--s-2); color: var(--color-text-muted);">video</span>
+              </button>
+              
+              <!-- 1:1 -->
+              <button class="ratio-card" data-ratio-w="1" data-ratio-h="1" onclick="setPreviewRatio(this)" style="
+                padding: var(--s-1) var(--s0);
+                background: var(--color-surface-sunken);
+                border: 2px solid var(--color-border);
+                border-radius: var(--s-2);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: var(--s-1);
+                color: var(--color-text);
+                transition: border-color 0.2s, background 0.2s;
+              ">
+                <span style="display: block; font-weight: 600;">1:1</span>
+                <span style="font-size: var(--s-2); color: var(--color-text-muted);">square</span>
+              </button>
+              
+              <!-- 4:3 -->
+              <button class="ratio-card active" data-ratio-w="4" data-ratio-h="3" onclick="setPreviewRatio(this)" style="
+                padding: var(--s-1) var(--s0);
+                background: var(--brand-ghost);
+                border: 2px solid var(--color-accent);
+                border-radius: var(--s-2);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: var(--s-1);
+                color: var(--color-text);
+                transition: border-color 0.2s, background 0.2s;
+              ">
+                <span style="display: block; font-weight: 600;">4:3</span>
+                <span style="font-size: var(--s-2); color: var(--color-text-muted);">classic</span>
+              </button>
+            </i-tiniath>
+          </i-hath>
+          
+          <!-- Preview element -->
+          <i-hath space="var(--s0)" style="--hath-space: var(--s0);">
+            <p style="font-size: var(--s-1); color: var(--color-text-muted); margin: 0;">Preview: <code id="currentRatioCode">4:3</code></p>
+            <i-gant-thala id="ratioPreview" ratio="4:3" style="
+              width: 100%;
+              max-width: 400px;
+              background: linear-gradient(135deg, var(--brand), var(--brand-complement));
+              border-radius: var(--s-1);
+              view-transition-name: gant-thala-preview;
+            ">
+              <i-hath space="var(--s-2)" style="--hath-space: var(--s-2); text-align: center; color: white;">
+                <span style="font-weight: 600; font-size: var(--s1);" id="previewRatioDisplay">4:3</span>
+                <span style="font-size: var(--s-1); opacity: 0.8;" id="previewDimensions"></span>
+              </i-hath>
+            </i-gant-thala>
+          </i-hath>
+        </i-glan-veleg>
+        
+        <script>
+          // Calculate and display viewport ratio
+          function updateViewportRatio() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            const divisor = gcd(w, h);
+            const ratioW = Math.round(w / divisor);
+            const ratioH = Math.round(h / divisor);
+            
+            // Simplify common ratios
+            const ratio = w / h;
+            let displayRatio;
+            if (Math.abs(ratio - 16/9) < 0.05) displayRatio = '16:9';
+            else if (Math.abs(ratio - 16/10) < 0.05) displayRatio = '16:10';
+            else if (Math.abs(ratio - 4/3) < 0.05) displayRatio = '4:3';
+            else if (Math.abs(ratio - 21/9) < 0.05) displayRatio = '21:9';
+            else if (Math.abs(ratio - 1) < 0.05) displayRatio = '1:1';
+            else displayRatio = `${ratioW}:${ratioH}`;
+            
+            const card = document.getElementById('viewportRatioCard');
+            const label = document.getElementById('viewportRatioLabel');
+            if (card && label) {
+              label.textContent = displayRatio;
+              const [vw, vh] = displayRatio.split(':').map(Number);
+              card.dataset.ratioW = vw;
+              card.dataset.ratioH = vh;
+            }
+          }
+          
+          // Set preview ratio with View Transition
+          function setPreviewRatio(button) {
+            const w = button.dataset.ratioW;
+            const h = button.dataset.ratioH;
+            const ratio = `${w}:${h}`;
+            
+            const updateDOM = () => {
+              // Update preview
+              const preview = document.getElementById('ratioPreview');
+              const display = document.getElementById('previewRatioDisplay');
+              const code = document.getElementById('currentRatioCode');
+              const dims = document.getElementById('previewDimensions');
+              
+              if (preview) {
+                preview.setAttribute('ratio', ratio);
+                preview.style.aspectRatio = `${w} / ${h}`;
+              }
+              if (display) display.textContent = ratio;
+              if (code) code.textContent = ratio;
+              if (dims) {
+                // Show equivalent dimensions at 400px width
+                const height = Math.round(400 * (h / w));
+                dims.textContent = `(400×${height}px at this width)`;
+              }
+              
+              // Update active state
+              document.querySelectorAll('.ratio-card').forEach(card => {
+                card.classList.remove('active');
+                card.style.background = 'var(--color-surface-sunken)';
+                card.style.borderColor = 'var(--color-border)';
+              });
+              button.classList.add('active');
+              button.style.background = 'var(--brand-ghost)';
+              button.style.borderColor = 'var(--color-accent)';
+            };
+            
+            // Use View Transition if available
+            if (document.startViewTransition) {
+              document.startViewTransition(updateDOM);
+            } else {
+              updateDOM();
+            }
+          }
+          
+          // Initialize
+          updateViewportRatio();
+          window.addEventListener('resize', updateViewportRatio);
+          
+          // Set initial dimensions display
+          const dims = document.getElementById('previewDimensions');
+          if (dims) dims.textContent = '(400×300px at this width)';
+        </script>
+        
+        <pre><code>&lt;i-gant-thala ratio="16:9"&gt;
+  &lt;img src="..." alt="..."&gt;
+&lt;/i-gant-thala&gt;</code></pre>
+      </section>
+
+      <!-- GLAN-THOLL (Reel/Side-Scrolling) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-glan-tholl&gt;
+          <span class="translation">"open-hollow" — Reel/Side-Scroll</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Horizontal scrolling container for cards, images, carousels.</p>
+        
+        <i-glan-tholl item-width="200px" space="var(--s1)" style="--glan-tholl-item-width: 200px; --glan-tholl-space: var(--s1);">
+          <div class="demo-box">Scroll →</div>
+          <div class="demo-box demo-box--alt">Item 2</div>
+          <div class="demo-box">Item 3</div>
+          <div class="demo-box demo-box--alt">Item 4</div>
+          <div class="demo-box">Item 5</div>
+        </i-glan-tholl>
+        
+        <pre><code>&lt;i-glan-tholl item-width="200px"&gt;
+  &lt;div&gt;Item&lt;/div&gt;
+  &lt;div&gt;Item&lt;/div&gt;
+&lt;/i-glan-tholl&gt;</code></pre>
+      </section>
+
+      <!-- FANO (Imposter/Overlay) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-fano&gt;
+          <span class="translation">"white phantom, cloud" — Imposter/Overlay</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Positioned overlay element. Perfect for modals, tooltips, popovers.</p>
+        
+        <div style="position: relative; height: 150px; background: var(--color-surface-sunken); border-radius: var(--s-1);">
+          <i-fano margin="var(--s1)" style="--fano-margin: var(--s1); background: var(--brand); color: white; padding: var(--s0); border-radius: var(--s-1);">
+            Centered Overlay
+          </i-fano>
+        </div>
+        
+        <pre><code>&lt;div style="position: relative;"&gt;
+  &lt;i-fano margin="var(--s1)"&gt;
+    Overlay content
+  &lt;/i-fano&gt;
+&lt;/div&gt;</code></pre>
+      </section>
+
+      <!-- THANN (Icon) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-thann&gt;
+          <span class="translation">"sign, token" — Icon</span>
+          <span class="badge primitive">Core</span>
+        </h2>
+        <p class="demo-description">Aligns an icon with text. Uses <code>echuiol</code> (active) and <code>dhoren</code> (hidden) attributes.</p>
+        
+        <i-tiniath space="var(--s1)" style="--tiniath-space: var(--s1);">
+          <i-thann space="0.5em">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>
+            With text
+          </i-thann>
+          <i-thann space="0.5em" echuiol>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+            Echuiol (Active)
+          </i-thann>
+        </i-tiniath>
+        
+        <pre><code>&lt;i-thann space="0.5em"&gt;
+  &lt;svg&gt;...&lt;/svg&gt;
+  With text
+&lt;/i-thann&gt;
+
+&lt;i-thann echuiol&gt;...&lt;/i-thann&gt;  &lt;!-- active state --&gt;
+&lt;i-thann dhoren&gt;...&lt;/i-thann&gt;   &lt;!-- hidden --&gt;</code></pre>
+      </section>
+
+      <!-- HIM (Sticky) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-him&gt;
+          <span class="translation">"steadfast, abiding" — Sticky</span>
+          <span class="badge primitive">Extended</span>
+        </h2>
+        <p class="demo-description">Sticky positioning wrapper. Adheres to scroll position.</p>
+        
+        <pre><code>&lt;i-him to="top" offset="var(--s1)"&gt;
+  &lt;nav&gt;Sticky navigation&lt;/nav&gt;
+&lt;/i-him&gt;</code></pre>
+      </section>
+
+      <!-- MIRIANT (Grid-Placed) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-miriant&gt;
+          <span class="translation">"jewel-work" — Explicit Grid</span>
+          <span class="badge primitive">Extended</span>
+        </h2>
+        <p class="demo-description">Explicit grid with defined columns. For layouts needing precise control.</p>
+        
+        <i-miriant columns="3" space="var(--s1)" style="--miriant-columns: 3; --miriant-space: var(--s1);">
+          <div class="demo-box">1</div>
+          <div class="demo-box demo-box--alt">2</div>
+          <div class="demo-box">3</div>
+          <div class="demo-box demo-box--alt">4</div>
+          <div class="demo-box">5</div>
+          <div class="demo-box demo-box--alt">6</div>
+        </i-miriant>
+        
+        <pre><code>&lt;i-miriant columns="3" space="var(--s1)"&gt;
+  &lt;div&gt;Cell&lt;/div&gt;
+  &lt;div&gt;Cell&lt;/div&gt;
+&lt;/i-miriant&gt;</code></pre>
+      </section>
+
+      <!-- ADLEITHIAN (Container) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-adleithian&gt;
+          <span class="translation">"releaser, liberator" — Container Query</span>
+          <span class="badge primitive">Extended</span>
+        </h2>
+        <p class="demo-description">Establishes a container query context. The escape hatch when intrinsic layouts need intervention.</p>
+        
+        <pre><code>&lt;i-adleithian name="card"&gt;
+  &lt;article&gt;
+    Content responds to container, not viewport
+  &lt;/article&gt;
+&lt;/i-adleithian&gt;
+
+@container card (min-width: 400px) {
+  article { flex-direction: row; }
+}</code></pre>
+      </section>
+
+      <!-- Composition Example -->
+      <section class="demo-section">
+        <h2>
+          Composition Example
+          <span class="badge primitive">Combined</span>
+        </h2>
+        <p class="demo-description">Primitives compose together naturally. Sindarin flows like the language of the Elves.</p>
+        
+        <i-glan-veleg side-width="200px" content-min="50%" space="var(--s1)" style="--glan-veleg-width: 200px; --glan-veleg-content-min: 50%; --glan-veleg-space: var(--s1);">
+          <i-hath space="var(--s0)" style="--hath-space: var(--s0);">
+            <i-bau padding="var(--s0)" invert>
+              <strong>Navigation</strong>
+            </i-bau>
+            <i-bau padding="var(--s0)" bg>Link 1</i-bau>
+            <i-bau padding="var(--s0)" bg>Link 2</i-bau>
+            <i-bau padding="var(--s0)" bg>Link 3</i-bau>
+          </i-hath>
+          
+          <i-hath space="var(--s1)" style="--hath-space: var(--s1);">
+            <i-bau padding="var(--s1)" border bg>
+              <i-hath space="var(--s-1)" style="--hath-space: var(--s-1);">
+                <strong>Main Content</strong>
+                <p style="color: var(--color-text-muted); margin: 0;">glan-veleg + hath + bau + vircantie</p>
+              </i-hath>
+            </i-bau>
+            
+            <i-vircantie min="120px" space="var(--s-1)" style="--vircantie-min: 120px; --vircantie-space: var(--s-1);">
+              <i-bau padding="var(--s0)" border>Card 1</i-bau>
+              <i-bau padding="var(--s0)" border>Card 2</i-bau>
+              <i-bau padding="var(--s0)" border>Card 3</i-bau>
+              <i-bau padding="var(--s0)" border>Card 4</i-bau>
+            </i-vircantie>
+          </i-hath>
+        </i-glan-veleg>
+      </section>
+
+      <!-- GONATH (Masonry) -->
+      <section class="demo-section">
+        <h2>
+          &lt;i-gonath&gt;
+          <span class="translation">"stone collection" — Masonry</span>
+          <span class="badge primitive">Extended</span>
+        </h2>
+        <p class="demo-description">Pinterest-style masonry layout. Items flow into columns, filling vertical space efficiently.</p>
+        
+        <i-gonath columns="3" space="var(--s1)" style="--gonath-columns: 3; --gonath-space: var(--s1);">
+          <div class="demo-box" style="height: 80px;">Short</div>
+          <div class="demo-box demo-box--alt" style="height: 140px;">Tall</div>
+          <div class="demo-box" style="height: 100px;">Medium</div>
+          <div class="demo-box demo-box--alt" style="height: 60px;">Tiny</div>
+          <div class="demo-box" style="height: 120px;">Taller</div>
+          <div class="demo-box demo-box--alt" style="height: 90px;">Normal</div>
+        </i-gonath>
+        
+        <pre><code>&lt;i-gonath columns="3" space="var(--s1)"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/i-gonath&gt;</code></pre>
+      </section>
+
+      <!-- Sindarin Reference -->
+      <section class="demo-section">
+        <h2>
+          Sindarin Reference
+          <span class="badge modern">Vocabulary</span>
+        </h2>
+        <p class="demo-description">The Elvish primitive names and their meanings.</p>
+        
+        <i-vircantie min="200px" space="var(--s1)" style="--vircantie-min: 200px; --vircantie-space: var(--s1);">
+          <i-bau padding="var(--s0)" border><strong>hath</strong> — row, series (Stack)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>bau</strong> — container (Box)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>enedh</strong> — middle (Center)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>tiniath</strong> — sparks (Cluster)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>glan-veleg</strong> — clear+mighty (Sidebar)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>gwistindor</strong> — change-watcher (Switcher)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>esgal</strong> — screen (Cover)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>vircantie</strong> — jewel-pattern (Grid)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>gant-thala</strong> — harp-foot (Aspect)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>glan-tholl</strong> — open-hollow (Reel)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>fano</strong> — phantom (Overlay)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>thann</strong> — sign (Icon)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>adleithian</strong> — liberator (Container)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>him</strong> — steadfast (Sticky)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>miriant</strong> — jewel-work (Grid-placed)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>gonath</strong> — stone collection (Masonry)</i-bau>
+        </i-vircantie>
+      </section>
+
+      <!-- Footer -->
+      <footer class="demo-section" style="text-align: center;">
+        <i-hath space="var(--s-1)" style="--hath-space: var(--s-1);">
+          <p><strong>Elvish</strong> — <em>Namárië!</em></p>
+          <p style="color: var(--color-text-muted); font-size: var(--s-1);">
+            Original concept by Heydon Pickering & Andy Bell (Every Layout)<br>
+            Sindarin names from Tolkien's legendarium
+          </p>
+        </i-hath>
+      </footer>
+
+    </i-hath>
+  </i-enedh>
+
+  <script type="module" src="../elvish.js"></script>
+</body>
+</html>

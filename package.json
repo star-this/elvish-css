@@ -1,0 +1,61 @@
+{
+  "name": "elvish-css",
+  "version": "1.0.0",
+  "description": "Intrinsic CSS layout-first styling primitives with Sindarin names",
+  "keywords": [
+    "css",
+    "layout",
+    "custom-elements",
+    "web-components",
+    "intrinsic-design",
+    "view-transitions"
+  ],
+  "author": "Mark Manley",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/star-this/elvish-css.git"
+  },
+  "homepage": "https://github.com/star-this/elvish-css#readme",
+  "type": "module",
+  "main": "dist/elvish.umd.js",
+  "module": "dist/elvish.esm.js",
+  "types": "dist/elvish.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/elvish.esm.js",
+      "require": "./dist/elvish.umd.js",
+      "types": "./dist/elvish.d.ts"
+    },
+    "./css": "./dist/elvish.css",
+    "./css/min": "./dist/elvish.min.css",
+    "./transitions": {
+      "import": "./global/transitions.js",
+      "types": "./dist/transitions.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "global",
+    "primitives",
+    "elvish.css",
+    "elvish.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:watch": "node scripts/build.js --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "lightningcss": "^1.24.0"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ]
+}

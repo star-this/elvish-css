@@ -1,0 +1,32 @@
+/**
+ * Frame Layout
+ * 
+ * Constrains content to a specific aspect ratio.
+ * Perfect for images, videos, and embedded content.
+ */
+
+i-gant-thala {
+  display: block;
+  overflow: hidden;
+  
+  /* Default 16:9 ratio */
+  gant-thala-ratio: var(--gant-thala-n, 16) / var(--gant-thala-d, 9);
+}
+
+/* For images and videos, cover the frame */
+i-gant-thala > img,
+i-gant-thala > video {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  /* Default: center the crop */
+  object-position: center;
+}
+
+/* Non-media content gets centered */
+i-gant-thala > :not(img):not(video) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 100%;
+}

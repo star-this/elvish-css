@@ -1,0 +1,28 @@
+/**
+ * Elvish - All Styles
+ * 
+ * Import this file to get all layout primitive styles.
+ * Import global/global.css separately for design tokens, reset, and utilities.
+ * 
+ * Primitives use Sindarin names from Tolkien's Elvish languages.
+ */
+
+/* Core primitives */
+@import './primitives/hath/hath.css';           /* Stack */
+@import './primitives/bau/bau.css';             /* Box */
+@import './primitives/enedh/enedh.css';         /* Center (horizontal) */
+@import './primitives/tiniath/tiniath.css';     /* Cluster */
+@import './primitives/glan-veleg/glan-veleg.css'; /* Sidebar */
+@import './primitives/gwistindor/gwistindor.css'; /* Switcher */
+@import './primitives/esgal/esgal.css';         /* Cover (vertical center) */
+@import './primitives/vircantie/vircantie.css'; /* Grid */
+@import './primitives/gant-thala/gant-thala.css'; /* Frame (aspect) */
+@import './primitives/glan-tholl/glan-tholl.css'; /* Reel (side-scrolling) */
+@import './primitives/fano/fano.css';           /* Imposter (overlay) */
+@import './primitives/thann/thann.css';         /* Icon */
+@import './primitives/adleithian/adleithian.css'; /* Container */
+
+/* Extended primitives */
+@import './primitives/him/him.css';             /* Sticky */
+@import './primitives/miriant/miriant.css';     /* Grid-placed */
+@import './primitives/gonath/gonath.css';       /* Masonry - "stone collection" */

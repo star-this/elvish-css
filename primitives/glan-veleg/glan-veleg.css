@@ -1,0 +1,45 @@
+/**
+ * GlanVeleg Layout
+ * 
+ * A two-element layout where one has a fixed width (sidebar)
+ * and the other fills remaining space. Switches to vertical
+ * when the non-sidebar would be less than a threshold.
+ */
+
+i-glan-veleg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--glan-veleg-space, var(--s1));
+}
+
+/* Default: sidebar is the first child (left side) */
+i-glan-veleg > * {
+  flex-grow: 1;
+}
+
+i-glan-veleg > :first-child {
+  flex-basis: var(--glan-veleg-width, 20rem);
+}
+
+i-glan-veleg > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: var(--glan-veleg-content-min, 50%);
+}
+
+/* When sidebar is on the right */
+i-glan-veleg[side="right"] > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: var(--glan-veleg-content-min, 50%);
+}
+
+i-glan-veleg[side="right"] > :last-child {
+  flex-basis: var(--glan-veleg-width, 20rem);
+  flex-grow: 1;
+}
+
+/* Disable equal height stretching */
+i-glan-veleg[no-stretch] {
+  align-items: flex-start;
+}

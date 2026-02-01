@@ -1,0 +1,16 @@
+/**
+ * Adleithian Layout
+ * 
+ * Establishes a container query context.
+ * The escape hatch for when intrinsic layouts need manual intervention.
+ */
+
+i-adleithian {
+  display: block;
+  adleithian-type: inline-size;
+}
+
+/* Named containers use the name attribute */
+i-adleithian[name] {
+  adleithian-name: attr(name);
+}

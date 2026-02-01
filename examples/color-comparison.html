@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Comparison</title>
+  <style>
+    :root {
+      --brand: oklch(83% 0.17 168);
+      
+      /* Derived colors */
+      --brand-lighter: oklch(from var(--brand) calc(l + 0.12) c h);
+      --brand-light: oklch(from var(--brand) calc(l + 0.06) c h);
+      --brand-dark: oklch(from var(--brand) calc(l - 0.12) c h);
+      --brand-darker: oklch(from var(--brand) calc(l - 0.24) c h);
+      --brand-muted: oklch(from var(--brand) l calc(c * 0.5) h);
+      --brand-subtle: oklch(from var(--brand) l calc(c * 0.25) h);
+      --brand-ghost: oklch(from var(--brand) l c h / 0.15);
+      --brand-complement: oklch(from var(--brand) l c calc(h + 180));
+      --brand-analogous-1: oklch(from var(--brand) l c calc(h + 30));
+      --brand-analogous-2: oklch(from var(--brand) l c calc(h - 30));
+    }
+    
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      background: #f5f5f5;
+      color: #1a1a2e;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    body.dark {
+      background: #0f0f1a;
+      color: #f0f0f5;
+    }
+    
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      z-index: 100;
+    }
+    
+    body.dark .theme-toggle {
+      background: #f0f0f5;
+      color: #1a1a2e;
+    }
+    
+    h1 { margin-bottom: 0.5rem; }
+    h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    
+    .swatches {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .swatch {
+      text-align: center;
+    }
+    .color-box {
+      width: 200px;
+      height: 200px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-bottom: 1rem;
+    }
+    
+    body.dark .color-box {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    
+    .original {
+      background: rgba(0, 233, 188, 1);
+    }
+    .oklch {
+      background: var(--brand);
+    }
+    code {
+      display: block;
+      background: #1a1a2e;
+      color: #f0f0f0;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    body.dark code {
+      background: #252538;
+    }
+    
+    .palette {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .palette-swatch {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.dark .palette-swatch {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .palette-swatch.light-text { color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .palette-swatch.dark-text { color: #1a1a2e; }
+    
+    .palette-swatch span {
+      font-size: 9px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+    
+    /* Dark theme surface examples */
+    .surface-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .surface-card {
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.dark .surface-card {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    
+    .surface-card h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 14px;
+    }
+    
+    .surface-card p {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+    
+    .surface-light {
+      background: #f5f5f5;
+      color: #1a1a2e;
+    }
+    
+    .surface-dark {
+      background: #1a1a2e;
+      color: #f0f0f5;
+    }
+    
+    .surface-brand {
+      background: var(--brand);
+      color: #1a1a2e;
+    }
+    
+    .surface-brand-dark {
+      background: var(--brand-darker);
+      color: #f0f0f5;
+    }
+    
+    .surface-ghost {
+      background: var(--brand-ghost);
+      border: 1px solid var(--brand-muted);
+    }
+    
+    body.dark .surface-ghost {
+      color: #f0f0f5;
+    }
+    
+    pre {
+      background: #1a1a2e;
+      color: #f0f0f0;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 13px;
+    }
+    
+    body.dark pre {
+      background: #252538;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="document.body.classList.toggle('dark')">
+    🌓 Toggle Dark/Light
+  </button>
+
+  <h1>Color Comparison</h1>
+  <p>Verifying the OKLCH conversion matches your original rgba value.</p>
+  
+  <div class="swatches">
+    <div class="swatch">
+      <div class="color-box original"></div>
+      <code>rgba(0, 233, 188, 1)</code>
+      <p>Original</p>
+    </div>
+    <div class="swatch">
+      <div class="color-box oklch"></div>
+      <code>oklch(83% 0.17 168)</code>
+      <p>OKLCH Conversion</p>
+    </div>
+  </div>
+  
+  <h2>Lightness Scale</h2>
+  <div class="palette">
+    <div class="palette-swatch dark-text" style="background: var(--brand-lighter);">
+      Lighter
+      <span>l + 0.12</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand-light);">
+      Light
+      <span>l + 0.06</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand);">
+      Brand
+      <span>base</span>
+    </div>
+    <div class="palette-swatch light-text" style="background: var(--brand-dark);">
+      Dark
+      <span>l - 0.12</span>
+    </div>
+    <div class="palette-swatch light-text" style="background: var(--brand-darker);">
+      Darker
+      <span>l - 0.24</span>
+    </div>
+  </div>
+  
+  <h2>Chroma Variations</h2>
+  <div class="palette">
+    <div class="palette-swatch dark-text" style="background: var(--brand);">
+      Brand
+      <span>full chroma</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand-muted);">
+      Muted
+      <span>c × 0.5</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand-subtle);">
+      Subtle
+      <span>c × 0.25</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand-ghost);">
+      Ghost
+      <span>15% opacity</span>
+    </div>
+  </div>
+  
+  <h2>Hue Shifts</h2>
+  <div class="palette">
+    <div class="palette-swatch dark-text" style="background: var(--brand-analogous-2);">
+      Analogous
+      <span>h - 30°</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand);">
+      Brand
+      <span>168°</span>
+    </div>
+    <div class="palette-swatch dark-text" style="background: var(--brand-analogous-1);">
+      Analogous
+      <span>h + 30°</span>
+    </div>
+    <div class="palette-swatch light-text" style="background: var(--brand-complement);">
+      Complement
+      <span>h + 180°</span>
+    </div>
+  </div>
+  
+  <h2>On Surfaces (Light vs Dark)</h2>
+  <div class="surface-demo">
+    <div class="surface-card surface-light">
+      <h3>Light Surface</h3>
+      <p>Brand color on light background</p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <span style="background: var(--brand); padding: 0.25rem 0.75rem; border-radius: 4px; color: #1a1a2e; font-size: 12px;">Button</span>
+        <span style="color: var(--brand); font-size: 12px; font-weight: 600;">Link text</span>
+      </div>
+    </div>
+    <div class="surface-card surface-dark">
+      <h3>Dark Surface</h3>
+      <p>Brand color on dark background</p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <span style="background: var(--brand); padding: 0.25rem 0.75rem; border-radius: 4px; color: #1a1a2e; font-size: 12px;">Button</span>
+        <span style="color: var(--brand); font-size: 12px; font-weight: 600;">Link text</span>
+      </div>
+    </div>
+    <div class="surface-card surface-brand">
+      <h3>Brand Surface</h3>
+      <p>Content on brand background</p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <span style="background: #1a1a2e; padding: 0.25rem 0.75rem; border-radius: 4px; color: white; font-size: 12px;">Button</span>
+        <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 4px; color: #1a1a2e; font-size: 12px;">Alt</span>
+      </div>
+    </div>
+    <div class="surface-card surface-brand-dark">
+      <h3>Dark Brand Surface</h3>
+      <p>Content on darker brand</p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <span style="background: var(--brand); padding: 0.25rem 0.75rem; border-radius: 4px; color: #1a1a2e; font-size: 12px;">Button</span>
+        <span style="color: var(--brand-light); font-size: 12px; font-weight: 600;">Link text</span>
+      </div>
+    </div>
+    <div class="surface-card surface-ghost">
+      <h3>Ghost Surface</h3>
+      <p>Subtle brand tint for cards</p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <span style="background: var(--brand); padding: 0.25rem 0.75rem; border-radius: 4px; color: #1a1a2e; font-size: 12px;">Button</span>
+        <span style="color: var(--brand-dark); font-size: 12px; font-weight: 600;">Link text</span>
+      </div>
+    </div>
+  </div>
+  
+  <h2>CSS Variables</h2>
+  <pre>:root {
+  --brand: oklch(83% 0.17 168);
+  
+  --brand-lighter: oklch(from var(--brand) calc(l + 0.12) c h);
+  --brand-light: oklch(from var(--brand) calc(l + 0.06) c h);
+  --brand-dark: oklch(from var(--brand) calc(l - 0.12) c h);
+  --brand-darker: oklch(from var(--brand) calc(l - 0.24) c h);
+  
+  --brand-muted: oklch(from var(--brand) l calc(c * 0.5) h);
+  --brand-subtle: oklch(from var(--brand) l calc(c * 0.25) h);
+  --brand-ghost: oklch(from var(--brand) l c h / 0.15);
+  
+  --brand-complement: oklch(from var(--brand) l c calc(h + 180));
+  --brand-analogous-1: oklch(from var(--brand) l c calc(h + 30));
+  --brand-analogous-2: oklch(from var(--brand) l c calc(h - 30));
+}</pre>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/**
+ * Elvish - Global Styles
+ * 
+ * Import this file to get all global styles:
+ * - Design tokens (modular scale, colors, etc.)
+ * - Reset and axioms
+ * - Utility classes
+ * - Modern CSS features (@function, if(), sibling-index, etc.)
+ * - View Transitions for smooth layout changes
+ */
+
+@import 'tokens.css';
+@import 'reset.css';
+@import 'utilities.css';
+@import 'modern.css';
+@import 'transitions.css';

@@ -1,0 +1,305 @@
+/**
+ * Elvish Modern - CSS Functions & Advanced Features
+ * 
+ * Features requiring Chrome 133+ / Edge 133+ (progressive enhancement)
+ * Firefox and Safari fallbacks provided where possible.
+ * 
+ * BROWSER SUPPORT (as of Jan 2026):
+ * - if()                 : Chrome 137+, Edge 137+
+ * - @function            : Chrome 139+, Edge 139+  
+ * - sibling-index/count  : Chrome 138+, Edge 138+
+ * - typed attr()         : Chrome 133+, Edge 133+
+ * - light-dark()         : All modern browsers ✓
+ * - Relative colors      : All modern browsers ✓
+ */
+
+/* ============================================================================
+ * CUSTOM FUNCTIONS (@function)
+ * ============================================================================
+ * Reusable logic defined once, used everywhere.
+ * Chrome 139+ / Edge 139+
+ */
+
+/* Negate a value */
+@function --negate(--value) {
+  result: calc(-1 * var(--value));
+}
+
+/* Linear interpolation between two values */
+@function --lerp(--a, --b, --t) {
+  result: calc(var(--a) + (var(--b) - var(--a)) * var(--t));
+}
+
+/* Fluid value between min and max based on viewport */
+@function --fluid(--min, --max, --min-vw: 20rem, --max-vw: 75rem) {
+  result: clamp(
+    var(--min),
+    calc(var(--min) + (var(--max) - var(--min)) * ((100vw - var(--min-vw)) / (var(--max-vw) - var(--min-vw)))),
+    var(--max)
+  );
+}
+
+/* Add transparency to a color */
+@function --alpha(--color, --opacity) {
+  result: oklch(from var(--color) l c h / var(--opacity));
+}
+
+/* Lighten a color */
+@function --lighten(--color, --amount: 0.1) {
+  result: oklch(from var(--color) calc(l + var(--amount)) c h);
+}
+
+/* Darken a color */
+@function --darken(--color, --amount: 0.1) {
+  result: oklch(from var(--color) calc(l - var(--amount)) c h);
+}
+
+/* Spacing multiplier */
+@function --space(--multiplier: 1) {
+  result: calc(var(--s0) * var(--multiplier));
+}
+
+/* Conditional border-radius (0 when near edge, normal otherwise) */
+@function --safe-radius(--radius, --threshold: 8px) {
+  /* Use container query units if available */
+  result: clamp(0px, calc((100cqi - var(--threshold)) * 999), var(--radius));
+}
+
+
+/* ============================================================================
+ * STAGGER ANIMATIONS (sibling-index)
+ * ============================================================================
+ * Automatic stagger delays without JavaScript!
+ * Chrome 138+ / Edge 138+
+ */
+
+/* Stagger children entrance animations */
+.stagger-enter > * {
+  animation: elvish-fade-in-up var(--duration-normal, 300ms) var(--ease-out, ease-out) both;
+  animation-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+}
+
+/* Stagger with @starting-style for appear animations */
+.stagger-appear > * {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 
+    opacity var(--duration-normal, 300ms) var(--ease-out, ease-out),
+    transform var(--duration-normal, 300ms) var(--ease-out, ease-out);
+  transition-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+  
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Cascade opacity based on position */
+.fade-cascade > * {
+  opacity: calc(1 - (sibling-index() - 1) * 0.08);
+}
+
+/* Rainbow children using sibling-index for hue */
+.rainbow > * {
+  --hue: calc(sibling-index() * (360 / sibling-count()));
+  background: oklch(85% 0.2 var(--hue));
+}
+
+/* Auto-numbered list items */
+.auto-number > *::before {
+  content: counter(sibling-index) ". ";
+  counter-increment: none; /* We don't need CSS counters anymore! */
+}
+
+
+/* ============================================================================
+ * CONDITIONAL STYLES (if() function)  
+ * ============================================================================
+ * Inline conditionals in CSS values.
+ * Chrome 137+ / Edge 137+
+ */
+
+/* Theme-aware component using if() */
+.theme-aware {
+  --is-dark: false;
+  
+  background: if(
+    style(--is-dark: true): var(--color-surface-dark, #1a1a2e);
+    else: var(--color-surface-light, #ffffff)
+  );
+  
+  color: if(
+    style(--is-dark: true): var(--color-text-dark, #f0f0f5);
+    else: var(--color-text-light, #1a1a2e)
+  );
+}
+
+/* Responsive without media queries using if() */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: if(
+    media(width >= 900px): repeat(4, 1fr);
+    media(width >= 600px): repeat(3, 1fr);
+    media(width >= 400px): repeat(2, 1fr);
+    else: 1fr
+  );
+}
+
+/* Compact variant using style query in if() */
+.adaptive-card {
+  --variant: default;
+  
+  padding: if(
+    style(--variant: compact): var(--s-1);
+    style(--variant: spacious): var(--s2);
+    else: var(--s1)
+  );
+  
+  font-size: if(
+    style(--variant: compact): var(--s-1);
+    else: var(--s0)
+  );
+}
+
+
+/* ============================================================================
+ * TYPED ATTR() - HTML to CSS Bridge
+ * ============================================================================
+ * Use HTML attributes as typed CSS values.
+ * Chrome 133+ / Edge 133+
+ */
+
+/* Grid columns from data attribute */
+[data-columns] {
+  --columns: attr(data-columns type(<number>), 1);
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+}
+
+/* Color from data attribute */
+[data-color] {
+  color: attr(data-color type(<color>), currentColor);
+}
+
+/* Background color from data attribute */
+[data-bg] {
+  background-color: attr(data-bg type(<color>), transparent);
+}
+
+/* Spacing from data attribute */
+[data-space] {
+  --space-value: attr(data-space type(<length>), var(--s1));
+  gap: var(--space-value);
+  padding: var(--space-value);
+}
+
+/* Progress bar using attr() */
+[data-progress] {
+  --progress: attr(data-progress type(<percentage>), 0%);
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--progress),
+    var(--color-surface-sunken) var(--progress)
+  );
+}
+
+/* Aspect ratio from attribute */
+[data-ratio] {
+  aspect-ratio: attr(data-ratio type(<ratio>), 1);
+}
+
+/* Dynamic view-transition-name from id */
+[data-transition] {
+  view-transition-name: attr(data-transition type(<custom-ident>), none);
+}
+
+
+/* ============================================================================
+ * KEYFRAMES
+ * ============================================================================
+ */
+
+@keyframes elvish-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes elvish-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance, 20px));
+  }
+}
+
+@keyframes elvish-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--distance, 20px) * -1));
+  }
+}
+
+@keyframes elvish-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes elvish-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes elvish-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+
+/* ============================================================================
+ * FEATURE DETECTION
+ * ============================================================================
+ * Fallbacks for browsers without support.
+ */
+
+/* Fallback for sibling-index() - requires JS to set --i custom property */
+@supports not (animation-delay: calc(sibling-index() * 1ms)) {
+  .stagger-enter > * {
+    /* Fallback: use nth-child or JS-set custom property */
+    animation-delay: calc(var(--i, 0) * var(--stagger-delay, 50ms));
+  }
+  
+  .stagger-enter > :nth-child(1) { --i: 0; }
+  .stagger-enter > :nth-child(2) { --i: 1; }
+  .stagger-enter > :nth-child(3) { --i: 2; }
+  .stagger-enter > :nth-child(4) { --i: 3; }
+  .stagger-enter > :nth-child(5) { --i: 4; }
+  .stagger-enter > :nth-child(6) { --i: 5; }
+  .stagger-enter > :nth-child(7) { --i: 6; }
+  .stagger-enter > :nth-child(8) { --i: 7; }
+  .stagger-enter > :nth-child(9) { --i: 8; }
+  .stagger-enter > :nth-child(10) { --i: 9; }
+}
+
+/* Fallback for if() - use custom properties toggled by classes */
+@supports not (color: if(style(--x: y): red; else: blue)) {
+  .theme-aware {
+    background: var(--color-surface-light, #ffffff);
+    color: var(--color-text-light, #1a1a2e);
+  }
+  
+  .theme-aware.is-dark {
+    background: var(--color-surface-dark, #1a1a2e);
+    color: var(--color-text-dark, #f0f0f5);
+  }
+}
+
+/* Fallback for typed attr() */
+@supports not (color: attr(data-x type(<color>), red)) {
+  [data-columns="2"] { grid-template-columns: repeat(2, 1fr); }
+  [data-columns="3"] { grid-template-columns: repeat(3, 1fr); }
+  [data-columns="4"] { grid-template-columns: repeat(4, 1fr); }
+  [data-columns="5"] { grid-template-columns: repeat(5, 1fr); }
+  [data-columns="6"] { grid-template-columns: repeat(6, 1fr); }
+}

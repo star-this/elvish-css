@@ -1,0 +1,39 @@
+/**
+ * Stack Layout
+ * 
+ * Injects vertical margin between successive child elements.
+ * The foundation of vertical rhythm.
+ */
+
+i-hath {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+i-hath > * {
+  /* Remove any existing vertical margins */
+  margin-block: 0;
+}
+
+i-hath > * + * {
+  /* Apply margin only between successive elements */
+  margin-block-start: var(--hath-space, var(--s1));
+}
+
+/* Recursive variant - applies to all descendants */
+i-hath[recursive] * + * {
+  margin-block-start: var(--hath-space, var(--s1));
+}
+
+/* Split variant - pushes element and siblings after it to the bottom */
+i-hath[split-after="1"] > :nth-child(1) { margin-block-end: auto; }
+i-hath[split-after="2"] > :nth-child(2) { margin-block-end: auto; }
+i-hath[split-after="3"] > :nth-child(3) { margin-block-end: auto; }
+i-hath[split-after="4"] > :nth-child(4) { margin-block-end: auto; }
+i-hath[split-after="5"] > :nth-child(5) { margin-block-end: auto; }
+
+/* When Stack needs to fill its parent */
+i-hath:only-child {
+  block-size: 100%;
+}

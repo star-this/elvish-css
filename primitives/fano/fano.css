@@ -1,0 +1,28 @@
+/**
+ * Imposter Layout
+ * 
+ * Positions an element over content, centered within a
+ * positioning container. Perfect for modals and overlays.
+ */
+
+i-fano {
+  /* Default: absolute positioning relative to nearest positioned ancestor */
+  position: var(--fano-position, absolute);
+  
+  /* Center the element */
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Fixed positioning variant (relative to viewport) */
+i-fano[fixed] {
+  --fano-position: fixed;
+}
+
+/* Contain within positioning container */
+i-fano[contain] {
+  overflow: auto;
+  max-inline-size: calc(100% - (var(--fano-margin, 0px) * 2));
+  max-block-size: calc(100% - (var(--fano-margin, 0px) * 2));
+}

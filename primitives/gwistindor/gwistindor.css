@@ -1,0 +1,52 @@
+/**
+ * Switcher Layout
+ * 
+ * Switches directly between horizontal and vertical layouts
+ * at a container-based threshold. No intermediary states.
+ * 
+ * Uses the "Holy Albatross" technique.
+ */
+
+i-gwistindor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gwistindor-space, var(--s1));
+}
+
+i-gwistindor > * {
+  flex-grow: 1;
+  /* 
+   * The magic: produces huge positive (vertical) or negative (horizontal) values.
+   * Default: --layout-threshold-md (45rem ≈ 720px) - switches at tablet width.
+   * NOTE: This is a *layout* threshold, not a text measure!
+   */
+  flex-basis: calc((var(--gwistindor-threshold, var(--layout-threshold-md, 45rem)) - 100%) * 999);
+}
+
+/* Quantity query: force vertical if more than threshold items */
+i-gwistindor[limit="2"] > :nth-last-child(n+3),
+i-gwistindor[limit="2"] > :nth-last-child(n+3) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="3"] > :nth-last-child(n+4),
+i-gwistindor[limit="3"] > :nth-last-child(n+4) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor:not([limit]) > :nth-last-child(n+5),
+i-gwistindor:not([limit]) > :nth-last-child(n+5) ~ *,
+i-gwistindor[limit="4"] > :nth-last-child(n+5),
+i-gwistindor[limit="4"] > :nth-last-child(n+5) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="5"] > :nth-last-child(n+6),
+i-gwistindor[limit="5"] > :nth-last-child(n+6) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="6"] > :nth-last-child(n+7),
+i-gwistindor[limit="6"] > :nth-last-child(n+7) ~ * {
+  flex-basis: 100%;
+}

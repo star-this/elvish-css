@@ -1,0 +1,75 @@
+/**
+ * Grid-Placed Layout (NEW)
+ * 
+ * A CSS Grid with explicit control over columns, rows, and item placement.
+ * For when the auto-flow Grid primitive isn't enough.
+ * 
+ * This is the "escape hatch" for complex grid layouts like:
+ * - Magazine-style layouts with spanning items
+ * - Dashboard widgets of varying sizes
+ * - Bento box layouts
+ */
+
+i-miriant {
+  display: grid;
+  gap: var(--miriant-space, var(--s1));
+  
+  /* Default: 12-column grid (common baseline) */
+  grid-template-columns: repeat(var(--miriant-columns, 12), 1fr);
+  
+  /* Rows auto-size by default */
+  grid-auto-rows: var(--miriant-row-height, minmax(0, auto));
+}
+
+/* Child placement utilities using data attributes */
+/* Columns */
+i-miriant > [data-col-span="1"] { grid-column: span 1; }
+i-miriant > [data-col-span="2"] { grid-column: span 2; }
+i-miriant > [data-col-span="3"] { grid-column: span 3; }
+i-miriant > [data-col-span="4"] { grid-column: span 4; }
+i-miriant > [data-col-span="5"] { grid-column: span 5; }
+i-miriant > [data-col-span="6"] { grid-column: span 6; }
+i-miriant > [data-col-span="7"] { grid-column: span 7; }
+i-miriant > [data-col-span="8"] { grid-column: span 8; }
+i-miriant > [data-col-span="9"] { grid-column: span 9; }
+i-miriant > [data-col-span="10"] { grid-column: span 10; }
+i-miriant > [data-col-span="11"] { grid-column: span 11; }
+i-miriant > [data-col-span="12"] { grid-column: span 12; }
+i-miriant > [data-col-span="full"] { grid-column: 1 / -1; }
+
+/* Rows */
+i-miriant > [data-row-span="1"] { grid-row: span 1; }
+i-miriant > [data-row-span="2"] { grid-row: span 2; }
+i-miriant > [data-row-span="3"] { grid-row: span 3; }
+i-miriant > [data-row-span="4"] { grid-row: span 4; }
+i-miriant > [data-row-span="5"] { grid-row: span 5; }
+i-miriant > [data-row-span="6"] { grid-row: span 6; }
+
+/* Dense packing - fill holes */
+i-miriant[dense] {
+  grid-auto-flow: dense;
+}
+
+/* Responsive: collapse to single column below threshold */
+@container (width < 600px) {
+  i-miriant {
+    grid-template-columns: 1fr;
+  }
+  
+  i-miriant > [data-col-span] {
+    grid-column: span 1;
+  }
+}
+
+/* Alternative: use media query fallback for browsers without container queries */
+@supports not (container-type: inline-size) {
+  @media (max-width: 600px) {
+    i-miriant {
+      grid-template-columns: 1fr;
+    }
+    
+    i-miriant > [data-col-span] {
+      grid-column: span 1;
+    }
+  }
+}

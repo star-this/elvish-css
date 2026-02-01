@@ -1,0 +1,86 @@
+/**
+ * Box Layout (i-bau)
+ * 
+ * A container primitive focused on padding/structure.
+ * Visual styling (borders, backgrounds) is opt-in via attributes.
+ * 
+ * Layout-first philosophy: invisible by default, styled explicitly.
+ * 
+ * Attributes:
+ *   padding="..."     - Override padding (default: var(--s1))
+ *   border            - Add border
+ *   border-width="..."- Custom border width
+ *   bg                - Add background color
+ *   invert            - Invert colors (dark bg, light text)
+ *   compact           - Remove padding
+ *   borderless        - Explicitly remove border (for overriding)
+ */
+
+i-bau {
+  display: block;
+  padding: var(--bau-padding, var(--s1));
+  
+  /* Color tokens - can be overridden per-instance */
+  --bau-color-light: var(--color-surface-raised, var(--color-light));
+  --bau-color-dark: var(--color-text, var(--color-dark));
+  --bau-border-color: var(--color-border, currentColor);
+  
+  /* Layout-first: no visual styling by default */
+  /* Border width and background are 0/transparent from reset.css */
+}
+
+/* ===== VISUAL STYLING (Opt-in) ===== */
+
+/* Add border - use [border] attribute */
+i-bau[border] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* Custom border width */
+i-bau[border-width] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* Add background - use [bg] attribute */
+i-bau[bg] {
+  background-color: var(--bau-color-light);
+  color: var(--bau-color-dark);
+}
+
+/* Inverted color scheme (implies bg) */
+i-bau[invert] {
+  background-color: var(--bau-color-dark);
+  color: var(--bau-color-light);
+}
+
+/* Combined: border + background */
+i-bau[border][bg],
+i-bau[border][invert] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* ===== LAYOUT VARIANTS ===== */
+
+/* No padding */
+i-bau[compact] {
+  padding: 0;
+}
+
+/* Explicitly no border (for overriding inherited styles) */
+i-bau[borderless] {
+  border-width: 0;
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+/* Transparent outline for Windows High Contrast Mode */
+@media (forced-colors: active) {
+  i-bau[border],
+  i-bau[bg],
+  i-bau[invert] {
+    outline: var(--bau-border-width, 1px) solid transparent;
+    outline-offset: calc(var(--bau-border-width, 1px) * -1);
+  }
+}

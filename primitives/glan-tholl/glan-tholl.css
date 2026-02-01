@@ -1,0 +1,71 @@
+/**
+ * Reel Layout
+ * 
+ * Horizontal scrolling container for overflow content.
+ * A robust alternative to JavaScript carousels.
+ */
+
+i-glan-tholl {
+  display: flex;
+  block-size: var(--glan-tholl-height, auto);
+  
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  /* Smooth scrolling where supported and preferred */
+  scroll-behavior: smooth;
+  
+  /* Scroll snap for better UX */
+  scroll-snap-type: x mandatory;
+  
+  /* Firefox scrollbar styling */
+  scrollbar-color: var(--color-dark) var(--color-light);
+}
+
+i-glan-tholl > * {
+  flex: 0 0 var(--glan-tholl-item-width, auto);
+  scroll-snap-align: start;
+}
+
+i-glan-tholl > * + * {
+  margin-inline-start: var(--glan-tholl-space, var(--s1));
+}
+
+/* Images should maintain aspect ratio */
+i-glan-tholl > img {
+  block-size: 100%;
+  inline-size: auto;
+  flex-basis: auto;
+}
+
+/* Webkit scrollbar styling */
+i-glan-tholl::-webkit-scrollbar {
+  block-size: 0.75rem;
+}
+
+i-glan-tholl::-webkit-scrollbar-track {
+  background-color: var(--color-light);
+}
+
+i-glan-tholl::-webkit-scrollbar-thumb {
+  background-color: var(--color-mid);
+  border-radius: var(--s-2);
+}
+
+/* Hide scrollbar variant */
+i-glan-tholl[no-bar] {
+  scrollbar-width: none;
+}
+
+i-glan-tholl[no-bar]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Overflowing state (added via JS) */
+i-glan-tholl.overflowing {
+  padding-block-end: var(--glan-tholl-space, var(--s1));
+}
+
+i-glan-tholl.overflowing.no-bar {
+  padding-block-end: 0;
+}

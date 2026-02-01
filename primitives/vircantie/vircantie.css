@@ -1,0 +1,24 @@
+/**
+ * Vircantie Layout (Grid)
+ * 
+ * Auto-flowing grid with responsive columns based on minimum width.
+ * Uses CSS Grid's auto-fit with min() for robust responsiveness.
+ */
+
+i-vircantie {
+  display: grid;
+  gap: var(--vircantie-space, var(--s1));
+}
+
+/* 
+ * Using min() prevents overflow when container is narrower than minimum.
+ * The 100% value kicks in when min would cause overflow.
+ */
+@supports (width: min(var(--vircantie-min, 250px), 100%)) {
+  i-vircantie {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--vircantie-min, 250px), 100%), 1fr)
+    );
+  }
+}

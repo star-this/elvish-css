@@ -1,0 +1,43 @@
+/**
+ * Him Layout (NEW)
+ * 
+ * Creates sticky positioning with configurable offset.
+ * Solves the common pattern of sticky headers/sidebars.
+ * 
+ * IMPORTANT: The parent must have defined height or be
+ * in a scroll context for sticky to work properly.
+ */
+
+i-him {
+  display: block;
+  position: sticky;
+  
+  /* Default: stick to top */
+  inset-block-start: var(--him-offset, 0);
+  
+  /* Ensure it stays above sibling content when stuck */
+  z-index: var(--him-z, 1);
+}
+
+/* Stick to bottom instead */
+i-him[to="bottom"] {
+  inset-block-start: auto;
+  inset-block-end: var(--him-offset, 0);
+}
+
+/* Stick to left (in horizontal scroll context) */
+i-him[to="left"] {
+  inset-block-start: auto;
+  inset-inline-start: var(--him-offset, 0);
+}
+
+/* Stick to right (in horizontal scroll context) */
+i-him[to="right"] {
+  inset-block-start: auto;
+  inset-inline-end: var(--him-offset, 0);
+}
+
+/* Sentinel for detecting stuck state (JavaScript enhancement) */
+i-him[data-stuck="true"] {
+  /* Add styles here or use this selector in your own CSS */
+}

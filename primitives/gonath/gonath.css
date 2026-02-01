@@ -1,0 +1,57 @@
+/**
+ * Gonath Layout (NEW)
+ * 
+ * Pinterest-style layout where items pack efficiently into columns.
+ * Uses CSS columns as the primary method (widely supported).
+ * Progressively enhances to CSS Grid masonry where supported.
+ * 
+ * CAVEATS:
+ * - CSS columns: items flow top-to-bottom, then left-to-right
+ *   (not strictly "visual order" like true masonry)
+ * - CSS Grid masonry: experimental, limited browser support
+ */
+
+i-gonath {
+  display: block;
+  
+  /* CSS Columns approach (fallback) */
+  column-count: var(--gonath-columns, 3);
+  column-gap: var(--gonath-space, var(--s1));
+}
+
+i-gonath > * {
+  /* Prevent items from breaking across columns */
+  break-inside: avoid;
+  
+  /* Add vertical spacing between items */
+  margin-block-end: var(--gonath-space, var(--s1));
+}
+
+/* Progressive enhancement: CSS Grid masonry where supported */
+@supports (grid-template-rows: masonry) {
+  i-gonath {
+    display: grid;
+    column-count: unset;
+    grid-template-columns: repeat(var(--gonath-columns, 3), 1fr);
+    grid-template-rows: masonry;
+    gap: var(--gonath-space, var(--s1));
+  }
+  
+  i-gonath > * {
+    margin-block-end: 0;
+    break-inside: unset;
+  }
+}
+
+/* Responsive column counts */
+@media (max-width: 800px) {
+  i-gonath {
+    --gonath-columns: 2;
+  }
+}
+
+@media (max-width: 500px) {
+  i-gonath {
+    --gonath-columns: 1;
+  }
+}

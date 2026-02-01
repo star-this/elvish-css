@@ -1,0 +1,57 @@
+/**
+ * Thann Layout (Icon)
+ * 
+ * Aligns an SVG icon with accompanying text.
+ * Uses relative units for automatic scaling.
+ * 
+ * Attributes:
+ * - echuiol: "active" state styling
+ * - dhoren: "hidden" state (visually hidden but accessible)
+ */
+
+i-thann {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--thann-space, 0);
+}
+
+i-thann svg {
+  /* Match uppercase letter height */
+  block-size: 0.75em;
+  block-size: 1cap; /* Where supported */
+  
+  inline-size: 0.75em;
+  inline-size: 1cap; /* Where supported */
+  
+  /* Inherit text color */
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* When using natural word spacing (no explicit space) */
+i-thann:not([space]) {
+  display: inline;
+}
+
+i-thann:not([space]) svg {
+  display: inline;
+  vertical-align: -0.125em; /* Fine-tune baseline alignment */
+}
+
+/* Echuiol = Active state */
+i-thann[echuiol] {
+  color: var(--color-accent, currentColor);
+}
+
+/* Dhoren = Hidden (visually hidden but accessible) */
+i-thann[dhoren] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

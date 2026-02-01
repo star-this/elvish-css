@@ -1,0 +1,39 @@
+/**
+ * Cover Layout
+ * 
+ * Vertically centers a principal element with optional
+ * header and footer elements. Perfect for hero sections.
+ */
+
+i-esgal {
+  display: flex;
+  flex-direction: column;
+  min-block-size: var(--esgal-min-height, 100vh);
+  padding: var(--esgal-space, var(--s1));
+}
+
+i-esgal > * {
+  margin-block: var(--esgal-space, var(--s1));
+}
+
+/* The centered element - default is h1 */
+i-esgal > :first-child:not(h1, h2, h3, [data-centered]) {
+  margin-block-start: 0;
+}
+
+i-esgal > :last-child:not(h1, h2, h3, [data-centered]) {
+  margin-block-end: 0;
+}
+
+/* Elements that should be centered */
+i-esgal > h1,
+i-esgal > h2,
+i-esgal > h3,
+i-esgal > [data-centered] {
+  margin-block: auto;
+}
+
+/* No padding variant */
+i-esgal[no-pad] {
+  padding: 0;
+}

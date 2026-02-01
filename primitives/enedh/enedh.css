@@ -1,0 +1,38 @@
+/**
+ * Center Layout
+ * 
+ * Horizontally centers content with a maximum width.
+ * Preserves gutters (minimum space on sides) in narrow contexts.
+ */
+
+i-enedh {
+  display: block;
+  
+  /* Use content-box so padding adds to the max-width, not subtracts */
+  box-sizing: content-box;
+  
+  /* Center with auto margins */
+  margin-inline: auto;
+  
+  /* 
+   * Maximum width - JS sets --enedh-max from the max attribute.
+   * Fallback chain: attribute value → 100% (full width until JS runs)
+   * This ensures layouts work even if JS fails to load.
+   */
+  max-inline-size: var(--enedh-max, 100%);
+  
+  /* Gutters - minimum space on either side */
+  padding-inline: var(--enedh-gutters, 0);
+}
+
+/* Intrinsic centering - center children based on their content width */
+i-enedh[intrinsic] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Also center the text */
+i-enedh[and-text] {
+  text-align: center;
+}

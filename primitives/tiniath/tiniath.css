@@ -1,0 +1,16 @@
+/**
+ * Cluster Layout
+ * 
+ * Groups elements that differ in length and wrap naturally.
+ * Perfect for tags, buttons, navigation items.
+ */
+
+i-tiniath {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tiniath-space, var(--s1));
+  
+  /* Default justification and alignment */
+  justify-content: var(--tiniath-justify, flex-start);
+  align-items: var(--tiniath-align, center);
+}

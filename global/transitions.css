@@ -1,0 +1,288 @@
+/**
+ * Elvish - View Transitions
+ * 
+ * Smooth, buttery transitions between layout states using the View Transitions API.
+ * 
+ * Browser Support (Jan 2026) - Baseline Newly Available since Oct 2025:
+ * - Chrome/Edge: ✅ 111+
+ * - Safari: ✅ 18+
+ * - Firefox: ✅ 144+
+ * 
+ * New features available:
+ * - view-transition-name: match-element (auto-naming)
+ * - view-transition-class (group styling)
+ * - :active-view-transition pseudo-class
+ * 
+ * Usage:
+ * 1. Add view-transition-name to elements that should animate independently
+ * 2. Use startTransition() helper to wrap DOM changes
+ * 3. Customize timing with CSS custom properties
+ */
+
+/* ===== ENABLE VIEW TRANSITIONS ===== */
+@view-transition {
+  navigation: auto; /* Enable for same-document navigations */
+}
+
+/* ===== TRANSITION TIMING TOKENS ===== */
+:root {
+  --transition-duration: 300ms;
+  --transition-duration-fast: 150ms;
+  --transition-duration-slow: 500ms;
+  
+  /* Easing curves */
+  --transition-ease: cubic-bezier(0.25, 0.1, 0.25, 1);      /* Smooth default */
+  --transition-ease-out: cubic-bezier(0.16, 1, 0.3, 1);     /* Quick start, gentle end */
+  --transition-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* Symmetric */
+  --transition-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Slight overshoot */
+}
+
+/* ===== DEFAULT TRANSITION BEHAVIOR ===== */
+/* Old state fades/scales out */
+::view-transition-old(root) {
+  animation: var(--transition-duration) var(--transition-ease) both fade-out;
+}
+
+/* New state fades/scales in */
+::view-transition-new(root) {
+  animation: var(--transition-duration) var(--transition-ease) both fade-in;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+/* ===== NAMED TRANSITION GROUPS ===== */
+
+/* 
+ * Assign view-transition-name to elements for independent animation.
+ * Each named element animates separately from the root transition.
+ */
+
+/* Layout primitives can opt-in to independent transitions */
+[data-transition] {
+  view-transition-name: var(--transition-name, auto);
+}
+
+/* Auto-naming for list/grid items - each gets unique name automatically */
+[data-transition="auto"] > * {
+  view-transition-name: match-element;
+}
+
+/* Group styling with view-transition-class */
+.transition-card-group > * {
+  view-transition-name: match-element;
+  view-transition-class: card;
+}
+
+/* Style all cards at once using the class */
+::view-transition-group(.card) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--transition-ease-spring);
+}
+
+/* Utility classes for common transition names */
+.transition-hero { view-transition-name: hero; }
+.transition-header { view-transition-name: header; }
+.transition-sidebar { view-transition-name: sidebar; }
+.transition-main { view-transition-name: main; }
+.transition-card { view-transition-name: card; }
+.transition-modal { view-transition-name: modal; }
+
+/* ===== TRANSITION ANIMATIONS ===== */
+
+/* Morph (default for named elements) - smooth position/size interpolation */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--transition-ease-out);
+}
+
+/* Slide transitions */
+::view-transition-old(slide-left) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-out-left;
+}
+::view-transition-new(slide-left) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-in-left;
+}
+
+::view-transition-old(slide-right) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-out-right;
+}
+::view-transition-new(slide-right) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-in-right;
+}
+
+::view-transition-old(slide-up) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-out-up;
+}
+::view-transition-new(slide-up) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-in-up;
+}
+
+::view-transition-old(slide-down) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-out-down;
+}
+::view-transition-new(slide-down) {
+  animation: var(--transition-duration) var(--transition-ease-out) both slide-in-down;
+}
+
+@keyframes slide-out-left {
+  to { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes slide-in-left {
+  from { transform: translateX(100%); opacity: 0; }
+}
+@keyframes slide-out-right {
+  to { transform: translateX(100%); opacity: 0; }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes slide-out-up {
+  to { transform: translateY(-100%); opacity: 0; }
+}
+@keyframes slide-in-up {
+  from { transform: translateY(100%); opacity: 0; }
+}
+@keyframes slide-out-down {
+  to { transform: translateY(100%); opacity: 0; }
+}
+@keyframes slide-in-down {
+  from { transform: translateY(-100%); opacity: 0; }
+}
+
+/* Scale transitions */
+::view-transition-old(scale) {
+  animation: var(--transition-duration) var(--transition-ease-out) both scale-out;
+}
+::view-transition-new(scale) {
+  animation: var(--transition-duration) var(--transition-ease-spring) both scale-in;
+}
+
+@keyframes scale-out {
+  to { transform: scale(0.9); opacity: 0; }
+}
+@keyframes scale-in {
+  from { transform: scale(1.1); opacity: 0; }
+}
+
+/* Flip transitions */
+::view-transition-old(flip) {
+  animation: var(--transition-duration-slow) var(--transition-ease) both flip-out;
+}
+::view-transition-new(flip) {
+  animation: var(--transition-duration-slow) var(--transition-ease) both flip-in;
+}
+
+@keyframes flip-out {
+  to { transform: rotateY(90deg); opacity: 0; }
+}
+@keyframes flip-in {
+  from { transform: rotateY(-90deg); opacity: 0; }
+}
+
+/* ===== LAYOUT-SPECIFIC TRANSITIONS ===== */
+
+/* Sidebar collapse/expand */
+.transition-glan-veleg { view-transition-name: glan-veleg; }
+
+::view-transition-old(glan-veleg),
+::view-transition-new(glan-veleg) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--transition-ease-out);
+  /* Height and width interpolate automatically */
+}
+
+/* Switcher horizontal ↔ vertical */
+.transition-gwistindor { view-transition-name: gwistindor; }
+
+/* Grid reflow */
+.transition-vircantie { view-transition-name: vircantie; }
+
+/* Aspect ratio changes */
+.transition-gant-thala { view-transition-name: gant-thala; }
+
+::view-transition-old(gant-thala),
+::view-transition-new(gant-thala) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--transition-ease-out);
+  /* Aspect ratio morphs smoothly */
+}
+
+/* ===== THEME TRANSITIONS ===== */
+.transition-theme { view-transition-name: theme; }
+
+/* Cross-fade for theme changes */
+::view-transition-old(theme),
+::view-transition-new(theme) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(theme) {
+  animation: var(--transition-duration-slow) var(--transition-ease) both fade-out;
+}
+
+::view-transition-new(theme) {
+  animation: var(--transition-duration-slow) var(--transition-ease) both fade-in;
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  
+  :root {
+    --transition-duration: 0ms;
+    --transition-duration-fast: 0ms;
+    --transition-duration-slow: 0ms;
+  }
+}
+
+/* ===== ACTIVE TRANSITION STATES ===== */
+/* Style the page during an active view transition */
+:root:active-view-transition {
+  /* Prevent interaction during transition */
+  pointer-events: none;
+}
+
+:root:active-view-transition-type(theme) {
+  /* Special handling for theme transitions */
+}
+
+:root:active-view-transition-type(layout) {
+  /* Special handling for layout transitions */
+}
+
+/* ===== FALLBACK FOR UNSUPPORTED BROWSERS ===== */
+/* 
+ * When View Transitions aren't supported, these CSS transitions
+ * provide a graceful fallback for common properties.
+ */
+@supports not (view-transition-name: none) {
+  /* Elvish primitives get CSS transition fallbacks */
+  i-glan-veleg,
+  i-gwistindor,
+  i-vircantie,
+  i-gant-thala,
+  i-enedh,
+  i-hath {
+    transition: 
+      width var(--transition-duration, 300ms) var(--transition-ease, ease),
+      height var(--transition-duration, 300ms) var(--transition-ease, ease),
+      flex-basis var(--transition-duration, 300ms) var(--transition-ease, ease),
+      gap var(--transition-duration, 300ms) var(--transition-ease, ease);
+  }
+  
+  i-gant-thala {
+    transition: aspect-ratio var(--transition-duration, 300ms) var(--transition-ease, ease);
+  }
+}
