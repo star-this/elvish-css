@@ -166,15 +166,15 @@
 /* === global/reset.css === */
 /**
  * Elvish - Modern Reset & Axioms
- * 
+ *
  * A synthesis of Andy Bell's "More Modern CSS Reset" and Elvish's original reset.
  * Optimized for Chrome/Edge with graceful degradation for Safari/Firefox.
- * 
+ *
  * Sources:
  * - [AB] Andy Bell's "A (More) Modern CSS Reset"
  * - [EL] Elvish original reset
  * - [NEW] New additions for modern browsers
- * 
+ *
  * Debug Mode:
  *   Add .mellon or .debug to <body> or any element to reveal layout structure.
  *   "Mellon" is Sindarin for "friend" - the password to enter Moria.
@@ -188,12 +188,12 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* ==========================================================================
    BORDER & BACKGROUND DEFAULTS [EL + NEW]
-   
+
    Layout-focused philosophy: visual styling is opt-in, not opt-out.
    - Borders: style is solid (for easy `border-width: 1px`), but width is 0
    - Backgrounds: transparent by default
@@ -203,52 +203,58 @@
 *,
 *::before,
 *::after {
-  /* Border: ready to use, but invisible by default */
-  border-style: solid;
-  border-width: 0;
-  
-  /* Background: transparent until explicitly set */
-  background-color: transparent;
+    /* Border: ready to use, but invisible by default */
+    border-style: solid;
+    border-width: 0;
+
+    /* Background: transparent until explicitly set */
+    background-color: transparent;
 }
 
 /* Root elements get the actual background */
 html {
-  background-color: var(--color-surface);
+    background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    MARGIN RESET [AB - expanded]
-   
+
    DISCARDED from Elvish: `* { margin: 0 }` is too aggressive.
    It breaks nested lists, fieldset legends, and third-party components.
-   
+
    Andy Bell's surgical approach is safer - only reset elements that commonly
    have problematic default margins. Expanded to include pre, h5, h6.
    ========================================================================== */
 
 body,
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 p,
 figure,
 blockquote,
-dl, dd,
+dl,
+dd,
 pre,
 fieldset {
-  margin: 0;
+    margin: 0;
 }
 
 /* ==========================================================================
    MEASURE AXIOM [EL]
-   
+
    Not in Andy Bell's reset - this is Elvish's core philosophy.
-   
+
    No line of text should exceed a comfortable reading length.
    Exception-based: everything gets the constraint, then we remove it
    from elements that need to contain multiple adjacent boxes.
    ========================================================================== */
 
 * {
-  max-inline-size: var(--measure);
+    max-inline-size: var(--measure);
 }
 
 html,
@@ -275,24 +281,25 @@ dialog,
 menu,
 hgroup,
 address,
-/* Custom elements - Elvish layout primitives (Sindarin names) */
-i-hath,          /* Stack */
-i-bau,           /* Box */
-i-enedh,         /* Center (horizontal) */
-i-tiniath,       /* Cluster */
+/* Custom elements - Elvish css primitives (Sindarin names) */
+i-hath,          /* Stacked */
+i-bau,           /* Quad */
+i-enedh,         /* Centered (horizontal) */
+i-tiniath,       /* Clustered */
 i-glan-veleg,    /* Sidebar */
-i-gwistindor,    /* Switcher */
-i-esgal,         /* Cover (vertical center) */
+i-gwistindor,    /* Switching */
+i-esgal,         /* Covering (vertical center) */
 i-vircantie,     /* Grid */
-i-gant-thala,    /* Frame (aspect) */
-i-glan-tholl,    /* Reel (side-scrolling) */
-i-fano,          /* Imposter (overlay) */
+i-gant-thala,    /* Aspect (ratio) */
+i-glan-tholl,    /* Side-Scrolling */
+i-fano,          /* Overcast */
 i-thann,         /* Icon */
 i-adleithian,    /* Container */
 i-him,           /* Sticky */
 i-miriant,       /* Grid-placed */
-i-gonath {       /* Masonry */
-  max-inline-size: none;
+i-gonath {
+    /* Masonry */
+    max-inline-size: none;
 }
 
 /* ==========================================================================
@@ -300,30 +307,30 @@ i-gonath {       /* Masonry */
    ========================================================================== */
 
 html {
-  /* [EL] Font settings via design tokens */
-  font-family: var(--font-plain);
-  font-size: 100%; /* Respects user preferences */
-  line-height: var(--line-height);
-  
-  /* [EL] Colors */
-  color: var(--color-text);
-  /* background-color set above in BORDER & BACKGROUND DEFAULTS */
-  
-  /* [NEW] Text rendering - prioritize legibility */
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-  /* [NEW] Prevent text size inflation on mobile */
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+    /* [EL] Font settings via design tokens */
+    font-family: var(--font-plain);
+    font-size: 100%; /* Respects user preferences */
+    line-height: var(--line-height);
+
+    /* [EL] Colors */
+    color: var(--color-text);
+    /* background-color set above in BORDER & BACKGROUND DEFAULTS */
+
+    /* [NEW] Text rendering - prioritize legibility */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* [NEW] Prevent text size inflation on mobile */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 /* [AB] Smooth scrolling ONLY when using keyboard navigation */
 @media (prefers-reduced-motion: no-preference) {
-  html:focus-within {
-    scroll-behavior: smooth;
-  }
+    html:focus-within {
+        scroll-behavior: smooth;
+    }
 }
 
 /* ==========================================================================
@@ -331,40 +338,57 @@ html {
    ========================================================================== */
 
 body {
-  /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
-  min-block-size: 100vh;
-  min-block-size: 100dvh;
-  
-  /* [NEW] Prevent horizontal overflow from animations, etc. */
-  overflow-x: clip;
-  
-  /* Body gets the surface background */
-  background-color: var(--color-surface);
+    /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
+    min-block-size: 100vh;
+    min-block-size: 100dvh;
+
+    /* [NEW] Prevent horizontal overflow from animations, etc. */
+    overflow-x: clip;
+
+    /* Body gets the surface background */
+    background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    TYPOGRAPHY [EL + NEW]
    ========================================================================== */
 
-h1, h2, h3, h4, h5, h6 {
-  /* [EL] Tighter line height for headings */
-  line-height: var(--line-height-tight);
-  
-  /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
-  text-wrap: balance;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    /* [EL] Tighter line height for headings */
+    line-height: var(--line-height-tight);
+
+    /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
+    text-wrap: balance;
 }
 
 /* [EL] Modular scale sizing */
-h1 { font-size: var(--s4); }
-h2 { font-size: var(--s3); }
-h3 { font-size: var(--s2); }
-h4 { font-size: var(--s1); }
-h5 { font-size: var(--s0); }
-h6 { font-size: var(--s-1); }
+h1 {
+    font-size: var(--s4);
+}
+h2 {
+    font-size: var(--s3);
+}
+h3 {
+    font-size: var(--s2);
+}
+h4 {
+    font-size: var(--s1);
+}
+h5 {
+    font-size: var(--s0);
+}
+h6 {
+    font-size: var(--s-1);
+}
 
 /* [NEW] Pretty wrapping for prose (Chrome 117+) */
 p {
-  text-wrap: pretty;
+    text-wrap: pretty;
 }
 
 /* ==========================================================================
@@ -372,25 +396,25 @@ p {
    ========================================================================== */
 
 a {
-  /* [EL] Inherit color - style via classes or context */
-  color: currentColor;
-  
-  /* [AB] Better underline rendering - skips descenders (g, y, p) */
-  text-decoration-skip-ink: auto;
-  
-  /* [NEW] Modern underline offset for readability */
-  text-underline-offset: 0.2em;
+    /* [EL] Inherit color - style via classes or context */
+    color: currentColor;
+
+    /* [AB] Better underline rendering - skips descenders (g, y, p) */
+    text-decoration-skip-ink: auto;
+
+    /* [NEW] Modern underline offset for readability */
+    text-underline-offset: 0.2em;
 }
 
 /* [EL] Remove underline on hover */
 a:hover {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 /* [NEW] Focus styles for keyboard navigation */
 a:focus-visible {
-  outline: 2px solid var(--color-accent, currentColor);
-  outline-offset: 2px;
+    outline: 2px solid var(--color-accent, currentColor);
+    outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -402,21 +426,21 @@ picture,
 video,
 canvas,
 svg {
-  display: block;
-  max-inline-size: 100%;
+    display: block;
+    max-inline-size: 100%;
 }
 
 img,
 picture,
 video {
-  /* [EL] Maintain aspect ratio */
-  block-size: auto;
+    /* [EL] Maintain aspect ratio */
+    block-size: auto;
 }
 
 /* [NEW] Style for alt text when image fails to load */
 img {
-  font-style: italic;
-  vertical-align: middle;
+    font-style: italic;
+    vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -427,21 +451,21 @@ input,
 button,
 textarea,
 select {
-  /* [AB + EL] Inherit font from parent */
-  font: inherit;
-  /* [EL] Inherit color too */
-  color: inherit;
+    /* [AB + EL] Inherit font from parent */
+    font: inherit;
+    /* [EL] Inherit color too */
+    color: inherit;
 }
 
 /* [EL] Indicate buttons are clickable */
 button,
 [role="button"] {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 /* [NEW] Textarea should not resize horizontally */
 textarea {
-  resize: vertical;
+    resize: vertical;
 }
 
 /* ==========================================================================
@@ -450,9 +474,9 @@ textarea {
 
 ul,
 ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 /* [NEW] Restore list styles when explicitly marked for semantics */
@@ -460,8 +484,8 @@ ul[role="list"],
 ol[role="list"],
 ul.list,
 ol.list {
-  list-style: revert;
-  padding-inline-start: 1em;
+    list-style: revert;
+    padding-inline-start: 1em;
 }
 
 /* ==========================================================================
@@ -469,14 +493,14 @@ ol.list {
    ========================================================================== */
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 /* [NEW] Inherit text alignment */
 th {
-  text-align: inherit;
-  font-weight: inherit;
+    text-align: inherit;
+    font-weight: inherit;
 }
 
 /* ==========================================================================
@@ -487,12 +511,12 @@ pre,
 code,
 kbd,
 samp {
-  font-family: var(--font-mono);
+    font-family: var(--font-mono);
 }
 
 pre {
-  overflow-x: auto;
-  white-space: pre;
+    overflow-x: auto;
+    white-space: pre;
 }
 
 /* ==========================================================================
@@ -501,20 +525,20 @@ pre {
 
 /* [EL] Horizontal rule */
 hr {
-  border-width: var(--border-thin, 1px) 0 0 0;
-  color: inherit;
-  block-size: 0;
+    border-width: var(--border-thin, 1px) 0 0 0;
+    color: inherit;
+    block-size: 0;
 }
 
 /* [NEW] Abbreviations with title should indicate expandability */
 abbr[title] {
-  text-decoration: underline dotted;
-  cursor: help;
+    text-decoration: underline dotted;
+    cursor: help;
 }
 
 /* [NEW] Summary cursor */
 summary {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 /* ==========================================================================
@@ -522,8 +546,8 @@ summary {
    ========================================================================== */
 
 ::selection {
-  background-color: var(--color-accent, highlight);
-  color: var(--color-accent-text, highlighttext);
+    background-color: var(--color-accent, highlight);
+    color: var(--color-accent-text, highlighttext);
 }
 
 /* ==========================================================================
@@ -532,13 +556,13 @@ summary {
 
 /* Remove default focus outline */
 :focus {
-  outline: none;
+    outline: none;
 }
 
 /* Visible focus for keyboard navigation only */
 :focus-visible {
-  outline: 2px solid var(--color-accent, currentColor);
-  outline-offset: 2px;
+    outline: 2px solid var(--color-accent, currentColor);
+    outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -546,40 +570,40 @@ summary {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    /* [AB] Kill all animations */
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    
-    /* [AB] Kill all transitions */
-    transition-duration: 0.01ms !important;
-    
-    /* [AB] Kill smooth scrolling */
-    scroll-behavior: auto !important;
-  }
-  
-  /* [NEW] Also target View Transitions */
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
+    *,
+    *::before,
+    *::after {
+        /* [AB] Kill all animations */
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        /* [AB] Kill all transitions */
+        transition-duration: 0.01ms !important;
+
+        /* [AB] Kill smooth scrolling */
+        scroll-behavior: auto !important;
+    }
+
+    /* [NEW] Also target View Transitions */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
 }
 
 /* ==========================================================================
    DEBUG MODE - "MELLON" [NEW]
-   
+
    Add .mellon or .debug to <body> or any element to reveal layout structure.
    "Mellon" is Sindarin for "friend" - the password to enter Moria.
-   
+
    Features:
    - Dashed outlines show element boundaries (uses outline, not border)
    - Each nesting level gets a different hue (rainbow effect)
    - Optional .tint modifier adds subtle background colors
    - Zero specificity via :where() - easily overridden by real styles
-   
+
    Usage:
      <body class="mellon">         - Debug entire page
      <body class="mellon tint">    - Debug with background tints
@@ -588,53 +612,90 @@ summary {
 
 /* Debug color tokens */
 :root {
-  --debug-stroke: 1px;
-  --debug-style: dashed;
-  --debug-saturation: 0.25;
-  --debug-lightness: 55%;
+    --debug-stroke: 1px;
+    --debug-style: dashed;
+    --debug-saturation: 0.25;
+    --debug-lightness: 55%;
 }
 
 /* Calculate hue based on depth (golden angle ≈ 137.5° for optimal distribution) */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-  --debug-hue: 0;
+    --debug-hue: 0;
 }
 
-:where(.mellon, .debug) > :where(*) { --debug-hue: 137; }
-:where(.mellon, .debug) > :where(*) > :where(*) { --debug-hue: 275; }
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) { --debug-hue: 52; }
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 190; }
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 327; }
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 105; }
+:where(.mellon, .debug) > :where(*) {
+    --debug-hue: 137;
+}
+:where(.mellon, .debug) > :where(*) > :where(*) {
+    --debug-hue: 275;
+}
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) {
+    --debug-hue: 52;
+}
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) {
+    --debug-hue: 190;
+}
+:where(.mellon, .debug)
+    > :where(*)
+    > :where(*)
+    > :where(*)
+    > :where(*)
+    > :where(*) {
+    --debug-hue: 327;
+}
+:where(.mellon, .debug)
+    > :where(*)
+    > :where(*)
+    > :where(*)
+    > :where(*)
+    > :where(*)
+    > :where(*) {
+    --debug-hue: 105;
+}
 
 /* Show outlines in debug mode */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-  outline: var(--debug-stroke) var(--debug-style) 
-    oklch(var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)) !important;
-  outline-offset: -1px;
+    outline: var(--debug-stroke) var(--debug-style)
+        oklch(
+            var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)
+        ) !important;
+    outline-offset: -1px;
 }
 
 /* Highlight Elvish primitives more prominently */
-:where(.mellon, .debug) :where(
-  i-hath, i-bau, i-enedh, i-tiniath, i-glan-veleg, i-gwistindor,
-  i-esgal, i-vircantie, i-gant-thala, i-glan-tholl, i-fano, i-thann,
-  i-adleithian, i-him, i-miriant, i-gonath
-) {
-  --debug-stroke: 2px;
-  --debug-style: solid;
-  --debug-saturation: 0.4;
+:where(.mellon, .debug)
+    :where(
+        i-hath,
+        i-bau,
+        i-enedh,
+        i-tiniath,
+        i-glan-veleg,
+        i-gwistindor,
+        i-esgal,
+        i-vircantie,
+        i-gant-thala,
+        i-glan-tholl,
+        i-fano,
+        i-thann,
+        i-adleithian,
+        i-him,
+        i-miriant,
+        i-gonath
+    ) {
+    --debug-stroke: 2px;
+    --debug-style: solid;
+    --debug-saturation: 0.4;
 }
 
 /* Optional: Background tint mode */
 :where(.mellon.tint, .debug.tint),
 :where(.mellon.tint, .debug.tint) :where(*) {
-  background-color: oklch(
-    var(--debug-lightness) 
-    calc(var(--debug-saturation) * 0.4) 
-    var(--debug-hue, 0) 
-    / 0.1
-  ) !important;
+    background-color: oklch(
+        var(--debug-lightness) calc(var(--debug-saturation) * 0.4)
+            var(--debug-hue, 0) / 0.1
+    ) !important;
 }
 
 /* ==========================================================================
@@ -644,199 +705,427 @@ summary {
 /* [EL] Hidden but accessible to screen readers */
 .visually-hidden,
 .sr-only {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* [NEW] Skip link pattern for accessibility */
 .skip-link {
-  position: absolute;
-  inset-inline-start: 0;
-  inset-block-start: 0;
-  padding: var(--s-1, 0.5rem) var(--s0, 1rem);
-  background: var(--color-accent, highlight);
-  color: var(--color-accent-text, highlighttext);
-  transform: translateY(-100%);
-  z-index: 9999;
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    padding: var(--s-1, 0.5rem) var(--s0, 1rem);
+    background: var(--color-accent, highlight);
+    color: var(--color-accent-text, highlighttext);
+    transform: translateY(-100%);
+    z-index: 9999;
 }
 
 .skip-link:focus {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
 
 /* === global/utilities.css === */
 /**
  * Elvish - Utilities
- * 
+ *
  * Final adjustments. Use sparingly.
  * Naming convention: property\:value
- * 
+ *
  * !important is intentional - utilities are for overrides.
  */
 
 /* ===== TEXT ALIGNMENT ===== */
-.text-align\:start { text-align: start !important; }
-.text-align\:center { text-align: center !important; }
-.text-align\:end { text-align: end !important; }
+.text-align\:start {
+    text-align: start !important;
+}
+.text-align\:center {
+    text-align: center !important;
+}
+.text-align\:end {
+    text-align: end !important;
+}
 
 /* ===== FONT SIZES ===== */
-.font-size\:s-2 { font-size: var(--s-2) !important; }
-.font-size\:s-1 { font-size: var(--s-1) !important; }
-.font-size\:s0 { font-size: var(--s0) !important; }
-.font-size\:s1 { font-size: var(--s1) !important; }
-.font-size\:s2 { font-size: var(--s2) !important; }
-.font-size\:s3 { font-size: var(--s3) !important; }
-.font-size\:s4 { font-size: var(--s4) !important; }
+.font-size\:s-2 {
+    font-size: var(--s-2) !important;
+}
+.font-size\:s-1 {
+    font-size: var(--s-1) !important;
+}
+.font-size\:s0 {
+    font-size: var(--s0) !important;
+}
+.font-size\:s1 {
+    font-size: var(--s1) !important;
+}
+.font-size\:s2 {
+    font-size: var(--s2) !important;
+}
+.font-size\:s3 {
+    font-size: var(--s3) !important;
+}
+.font-size\:s4 {
+    font-size: var(--s4) !important;
+}
 
 /* ===== FONT WEIGHT ===== */
-.font-weight\:normal { font-weight: normal !important; }
-.font-weight\:bold { font-weight: bold !important; }
+.font-weight\:normal {
+    font-weight: normal !important;
+}
+.font-weight\:bold {
+    font-weight: bold !important;
+}
 
 /* ===== COLORS ===== */
-.color\:dark { color: var(--color-dark) !important; }
-.color\:light { color: var(--color-light) !important; }
-.color\:accent { color: var(--color-accent) !important; }
+.color\:dark {
+    color: var(--color-dark) !important;
+}
+.color\:light {
+    color: var(--color-light) !important;
+}
+.color\:accent {
+    color: var(--color-accent) !important;
+}
 
-.bg\:dark { background-color: var(--color-dark) !important; }
-.bg\:light { background-color: var(--color-light) !important; }
-.bg\:accent { background-color: var(--color-accent) !important; }
+.bg\:dark {
+    background-color: var(--color-dark) !important;
+}
+.bg\:light {
+    background-color: var(--color-light) !important;
+}
+.bg\:accent {
+    background-color: var(--color-accent) !important;
+}
 
 /* ===== MEASURE ===== */
-.max-inline-size\:measure { max-inline-size: var(--measure) !important; }
-.max-inline-size\:measure\/2 { max-inline-size: calc(var(--measure) / 2) !important; }
-.max-inline-size\:measure\/3 { max-inline-size: calc(var(--measure) / 3) !important; }
-.max-inline-size\:none { max-inline-size: none !important; }
+.max-inline-size\:measure {
+    max-inline-size: var(--measure) !important;
+}
+.max-inline-size\:measure\/2 {
+    max-inline-size: calc(var(--measure) / 2) !important;
+}
+.max-inline-size\:measure\/3 {
+    max-inline-size: calc(var(--measure) / 3) !important;
+}
+.max-inline-size\:none {
+    max-inline-size: none !important;
+}
 
 /* ===== WIDTH ===== */
-.inline-size\:100 { inline-size: 100% !important; }
-.inline-size\:auto { inline-size: auto !important; }
+.inline-size\:100 {
+    inline-size: 100% !important;
+}
+.inline-size\:auto {
+    inline-size: auto !important;
+}
 
 /* ===== HEIGHT ===== */
-.block-size\:100 { block-size: 100% !important; }
-.block-size\:100vh { block-size: 100vh !important; }
-.block-size\:auto { block-size: auto !important; }
+.block-size\:100 {
+    block-size: 100% !important;
+}
+.block-size\:100vh {
+    block-size: 100vh !important;
+}
+.block-size\:auto {
+    block-size: auto !important;
+}
 
 /* ===== MARGIN ===== */
-.margin\:0 { margin: 0 !important; }
-.margin-block\:0 { margin-block: 0 !important; }
-.margin-inline\:0 { margin-inline: 0 !important; }
-.margin-inline\:auto { margin-inline: auto !important; }
+.margin\:0 {
+    margin: 0 !important;
+}
+.margin-block\:0 {
+    margin-block: 0 !important;
+}
+.margin-inline\:0 {
+    margin-inline: 0 !important;
+}
+.margin-inline\:auto {
+    margin-inline: auto !important;
+}
 
 /* ===== PADDING ===== */
-.padding\:s-1 { padding: var(--s-1) !important; }
-.padding\:s0 { padding: var(--s0) !important; }
-.padding\:s1 { padding: var(--s1) !important; }
-.padding\:s2 { padding: var(--s2) !important; }
+.padding\:s-1 {
+    padding: var(--s-1) !important;
+}
+.padding\:s0 {
+    padding: var(--s0) !important;
+}
+.padding\:s1 {
+    padding: var(--s1) !important;
+}
+.padding\:s2 {
+    padding: var(--s2) !important;
+}
 
 /* ===== GAP ===== */
-.gap\:s-1 { gap: var(--s-1) !important; }
-.gap\:s0 { gap: var(--s0) !important; }
-.gap\:s1 { gap: var(--s1) !important; }
-.gap\:s2 { gap: var(--s2) !important; }
+.gap\:s-1 {
+    gap: var(--s-1) !important;
+}
+.gap\:s0 {
+    gap: var(--s0) !important;
+}
+.gap\:s1 {
+    gap: var(--s1) !important;
+}
+.gap\:s2 {
+    gap: var(--s2) !important;
+}
 
 /* ===== FLEX ===== */
-.flex-grow\:1 { flex-grow: 1 !important; }
-.flex-shrink\:0 { flex-shrink: 0 !important; }
+.flex-grow\:1 {
+    flex-grow: 1 !important;
+}
+.flex-shrink\:0 {
+    flex-shrink: 0 !important;
+}
 
 /* ===== OVERFLOW ===== */
-.overflow\:hidden { overflow: hidden !important; }
-.overflow\:auto { overflow: auto !important; }
+.overflow\:hidden {
+    overflow: hidden !important;
+}
+.overflow\:auto {
+    overflow: auto !important;
+}
 
 /* ===== POSITION ===== */
-.position\:relative { position: relative !important; }
-.position\:absolute { position: absolute !important; }
-.position\:fixed { position: fixed !important; }
-.position\:sticky { position: sticky !important; }
+.position\:relative {
+    position: relative !important;
+}
+.position\:absolute {
+    position: absolute !important;
+}
+.position\:fixed {
+    position: fixed !important;
+}
+.position\:sticky {
+    position: sticky !important;
+}
 
 /* ===== DISPLAY ===== */
-.display\:none { display: none !important; }
-.display\:block { display: block !important; }
-.display\:inline { display: inline !important; }
-.display\:inline-block { display: inline-block !important; }
-.display\:flex { display: flex !important; }
-.display\:grid { display: grid !important; }
+.display\:none {
+    display: none !important;
+}
+.display\:block {
+    display: block !important;
+}
+.display\:inline {
+    display: inline !important;
+}
+.display\:inline-block {
+    display: inline-block !important;
+}
+.display\:flex {
+    display: flex !important;
+}
+.display\:grid {
+    display: grid !important;
+}
 
 /* ===== BORDERS ===== */
-.border\:thin { border-width: var(--border-thin) !important; }
-.border\:thick { border-width: var(--border-thick) !important; }
-.border-radius\:s-2 { border-radius: var(--s-2) !important; }
-.border-radius\:s-1 { border-radius: var(--s-1) !important; }
-.border-radius\:s0 { border-radius: var(--s0) !important; }
+.border\:thin {
+    border-width: var(--border-thin) !important;
+}
+.border\:thick {
+    border-width: var(--border-thick) !important;
+}
+.border-radius\:s-2 {
+    border-radius: var(--s-2) !important;
+}
+.border-radius\:s-1 {
+    border-radius: var(--s-1) !important;
+}
+.border-radius\:s0 {
+    border-radius: var(--s0) !important;
+}
 
 /* ===== SHADOWS ===== */
 .shadow\:small {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24) !important;
 }
 .shadow\:medium {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12) !important;
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.12) !important;
 }
 .shadow\:large {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10) !important;
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.15),
+        0 3px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* ===== Z-INDEX ===== */
 /* Use sparingly! Prefer source order. */
-.z\:0 { z-index: 0 !important; }
-.z\:1 { z-index: 1 !important; }
-.z\:10 { z-index: 10 !important; }
-.z\:100 { z-index: 100 !important; }
+.z\:0 {
+    z-index: 0 !important;
+}
+.z\:1 {
+    z-index: 1 !important;
+}
+.z\:2 {
+    z-index: 2 !important;
+}
+.z\:3 {
+    z-index: 3 !important;
+}
+.z\:5 {
+    z-index: 5 !important;
+}
+.z\:8 {
+    z-index: 8 !important;
+}
+.z\:13 {
+    z-index: 13 !important;
+}
+.z\:21 {
+    z-index: 21 !important;
+}
+.z\:34 {
+    z-index: 34 !important;
+}
+.z\:55 {
+    z-index: 55 !important;
+}
+.z\:89 {
+    z-index: 89 !important;
+}
+.z\:100 {
+    z-index: 100 !important;
+}
+.z\:101 {
+    z-index: 101 !important;
+}
+.z\:102 {
+    z-index: 102 !important;
+}
+.z\:103 {
+    z-index: 103 !important;
+}
+.z\:105 {
+    z-index: 105 !important;
+}
+.z\:108 {
+    z-index: 108 !important;
+}
+.z\:113 {
+    z-index: 113 !important;
+}
+.z\:121 {
+    z-index: 121 !important;
+}
+.z\:134 {
+    z-index: 134 !important;
+}
+.z\:155 {
+    z-index: 155 !important;
+}
+.z\:189 {
+    z-index: 189 !important;
+}
+.z\:200 {
+    z-index: 200 !important;
+}
 
 /* ===== LISTS ===== */
-.list-style\:disc { list-style: disc !important; padding-inline-start: 1em !important; }
-.list-style\:decimal { list-style: decimal !important; padding-inline-start: 1em !important; }
+.list-style\:disc {
+    list-style: disc !important;
+    padding-inline-start: 1em !important;
+}
+.list-style\:decimal {
+    list-style: decimal !important;
+    padding-inline-start: 1em !important;
+}
 
 /* ===== CURSOR ===== */
-.cursor\:pointer { cursor: pointer !important; }
-.cursor\:not-allowed { cursor: not-allowed !important; }
+.cursor\:pointer {
+    cursor: pointer !important;
+}
+.cursor\:not-allowed {
+    cursor: not-allowed !important;
+}
 
 /* ===== USER SELECT ===== */
-.user-select\:none { user-select: none !important; }
-.user-select\:all { user-select: all !important; }
+.user-select\:none {
+    user-select: none !important;
+}
+.user-select\:all {
+    user-select: all !important;
+}
 
 /* ===== RATIO MODES ===== */
-/* 
+/*
  * Switch the modular scale ratio for a container and all descendants.
  * Golden (φ): Dramatic, high-impact - ideal for marketing, CTAs
  * Silver (√2): Subtle, refined - ideal for documentation, dense content
  * Fifth (1.5): Balanced middle-ground
- * 
+ *
  * Also adjusts --measure (line length) to complement each ratio:
  * Golden: 60ch (tighter), Fifth: 70ch (balanced), Silver: 80ch (looser)
  */
-.ratio\:golden { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
-.ratio\:silver { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
-.ratio\:fifth { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
+.ratio\:golden {
+    --ratio: var(--ratio-golden) !important;
+    --measure: 60ch !important;
+}
+.ratio\:silver {
+    --ratio: var(--ratio-silver) !important;
+    --measure: 80ch !important;
+}
+.ratio\:fifth {
+    --ratio: var(--ratio-fifth) !important;
+    --measure: 70ch !important;
+}
 
 /* Aliases for convenience */
-.ratio\:dramatic { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
-.ratio\:subtle { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
-.ratio\:balanced { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
+.ratio\:dramatic {
+    --ratio: var(--ratio-golden) !important;
+    --measure: 60ch !important;
+}
+.ratio\:subtle {
+    --ratio: var(--ratio-silver) !important;
+    --measure: 80ch !important;
+}
+.ratio\:balanced {
+    --ratio: var(--ratio-fifth) !important;
+    --measure: 70ch !important;
+}
 
 /* Data attribute alternative (for JS toggling) */
-[data-ratio="golden"] { --ratio: var(--ratio-golden); --measure: 60ch; }
-[data-ratio="silver"] { --ratio: var(--ratio-silver); --measure: 80ch; }
-[data-ratio="fifth"] { --ratio: var(--ratio-fifth); --measure: 70ch; }
+[data-ratio="golden"] {
+    --ratio: var(--ratio-golden);
+    --measure: 60ch;
+}
+[data-ratio="silver"] {
+    --ratio: var(--ratio-silver);
+    --measure: 80ch;
+}
+[data-ratio="fifth"] {
+    --ratio: var(--ratio-fifth);
+    --measure: 70ch;
+}
 
 
 /* === global/modern.css === */
 /**
  * Elvish Modern - CSS Functions & Advanced Features
- * 
+ *
  * Features requiring Chrome 133+ / Edge 133+ (progressive enhancement)
  * Firefox and Safari fallbacks provided where possible.
- * 
+ *
  * BROWSER SUPPORT (as of Jan 2026):
  * - if()                 : Chrome 137+, Edge 137+
- * - @function            : Chrome 139+, Edge 139+  
+ * - @function            : Chrome 139+, Edge 139+
  * - sibling-index/count  : Chrome 138+, Edge 138+
  * - typed attr()         : Chrome 133+, Edge 133+
  * - light-dark()         : All modern browsers ✓
@@ -851,50 +1140,52 @@ summary {
  */
 
 /* Negate a value */
-@function --negate(--value) {
-  result: calc(-1 * var(--value));
+@function --neg(--value) {
+    result: calc(-1 * var(--value));
 }
 
 /* Linear interpolation between two values */
 @function --lerp(--a, --b, --t) {
-  result: calc(var(--a) + (var(--b) - var(--a)) * var(--t));
+    result: calc(var(--a) + (var(--b) - var(--a)) * var(--t));
 }
 
 /* Fluid value between min and max based on viewport */
 @function --fluid(--min, --max, --min-vw: 20rem, --max-vw: 75rem) {
-  result: clamp(
-    var(--min),
-    calc(var(--min) + (var(--max) - var(--min)) * ((100vw - var(--min-vw)) / (var(--max-vw) - var(--min-vw)))),
-    var(--max)
-  );
+    result: clamp(
+        var(--min),
+        calc(
+            var(--min) + (var(--max) - var(--min)) *
+                ((100vw - var(--min-vw)) / (var(--max-vw) - var(--min-vw)))
+        ),
+        var(--max)
+    );
 }
 
 /* Add transparency to a color */
 @function --alpha(--color, --opacity) {
-  result: oklch(from var(--color) l c h / var(--opacity));
+    result: oklch(from var(--color) l c h / var(--opacity));
 }
 
 /* Lighten a color */
 @function --lighten(--color, --amount: 0.1) {
-  result: oklch(from var(--color) calc(l + var(--amount)) c h);
+    result: oklch(from var(--color) calc(l + var(--amount)) c h);
 }
 
 /* Darken a color */
 @function --darken(--color, --amount: 0.1) {
-  result: oklch(from var(--color) calc(l - var(--amount)) c h);
+    result: oklch(from var(--color) calc(l - var(--amount)) c h);
 }
 
 /* Spacing multiplier */
 @function --space(--multiplier: 1) {
-  result: calc(var(--s0) * var(--multiplier));
+    result: calc(var(--s0) * var(--multiplier));
 }
 
 /* Conditional border-radius (0 when near edge, normal otherwise) */
 @function --safe-radius(--radius, --threshold: 8px) {
-  /* Use container query units if available */
-  result: clamp(0px, calc((100cqi - var(--threshold)) * 999), var(--radius));
+    /* Use container query units if available */
+    result: clamp(0px, calc((100cqi - var(--threshold)) * 999), var(--radius));
 }
-
 
 /* ============================================================================
  * STAGGER ANIMATIONS (sibling-index)
@@ -905,45 +1196,45 @@ summary {
 
 /* Stagger children entrance animations */
 .stagger-enter > * {
-  animation: elvish-fade-in-up var(--duration-normal, 300ms) var(--ease-out, ease-out) both;
-  animation-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+    animation: elvish-fade-in-up var(--duration-normal, 300ms)
+        var(--ease-out, ease-out) both;
+    animation-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
 }
 
 /* Stagger with @starting-style for appear animations */
 .stagger-appear > * {
-  opacity: 1;
-  transform: translateY(0);
-  transition: 
-    opacity var(--duration-normal, 300ms) var(--ease-out, ease-out),
-    transform var(--duration-normal, 300ms) var(--ease-out, ease-out);
-  transition-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
-  
-  @starting-style {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity var(--duration-normal, 300ms) var(--ease-out, ease-out),
+        transform var(--duration-normal, 300ms) var(--ease-out, ease-out);
+    transition-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+
+    @starting-style {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 }
 
 /* Cascade opacity based on position */
 .fade-cascade > * {
-  opacity: calc(1 - (sibling-index() - 1) * 0.08);
+    opacity: calc(1 - (sibling-index() - 1) * 0.08);
 }
 
 /* Rainbow children using sibling-index for hue */
 .rainbow > * {
-  --hue: calc(sibling-index() * (360 / sibling-count()));
-  background: oklch(85% 0.2 var(--hue));
+    --hue: calc(sibling-index() * (360 / sibling-count()));
+    background: oklch(85% 0.2 var(--hue));
 }
 
 /* Auto-numbered list items */
 .auto-number > *::before {
-  content: counter(sibling-index) ". ";
-  counter-increment: none; /* We don't need CSS counters anymore! */
+    content: counter(sibling-index) ". ";
+    counter-increment: none; /* We don't need CSS counters anymore! */
 }
 
-
 /* ============================================================================
- * CONDITIONAL STYLES (if() function)  
+ * CONDITIONAL STYLES (if() function)
  * ============================================================================
  * Inline conditionals in CSS values.
  * Chrome 137+ / Edge 137+
@@ -951,46 +1242,40 @@ summary {
 
 /* Theme-aware component using if() */
 .theme-aware {
-  --is-dark: false;
-  
-  background: if(
-    style(--is-dark: true): var(--color-surface-dark, #1a1a2e);
-    else: var(--color-surface-light, #ffffff)
-  );
-  
-  color: if(
-    style(--is-dark: true): var(--color-text-dark, #f0f0f5);
-    else: var(--color-text-light, #1a1a2e)
-  );
+    --is-dark: false;
+
+    background: if(
+        style(--is-dark: true): var(--color-surface-dark, #1a1a2e) ;
+            else: var(--color-surface-light, #ffffff)
+    );
+
+    color: if(
+        style(--is-dark: true): var(--color-text-dark, #f0f0f5) ;
+            else: var(--color-text-light, #1a1a2e)
+    );
 }
 
 /* Responsive without media queries using if() */
 .responsive-grid {
-  display: grid;
-  grid-template-columns: if(
-    media(width >= 900px): repeat(4, 1fr);
-    media(width >= 600px): repeat(3, 1fr);
-    media(width >= 400px): repeat(2, 1fr);
-    else: 1fr
-  );
+    display: grid;
+    grid-template-columns: if(
+        media(width >= 900px): repeat(4, 1fr) ;
+            media(width >= 600px): repeat(3, 1fr) ;
+            media(width >= 400px): repeat(2, 1fr) ; else: 1fr
+    );
 }
 
 /* Compact variant using style query in if() */
 .adaptive-card {
-  --variant: default;
-  
-  padding: if(
-    style(--variant: compact): var(--s-1);
-    style(--variant: spacious): var(--s2);
-    else: var(--s1)
-  );
-  
-  font-size: if(
-    style(--variant: compact): var(--s-1);
-    else: var(--s0)
-  );
-}
+    --variant: default;
 
+    padding: if(
+        style(--variant: compact): var(--s-1) ;
+            style(--variant: spacious): var(--s2) ; else: var(--s1)
+    );
+
+    font-size: if(style(--variant: compact): var(--s-1) ; else: var(--s0));
+}
 
 /* ============================================================================
  * TYPED ATTR() - HTML to CSS Bridge
@@ -1001,48 +1286,47 @@ summary {
 
 /* Grid columns from data attribute */
 [data-columns] {
-  --columns: attr(data-columns type(<number>), 1);
-  display: grid;
-  grid-template-columns: repeat(var(--columns), 1fr);
+    --columns: attr(data-columns type(<number>), 1);
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
 }
 
 /* Color from data attribute */
 [data-color] {
-  color: attr(data-color type(<color>), currentColor);
+    color: attr(data-color type(<color>), currentColor);
 }
 
 /* Background color from data attribute */
 [data-bg] {
-  background-color: attr(data-bg type(<color>), transparent);
+    background-color: attr(data-bg type(<color>), transparent);
 }
 
 /* Spacing from data attribute */
 [data-space] {
-  --space-value: attr(data-space type(<length>), var(--s1));
-  gap: var(--space-value);
-  padding: var(--space-value);
+    --space-value: attr(data-space type(<length>), var(--s1));
+    gap: var(--space-value);
+    padding: var(--space-value);
 }
 
 /* Progress bar using attr() */
 [data-progress] {
-  --progress: attr(data-progress type(<percentage>), 0%);
-  background: linear-gradient(
-    to right,
-    var(--color-accent) var(--progress),
-    var(--color-surface-sunken) var(--progress)
-  );
+    --progress: attr(data-progress type(<percentage>), 0%);
+    background: linear-gradient(
+        to right,
+        var(--color-accent) var(--progress),
+        var(--color-surface-sunken) var(--progress)
+    );
 }
 
 /* Aspect ratio from attribute */
 [data-ratio] {
-  aspect-ratio: attr(data-ratio type(<ratio>), 1);
+    aspect-ratio: attr(data-ratio type(<ratio>), 1);
 }
 
 /* Dynamic view-transition-name from id */
 [data-transition] {
-  view-transition-name: attr(data-transition type(<custom-ident>), none);
+    view-transition-name: attr(data-transition type(<custom-ident>), none);
 }
-
 
 /* ============================================================================
  * KEYFRAMES
@@ -1050,42 +1334,43 @@ summary {
  */
 
 @keyframes elvish-fade-in {
-  from { opacity: 0; }
+    from {
+        opacity: 0;
+    }
 }
 
 @keyframes elvish-fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(var(--distance, 20px));
-  }
+    from {
+        opacity: 0;
+        transform: translateY(var(--distance, 20px));
+    }
 }
 
 @keyframes elvish-fade-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(calc(var(--distance, 20px) * -1));
-  }
+    from {
+        opacity: 0;
+        transform: translateY(calc(var(--distance, 20px) * -1));
+    }
 }
 
 @keyframes elvish-scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 }
 
 @keyframes elvish-slide-in-right {
-  from {
-    transform: translateX(100%);
-  }
+    from {
+        transform: translateX(100%);
+    }
 }
 
 @keyframes elvish-slide-in-left {
-  from {
-    transform: translateX(-100%);
-  }
+    from {
+        transform: translateX(-100%);
+    }
 }
-
 
 /* ============================================================================
  * FEATURE DETECTION
@@ -1095,43 +1380,73 @@ summary {
 
 /* Fallback for sibling-index() - requires JS to set --i custom property */
 @supports not (animation-delay: calc(sibling-index() * 1ms)) {
-  .stagger-enter > * {
-    /* Fallback: use nth-child or JS-set custom property */
-    animation-delay: calc(var(--i, 0) * var(--stagger-delay, 50ms));
-  }
-  
-  .stagger-enter > :nth-child(1) { --i: 0; }
-  .stagger-enter > :nth-child(2) { --i: 1; }
-  .stagger-enter > :nth-child(3) { --i: 2; }
-  .stagger-enter > :nth-child(4) { --i: 3; }
-  .stagger-enter > :nth-child(5) { --i: 4; }
-  .stagger-enter > :nth-child(6) { --i: 5; }
-  .stagger-enter > :nth-child(7) { --i: 6; }
-  .stagger-enter > :nth-child(8) { --i: 7; }
-  .stagger-enter > :nth-child(9) { --i: 8; }
-  .stagger-enter > :nth-child(10) { --i: 9; }
+    .stagger-enter > * {
+        /* Fallback: use nth-child or JS-set custom property */
+        animation-delay: calc(var(--i, 0) * var(--stagger-delay, 50ms));
+    }
+
+    .stagger-enter > :nth-child(1) {
+        --i: 0;
+    }
+    .stagger-enter > :nth-child(2) {
+        --i: 1;
+    }
+    .stagger-enter > :nth-child(3) {
+        --i: 2;
+    }
+    .stagger-enter > :nth-child(4) {
+        --i: 3;
+    }
+    .stagger-enter > :nth-child(5) {
+        --i: 4;
+    }
+    .stagger-enter > :nth-child(6) {
+        --i: 5;
+    }
+    .stagger-enter > :nth-child(7) {
+        --i: 6;
+    }
+    .stagger-enter > :nth-child(8) {
+        --i: 7;
+    }
+    .stagger-enter > :nth-child(9) {
+        --i: 8;
+    }
+    .stagger-enter > :nth-child(10) {
+        --i: 9;
+    }
 }
 
 /* Fallback for if() - use custom properties toggled by classes */
 @supports not (color: if(style(--x: y): red; else: blue)) {
-  .theme-aware {
-    background: var(--color-surface-light, #ffffff);
-    color: var(--color-text-light, #1a1a2e);
-  }
-  
-  .theme-aware.is-dark {
-    background: var(--color-surface-dark, #1a1a2e);
-    color: var(--color-text-dark, #f0f0f5);
-  }
+    .theme-aware {
+        background: var(--color-surface-light, #ffffff);
+        color: var(--color-text-light, #1a1a2e);
+    }
+
+    .theme-aware.is-dark {
+        background: var(--color-surface-dark, #1a1a2e);
+        color: var(--color-text-dark, #f0f0f5);
+    }
 }
 
 /* Fallback for typed attr() */
 @supports not (color: attr(data-x type(<color>), red)) {
-  [data-columns="2"] { grid-template-columns: repeat(2, 1fr); }
-  [data-columns="3"] { grid-template-columns: repeat(3, 1fr); }
-  [data-columns="4"] { grid-template-columns: repeat(4, 1fr); }
-  [data-columns="5"] { grid-template-columns: repeat(5, 1fr); }
-  [data-columns="6"] { grid-template-columns: repeat(6, 1fr); }
+    [data-columns="2"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    [data-columns="3"] {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    [data-columns="4"] {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    [data-columns="5"] {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    [data-columns="6"] {
+        grid-template-columns: repeat(6, 1fr);
+    }
 }
 
 
