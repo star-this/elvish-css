@@ -481,7 +481,7 @@ elvish/
 │   ├── tiniath/         # Clustered
 │   ├── glan-veleg/      # Sidebar
 │   ├── gwistindor/      # Switching
-│   ├── esgal/           # Covered
+│   ├── esgal/           # Covering
 │   ├── vircantie/       # Grid
 │   ├── gant-thala/      # Aspect (ratio)
 │   ├── glan-tholl/      # Side-Scrolling 
