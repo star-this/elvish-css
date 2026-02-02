@@ -396,8 +396,13 @@
 /* ==========================================================================
    ELVISH PRIMITIVE: i-nelu (inverted/scalloped)
    
-   Custom element for easy inverted corners.
-   Sindarin: "nelu" could mean "hollow/concave"
+   DEPRECATED: Use <i-thir shape="..."> instead for better composability.
+   
+   <i-thir shape="inverted">  replaces  <i-nelu>
+   <i-thir shape="ticket">    replaces  <i-nelu shape="ticket">
+   <i-thir shape="scalloped"> replaces  <i-nelu shape="scalloped">
+   
+   i-nelu is kept for backwards compatibility.
    ========================================================================== */
 
 i-nelu {

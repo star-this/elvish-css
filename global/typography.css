@@ -1,0 +1,862 @@
+/**
+ * Elvish - Typography (i-têw)
+ * 
+ * "Têw" (Sindarin) = letters, characters, writing
+ * Handles all text and font styling concerns.
+ * 
+ * Philosophy:
+ * - Typography is about readability, hierarchy, and voice
+ * - Separate from visual effects (i-thîr) and layout (i-hath, etc.)
+ * - Attributes map to typography CSS properties
+ * - Composable with other Elvish primitives
+ * 
+ * Usage:
+ *   <i-tew family="serif" size="lg" weight="bold">Heading</i-tew>
+ *   <i-tew leading="loose" tracking="wide">Spaced text</i-tew>
+ *   <i-tew transform="uppercase" align="center">CENTERED</i-tew>
+ * 
+ * Browser Support:
+ * - Chrome/Edge: ✅ Full support
+ * - Safari: ✅ Full support
+ * - Firefox: ✅ Full support
+ * - text-wrap: balance/pretty requires Chrome 114+/117+ (graceful fallback)
+ */
+
+/* ==========================================================================
+   BASE ELEMENT
+   ========================================================================== */
+
+i-tew {
+  /* Inline by default (text element) */
+  display: inline;
+  
+  /* Inherit by default, attributes override */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  
+  /* Modular scale from tokens */
+  --tew-size-base: var(--s0, 1rem);
+}
+
+/* Block variant for paragraphs/headings */
+i-tew[block],
+i-tew[display="block"] {
+  display: block;
+}
+
+/* Inline-block for sized inline elements */
+i-tew[inline-block] {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   FONT FAMILY
+   
+   Uses the five font variables from tokens.css:
+   --font-serif, --font-sans, --font-title, --font-code, --font-alt
+   
+   Override at any scope to change fonts locally:
+     <section style="--font-serif: 'Playfair Display', serif;">
+   ========================================================================== */
+
+i-tew[family="sans"],
+i-tew[family="plain"] {
+  font-family: var(--font-sans);
+}
+
+i-tew[family="serif"] {
+  font-family: var(--font-serif);
+}
+
+i-tew[family="title"],
+i-tew[family="heading"],
+i-tew[family="display"] {
+  font-family: var(--font-title);
+}
+
+i-tew[family="mono"],
+i-tew[family="monospace"],
+i-tew[family="code"] {
+  font-family: var(--font-code);
+}
+
+i-tew[family="alt"],
+i-tew[family="accent"] {
+  font-family: var(--font-alt);
+}
+
+i-tew[family="display"],
+i-tew[family="heading"] {
+  font-family: var(--tew-font-display);
+}
+
+/* System font stacks */
+i-tew[family="system"] {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+i-tew[family="ui"] {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* ==========================================================================
+   FONT SIZE (Modular Scale)
+   ========================================================================== */
+
+/* Using the Elvish modular scale */
+i-tew[size="-3"], i-tew[size="3xs"] { font-size: var(--s-3, 0.579rem); }
+i-tew[size="-2"], i-tew[size="2xs"] { font-size: var(--s-2, 0.694rem); }
+i-tew[size="-1"], i-tew[size="xs"]  { font-size: var(--s-1, 0.833rem); }
+i-tew[size="0"],  i-tew[size="sm"]  { font-size: var(--s0, 1rem); }
+i-tew[size="1"],  i-tew[size="base"],
+i-tew[size="md"] { font-size: var(--s1, 1.2rem); }
+i-tew[size="2"],  i-tew[size="lg"]  { font-size: var(--s2, 1.44rem); }
+i-tew[size="3"],  i-tew[size="xl"]  { font-size: var(--s3, 1.728rem); }
+i-tew[size="4"],  i-tew[size="2xl"] { font-size: var(--s4, 2.074rem); }
+i-tew[size="5"],  i-tew[size="3xl"] { font-size: var(--s5, 2.488rem); }
+i-tew[size="6"],  i-tew[size="4xl"] { font-size: var(--s6, 2.986rem); }
+i-tew[size="7"],  i-tew[size="5xl"] { font-size: var(--s7, 3.583rem); }
+i-tew[size="8"],  i-tew[size="6xl"] { font-size: var(--s8, 4.3rem); }
+
+/* Fluid/responsive sizing */
+i-tew[size="fluid-sm"] { font-size: clamp(0.875rem, 2vw, 1rem); }
+i-tew[size="fluid"]    { font-size: clamp(1rem, 2.5vw, 1.5rem); }
+i-tew[size="fluid-lg"] { font-size: clamp(1.5rem, 4vw, 3rem); }
+i-tew[size="fluid-xl"] { font-size: clamp(2rem, 6vw, 5rem); }
+
+/* ==========================================================================
+   FONT WEIGHT
+   ========================================================================== */
+
+i-tew[weight="thin"],       i-tew[weight="100"] { font-weight: 100; }
+i-tew[weight="extralight"], i-tew[weight="200"] { font-weight: 200; }
+i-tew[weight="light"],      i-tew[weight="300"] { font-weight: 300; }
+i-tew[weight="normal"],     i-tew[weight="400"] { font-weight: 400; }
+i-tew[weight="medium"],     i-tew[weight="500"] { font-weight: 500; }
+i-tew[weight="semibold"],   i-tew[weight="600"] { font-weight: 600; }
+i-tew[weight="bold"],       i-tew[weight="700"] { font-weight: 700; }
+i-tew[weight="extrabold"],  i-tew[weight="800"] { font-weight: 800; }
+i-tew[weight="black"],      i-tew[weight="900"] { font-weight: 900; }
+
+/* ==========================================================================
+   LINE HEIGHT (Leading)
+   ========================================================================== */
+
+i-tew[leading="none"]    { line-height: 1; }
+i-tew[leading="tight"]   { line-height: 1.25; }
+i-tew[leading="snug"]    { line-height: 1.375; }
+i-tew[leading="normal"]  { line-height: 1.5; }
+i-tew[leading="relaxed"] { line-height: 1.625; }
+i-tew[leading="loose"]   { line-height: 2; }
+
+/* Numeric values */
+i-tew[leading="1"]   { line-height: 1; }
+i-tew[leading="1.2"] { line-height: 1.2; }
+i-tew[leading="1.4"] { line-height: 1.4; }
+i-tew[leading="1.5"] { line-height: 1.5; }
+i-tew[leading="1.6"] { line-height: 1.6; }
+i-tew[leading="1.8"] { line-height: 1.8; }
+i-tew[leading="2"]   { line-height: 2; }
+
+/* ==========================================================================
+   LETTER SPACING (Tracking)
+   ========================================================================== */
+
+i-tew[tracking="tighter"] { letter-spacing: -0.05em; }
+i-tew[tracking="tight"]   { letter-spacing: -0.025em; }
+i-tew[tracking="normal"]  { letter-spacing: 0; }
+i-tew[tracking="wide"]    { letter-spacing: 0.025em; }
+i-tew[tracking="wider"]   { letter-spacing: 0.05em; }
+i-tew[tracking="widest"]  { letter-spacing: 0.1em; }
+
+/* Uppercase often needs more tracking */
+i-tew[tracking="caps"] { letter-spacing: 0.15em; }
+
+/* ==========================================================================
+   WORD SPACING
+   ========================================================================== */
+
+i-tew[word-spacing="tight"]   { word-spacing: -0.05em; }
+i-tew[word-spacing="normal"]  { word-spacing: normal; }
+i-tew[word-spacing="wide"]    { word-spacing: 0.1em; }
+i-tew[word-spacing="wider"]   { word-spacing: 0.25em; }
+
+/* ==========================================================================
+   TEXT ALIGNMENT
+   ========================================================================== */
+
+i-tew[align="left"]    { text-align: left; }
+i-tew[align="center"]  { text-align: center; }
+i-tew[align="right"]   { text-align: right; }
+i-tew[align="justify"] { text-align: justify; }
+i-tew[align="start"]   { text-align: start; }
+i-tew[align="end"]     { text-align: end; }
+
+/* Vertical alignment (for inline elements) */
+i-tew[valign="top"]      { vertical-align: top; }
+i-tew[valign="middle"]   { vertical-align: middle; }
+i-tew[valign="bottom"]   { vertical-align: bottom; }
+i-tew[valign="baseline"] { vertical-align: baseline; }
+i-tew[valign="sub"]      { vertical-align: sub; }
+i-tew[valign="super"]    { vertical-align: super; }
+
+/* ==========================================================================
+   TEXT TRANSFORM (Case)
+   ========================================================================== */
+
+i-tew[transform="uppercase"],
+i-tew[case="upper"] { 
+  text-transform: uppercase; 
+}
+
+i-tew[transform="lowercase"],
+i-tew[case="lower"] { 
+  text-transform: lowercase; 
+}
+
+i-tew[transform="capitalize"],
+i-tew[case="title"] { 
+  text-transform: capitalize; 
+}
+
+i-tew[transform="none"],
+i-tew[case="none"] { 
+  text-transform: none; 
+}
+
+/* Small caps */
+i-tew[transform="small-caps"],
+i-tew[variant="small-caps"] { 
+  font-variant-caps: small-caps; 
+}
+
+i-tew[transform="all-small-caps"],
+i-tew[variant="all-small-caps"] { 
+  font-variant-caps: all-small-caps; 
+}
+
+/* ==========================================================================
+   FONT STYLE
+   ========================================================================== */
+
+i-tew[style="italic"],
+i-tew[italic] { 
+  font-style: italic; 
+}
+
+i-tew[style="oblique"] { 
+  font-style: oblique; 
+}
+
+i-tew[style="normal"] { 
+  font-style: normal; 
+}
+
+/* ==========================================================================
+   TEXT DECORATION
+   ========================================================================== */
+
+/* Underline */
+i-tew[decoration="underline"],
+i-tew[underline] { 
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-wavy"] { 
+  text-decoration: wavy underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-dotted"] { 
+  text-decoration: dotted underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-dashed"] { 
+  text-decoration: dashed underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-double"] { 
+  text-decoration: double underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Line-through (strikethrough) */
+i-tew[decoration="line-through"],
+i-tew[decoration="strike"],
+i-tew[strikethrough] { 
+  text-decoration: line-through; 
+}
+
+/* Overline */
+i-tew[decoration="overline"] { 
+  text-decoration: overline; 
+}
+
+/* None */
+i-tew[decoration="none"],
+i-tew[no-decoration] { 
+  text-decoration: none; 
+}
+
+/* Decoration thickness */
+i-tew[decoration-thickness="thin"]   { text-decoration-thickness: 1px; }
+i-tew[decoration-thickness="medium"] { text-decoration-thickness: 2px; }
+i-tew[decoration-thickness="thick"]  { text-decoration-thickness: 3px; }
+i-tew[decoration-thickness="auto"]   { text-decoration-thickness: from-font; }
+
+/* Skip ink (for underlines) */
+i-tew[decoration-skip="auto"] { text-decoration-skip-ink: auto; }
+i-tew[decoration-skip="none"] { text-decoration-skip-ink: none; }
+i-tew[decoration-skip="all"]  { text-decoration-skip-ink: all; }
+
+/* ==========================================================================
+   TEXT WRAPPING
+   ========================================================================== */
+
+/* Modern text-wrap property */
+i-tew[wrap="balance"] { 
+  text-wrap: balance; 
+}
+
+i-tew[wrap="pretty"] { 
+  text-wrap: pretty; 
+}
+
+i-tew[wrap="stable"] { 
+  text-wrap: stable; 
+}
+
+i-tew[wrap="nowrap"],
+i-tew[nowrap] { 
+  text-wrap: nowrap;
+  white-space: nowrap; 
+}
+
+/* White-space control */
+i-tew[whitespace="normal"]   { white-space: normal; }
+i-tew[whitespace="nowrap"]   { white-space: nowrap; }
+i-tew[whitespace="pre"]      { white-space: pre; }
+i-tew[whitespace="pre-wrap"] { white-space: pre-wrap; }
+i-tew[whitespace="pre-line"] { white-space: pre-line; }
+i-tew[whitespace="break"]    { white-space: break-spaces; }
+
+/* Word break */
+i-tew[break="normal"] { word-break: normal; }
+i-tew[break="all"]    { word-break: break-all; }
+i-tew[break="keep"]   { word-break: keep-all; }
+i-tew[break="word"]   { overflow-wrap: break-word; }
+
+/* Hyphenation */
+i-tew[hyphens="auto"]   { hyphens: auto; }
+i-tew[hyphens="manual"] { hyphens: manual; }
+i-tew[hyphens="none"]   { hyphens: none; }
+
+/* ==========================================================================
+   TEXT OVERFLOW & TRUNCATION
+   ========================================================================== */
+
+i-tew[overflow="ellipsis"],
+i-tew[truncate] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+i-tew[overflow="clip"] {
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Multi-line truncation (line-clamp) */
+i-tew[lines="1"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+i-tew[lines="2"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+i-tew[lines="3"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+i-tew[lines="4"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+i-tew[lines="5"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   TEXT INDENT
+   ========================================================================== */
+
+i-tew[indent="none"]   { text-indent: 0; }
+i-tew[indent="sm"]     { text-indent: 1em; }
+i-tew[indent="md"]     { text-indent: 2em; }
+i-tew[indent="lg"]     { text-indent: 3em; }
+i-tew[indent="hanging"] { 
+  text-indent: -1em; 
+  padding-left: 1em; 
+}
+
+/* ==========================================================================
+   TEXT COLOR
+   ========================================================================== */
+
+/* Semantic colors */
+i-tew[color="primary"]   { color: var(--color-text, currentColor); }
+i-tew[color="secondary"],
+i-tew[color="muted"]     { color: var(--color-text-muted, oklch(50% 0 0)); }
+i-tew[color="accent"]    { color: var(--color-accent, oklch(60% 0.2 250)); }
+i-tew[color="success"]   { color: var(--color-success, oklch(65% 0.2 145)); }
+i-tew[color="warning"]   { color: var(--color-warning, oklch(75% 0.15 85)); }
+i-tew[color="error"],
+i-tew[color="danger"]    { color: var(--color-error, oklch(60% 0.25 25)); }
+i-tew[color="info"]      { color: var(--color-info, oklch(65% 0.15 230)); }
+
+/* Neutral colors */
+i-tew[color="inherit"]     { color: inherit; }
+i-tew[color="current"]     { color: currentColor; }
+i-tew[color="transparent"] { color: transparent; }
+i-tew[color="white"]       { color: oklch(100% 0 0); }
+i-tew[color="black"]       { color: oklch(0% 0 0); }
+i-tew[color="gray"],
+i-tew[color="grey"]        { color: oklch(50% 0 0); }
+
+/* ==========================================================================
+   FONT FEATURES & VARIANTS
+   ========================================================================== */
+
+/* Numeric variants */
+i-tew[numeric="tabular"] { 
+  font-variant-numeric: tabular-nums; 
+}
+i-tew[numeric="proportional"] { 
+  font-variant-numeric: proportional-nums; 
+}
+i-tew[numeric="lining"] { 
+  font-variant-numeric: lining-nums; 
+}
+i-tew[numeric="oldstyle"] { 
+  font-variant-numeric: oldstyle-nums; 
+}
+i-tew[numeric="diagonal-fractions"] { 
+  font-variant-numeric: diagonal-fractions; 
+}
+i-tew[numeric="stacked-fractions"] { 
+  font-variant-numeric: stacked-fractions; 
+}
+i-tew[numeric="ordinal"] { 
+  font-variant-numeric: ordinal; 
+}
+i-tew[numeric="slashed-zero"] { 
+  font-variant-numeric: slashed-zero; 
+}
+
+/* Ligatures */
+i-tew[ligatures="normal"]      { font-variant-ligatures: normal; }
+i-tew[ligatures="none"]        { font-variant-ligatures: none; }
+i-tew[ligatures="common"]      { font-variant-ligatures: common-ligatures; }
+i-tew[ligatures="contextual"]  { font-variant-ligatures: contextual; }
+i-tew[ligatures="discretionary"] { font-variant-ligatures: discretionary-ligatures; }
+
+/* Kerning */
+i-tew[kerning="auto"]   { font-kerning: auto; }
+i-tew[kerning="normal"] { font-kerning: normal; }
+i-tew[kerning="none"]   { font-kerning: none; }
+
+/* ==========================================================================
+   TEXT RENDERING
+   ========================================================================== */
+
+i-tew[rendering="auto"]        { text-rendering: auto; }
+i-tew[rendering="speed"]       { text-rendering: optimizeSpeed; }
+i-tew[rendering="legibility"]  { text-rendering: optimizeLegibility; }
+i-tew[rendering="precision"]   { text-rendering: geometricPrecision; }
+
+/* Font smoothing (WebKit/Blink) */
+i-tew[smoothing="auto"] {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+i-tew[smoothing="antialiased"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+i-tew[smoothing="subpixel"] {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+/* ==========================================================================
+   WRITING MODE & DIRECTION
+   ========================================================================== */
+
+/* Writing mode */
+i-tew[writing="horizontal"] { writing-mode: horizontal-tb; }
+i-tew[writing="vertical-rl"] { writing-mode: vertical-rl; }
+i-tew[writing="vertical-lr"] { writing-mode: vertical-lr; }
+i-tew[writing="sideways-rl"] { writing-mode: sideways-rl; }
+i-tew[writing="sideways-lr"] { writing-mode: sideways-lr; }
+
+/* Text direction */
+i-tew[dir="ltr"] { direction: ltr; }
+i-tew[dir="rtl"] { direction: rtl; }
+
+/* Text orientation (for vertical text) */
+i-tew[orientation="mixed"]    { text-orientation: mixed; }
+i-tew[orientation="upright"]  { text-orientation: upright; }
+i-tew[orientation="sideways"] { text-orientation: sideways; }
+
+/* ==========================================================================
+   TEXT SHADOWS
+   ========================================================================== */
+
+i-tew[shadow="none"] { text-shadow: none; }
+
+i-tew[shadow="sm"] { 
+  text-shadow: 0 1px 2px oklch(0% 0 0 / 0.2); 
+}
+i-tew[shadow],
+i-tew[shadow="md"] { 
+  text-shadow: 0 2px 4px oklch(0% 0 0 / 0.25); 
+}
+i-tew[shadow="lg"] { 
+  text-shadow: 0 4px 8px oklch(0% 0 0 / 0.3); 
+}
+
+/* Crisp shadow (no blur) */
+i-tew[shadow="crisp"] { 
+  text-shadow: 1px 1px 0 oklch(0% 0 0 / 0.3); 
+}
+
+/* Glow effect */
+i-tew[shadow="glow"] { 
+  text-shadow: 
+    0 0 4px currentColor,
+    0 0 8px currentColor; 
+}
+i-tew[shadow="glow-lg"] { 
+  text-shadow: 
+    0 0 8px currentColor,
+    0 0 16px currentColor,
+    0 0 32px currentColor; 
+}
+
+/* Outline/stroke effect via shadow */
+i-tew[shadow="outline"] {
+  text-shadow:
+    -1px -1px 0 currentColor,
+     1px -1px 0 currentColor,
+    -1px  1px 0 currentColor,
+     1px  1px 0 currentColor;
+}
+
+/* 3D/emboss effect */
+i-tew[shadow="3d"],
+i-tew[shadow="emboss"] {
+  text-shadow:
+    1px 1px 0 oklch(0% 0 0 / 0.3),
+    2px 2px 0 oklch(0% 0 0 / 0.2),
+    3px 3px 0 oklch(0% 0 0 / 0.1);
+}
+
+/* Long shadow */
+i-tew[shadow="long"] {
+  text-shadow:
+    1px 1px 0 oklch(0% 0 0 / 0.15),
+    2px 2px 0 oklch(0% 0 0 / 0.12),
+    3px 3px 0 oklch(0% 0 0 / 0.09),
+    4px 4px 0 oklch(0% 0 0 / 0.06),
+    5px 5px 0 oklch(0% 0 0 / 0.03);
+}
+
+/* ==========================================================================
+   SELECTION STYLING
+   ========================================================================== */
+
+i-tew[selection="none"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+i-tew[selection="all"] {
+  user-select: all;
+}
+
+i-tew[selection="text"] {
+  user-select: text;
+}
+
+/* ==========================================================================
+   PRESETS / COMBINATIONS
+   
+   Opinionated bundles of typography properties for common patterns.
+   All presets use the font variables from tokens.css.
+   ========================================================================== */
+
+/* === HEADINGS (h1-h6) === */
+
+i-tew[preset="heading"],
+i-tew[preset="h1"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s5, 2.488rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h2"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s4, 2.074rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h3"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s3, 1.728rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h4"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s2, 1.44rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+i-tew[preset="h5"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s1, 1.2rem);
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+i-tew[preset="h6"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s0, 1rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-wrap: balance;
+}
+
+/* === BODY TEXT === */
+
+i-tew[preset="body"] {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--s0, 1rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* Lead/intro paragraph */
+i-tew[preset="lead"] {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--s1, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Caption/small text */
+i-tew[preset="caption"],
+i-tew[preset="small"] {
+  font-size: var(--s-1, 0.833rem);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* Label preset */
+i-tew[preset="label"] {
+  font-size: var(--s-1, 0.833rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === CODE === */
+
+i-tew[preset="code"] {
+  font-family: var(--font-code);
+  font-size: 0.9em;
+  font-variant-ligatures: none;
+  background: oklch(from var(--color-surface) calc(l - 0.05) c h);
+  padding: 0.1em 0.3em;
+  border-radius: 0.25em;
+}
+
+/* === QUOTES === */
+
+/* Simple quote (border left) */
+i-tew[preset="quote"] {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--s1, 1.2rem);
+  line-height: 1.6;
+  border-left: 3px solid var(--color-accent, oklch(60% 0.2 250));
+  padding-left: 1em;
+}
+
+/* Big quote / Pull quote (giant quotation mark) */
+i-tew[preset="bquote"],
+i-tew[preset="pullquote"] {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--s2, 1.44rem);
+  line-height: 1.5;
+  padding-left: 3.5rem;
+  position: relative;
+  
+  /* Quote character customization */
+  --tew-quote-char: '"';
+  --tew-quote-color: var(--color-accent, oklch(60% 0.2 250));
+  --tew-quote-size: var(--s6, 4rem);
+  --tew-quote-opacity: 0.25;
+}
+
+/* The giant quote mark */
+i-tew[preset="bquote"]::before,
+i-tew[preset="pullquote"]::before {
+  content: var(--tew-quote-char);
+  position: absolute;
+  left: 0;
+  top: -0.1em;
+  font-family: var(--font-serif);
+  font-size: var(--tew-quote-size);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tew-quote-color);
+  opacity: var(--tew-quote-opacity);
+}
+
+/* Attribution via data-cite attribute */
+i-tew[preset="bquote"][data-cite]::after,
+i-tew[preset="pullquote"][data-cite]::after {
+  content: "— " attr(data-cite);
+  display: block;
+  margin-top: var(--s0, 1rem);
+  font-size: var(--s-1, 0.833rem);
+  font-style: normal;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Optional closing quote mark */
+i-tew[preset="bquote"][closing],
+i-tew[preset="pullquote"][closing] {
+  padding-right: 2.5rem;
+}
+
+i-tew[preset="bquote"][closing]::after,
+i-tew[preset="pullquote"][closing]::after {
+  content: var(--tew-quote-char);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-family: var(--font-serif);
+  font-size: calc(var(--tew-quote-size) * 0.7);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tew-quote-color);
+  opacity: var(--tew-quote-opacity);
+  transform: rotate(180deg);
+}
+
+/* When both closing AND data-cite, use a wrapper approach */
+i-tew[preset="bquote"][closing][data-cite]::after {
+  content: none; /* Let the closing quote be shown, cite needs a wrapper */
+}
+
+/* ==========================================================================
+   MEASURE (Line Length)
+   ========================================================================== */
+
+i-tew[measure="narrow"]  { max-width: 45ch; }
+i-tew[measure="normal"]  { max-width: 65ch; }
+i-tew[measure],
+i-tew[measure="wide"]    { max-width: 75ch; }
+i-tew[measure="full"]    { max-width: none; }
+
+/* ==========================================================================
+   RESPONSIVE TYPOGRAPHY
+   ========================================================================== */
+
+/* Responsive size adjustments */
+@media (max-width: 640px) {
+  i-tew[responsive] {
+    font-size: max(0.875em, 16px);
+  }
+  
+  i-tew[preset="heading"],
+  i-tew[preset="h1"][responsive] {
+    font-size: var(--s3, 1.728rem);
+  }
+  
+  i-tew[preset="h2"][responsive] {
+    font-size: var(--s2, 1.44rem);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  i-tew[color="muted"],
+  i-tew[color="secondary"] {
+    color: var(--color-text);
+  }
+}
+
+/* Reduced motion - disable text animations if any */
+@media (prefers-reduced-motion: reduce) {
+  i-tew {
+    transition: none !important;
+  }
+}

@@ -1,14 +1,14 @@
 /**
  * Elvish - Modern Reset & Axioms
- *
+ * 
  * A synthesis of Andy Bell's "More Modern CSS Reset" and Elvish's original reset.
  * Optimized for Chrome/Edge with graceful degradation for Safari/Firefox.
- *
+ * 
  * Sources:
  * - [AB] Andy Bell's "A (More) Modern CSS Reset"
  * - [EL] Elvish original reset
  * - [NEW] New additions for modern browsers
- *
+ * 
  * Debug Mode:
  *   Add .mellon or .debug to <body> or any element to reveal layout structure.
  *   "Mellon" is Sindarin for "friend" - the password to enter Moria.
@@ -22,12 +22,12 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
    BORDER & BACKGROUND DEFAULTS [EL + NEW]
-
+   
    Layout-focused philosophy: visual styling is opt-in, not opt-out.
    - Borders: style is solid (for easy `border-width: 1px`), but width is 0
    - Backgrounds: transparent by default
@@ -37,58 +37,52 @@
 *,
 *::before,
 *::after {
-    /* Border: ready to use, but invisible by default */
-    border-style: solid;
-    border-width: 0;
-
-    /* Background: transparent until explicitly set */
-    background-color: transparent;
+  /* Border: ready to use, but invisible by default */
+  border-style: solid;
+  border-width: 0;
+  
+  /* Background: transparent until explicitly set */
+  background-color: transparent;
 }
 
 /* Root elements get the actual background */
 html {
-    background-color: var(--color-surface);
+  background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    MARGIN RESET [AB - expanded]
-
+   
    DISCARDED from Elvish: `* { margin: 0 }` is too aggressive.
    It breaks nested lists, fieldset legends, and third-party components.
-
+   
    Andy Bell's surgical approach is safer - only reset elements that commonly
    have problematic default margins. Expanded to include pre, h5, h6.
    ========================================================================== */
 
 body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+h1, h2, h3, h4, h5, h6,
 p,
 figure,
 blockquote,
-dl,
-dd,
+dl, dd,
 pre,
 fieldset {
-    margin: 0;
+  margin: 0;
 }
 
 /* ==========================================================================
    MEASURE AXIOM [EL]
-
+   
    Not in Andy Bell's reset - this is Elvish's core philosophy.
-
+   
    No line of text should exceed a comfortable reading length.
    Exception-based: everything gets the constraint, then we remove it
    from elements that need to contain multiple adjacent boxes.
    ========================================================================== */
 
 * {
-    max-inline-size: var(--measure);
+  max-inline-size: var(--measure);
 }
 
 html,
@@ -115,25 +109,24 @@ dialog,
 menu,
 hgroup,
 address,
-/* Custom elements - Elvish css primitives (Sindarin names) */
-i-hath,          /* Stacked */
-i-bau,           /* Quad */
-i-enedh,         /* Centered (horizontal) */
-i-tiniath,       /* Clustered */
+/* Custom elements - Elvish layout primitives (Sindarin names) */
+i-hath,          /* Stack */
+i-bau,           /* Box */
+i-enedh,         /* Center (horizontal) */
+i-tiniath,       /* Cluster */
 i-glan-veleg,    /* Sidebar */
-i-gwistindor,    /* Switching */
-i-esgal,         /* Covering (vertical center) */
+i-gwistindor,    /* Switcher */
+i-esgal,         /* Cover (vertical center) */
 i-vircantie,     /* Grid */
-i-gant-thala,    /* Aspect (ratio) */
-i-glan-tholl,    /* Side-Scrolling */
-i-fano,          /* Overcast */
+i-gant-thala,    /* Frame (aspect) */
+i-glan-tholl,    /* Reel (side-scrolling) */
+i-fano,          /* Imposter (overlay) */
 i-thann,         /* Icon */
 i-adleithian,    /* Container */
 i-him,           /* Sticky */
 i-miriant,       /* Grid-placed */
-i-gonath {
-    /* Masonry */
-    max-inline-size: none;
+i-gonath {       /* Masonry */
+  max-inline-size: none;
 }
 
 /* ==========================================================================
@@ -141,30 +134,30 @@ i-gonath {
    ========================================================================== */
 
 html {
-    /* [EL] Font settings via design tokens */
-    font-family: var(--font-plain);
-    font-size: 100%; /* Respects user preferences */
-    line-height: var(--line-height);
-
-    /* [EL] Colors */
-    color: var(--color-text);
-    /* background-color set above in BORDER & BACKGROUND DEFAULTS */
-
-    /* [NEW] Text rendering - prioritize legibility */
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    /* [NEW] Prevent text size inflation on mobile */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
+  /* [EL] Font settings via design tokens */
+  font-family: var(--font-plain);
+  font-size: 100%; /* Respects user preferences */
+  line-height: var(--line-height);
+  
+  /* [EL] Colors */
+  color: var(--color-text);
+  /* background-color set above in BORDER & BACKGROUND DEFAULTS */
+  
+  /* [NEW] Text rendering - prioritize legibility */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* [NEW] Prevent text size inflation on mobile */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* [AB] Smooth scrolling ONLY when using keyboard navigation */
 @media (prefers-reduced-motion: no-preference) {
-    html:focus-within {
-        scroll-behavior: smooth;
-    }
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
 }
 
 /* ==========================================================================
@@ -172,57 +165,40 @@ html {
    ========================================================================== */
 
 body {
-    /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
-    min-block-size: 100vh;
-    min-block-size: 100dvh;
-
-    /* [NEW] Prevent horizontal overflow from animations, etc. */
-    overflow-x: clip;
-
-    /* Body gets the surface background */
-    background-color: var(--color-surface);
+  /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  
+  /* [NEW] Prevent horizontal overflow from animations, etc. */
+  overflow-x: clip;
+  
+  /* Body gets the surface background */
+  background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    TYPOGRAPHY [EL + NEW]
    ========================================================================== */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    /* [EL] Tighter line height for headings */
-    line-height: var(--line-height-tight);
-
-    /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
-    text-wrap: balance;
+h1, h2, h3, h4, h5, h6 {
+  /* [EL] Tighter line height for headings */
+  line-height: var(--line-height-tight);
+  
+  /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
+  text-wrap: balance;
 }
 
 /* [EL] Modular scale sizing */
-h1 {
-    font-size: var(--s4);
-}
-h2 {
-    font-size: var(--s3);
-}
-h3 {
-    font-size: var(--s2);
-}
-h4 {
-    font-size: var(--s1);
-}
-h5 {
-    font-size: var(--s0);
-}
-h6 {
-    font-size: var(--s-1);
-}
+h1 { font-size: var(--s4); }
+h2 { font-size: var(--s3); }
+h3 { font-size: var(--s2); }
+h4 { font-size: var(--s1); }
+h5 { font-size: var(--s0); }
+h6 { font-size: var(--s-1); }
 
 /* [NEW] Pretty wrapping for prose (Chrome 117+) */
 p {
-    text-wrap: pretty;
+  text-wrap: pretty;
 }
 
 /* ==========================================================================
@@ -230,25 +206,25 @@ p {
    ========================================================================== */
 
 a {
-    /* [EL] Inherit color - style via classes or context */
-    color: currentColor;
-
-    /* [AB] Better underline rendering - skips descenders (g, y, p) */
-    text-decoration-skip-ink: auto;
-
-    /* [NEW] Modern underline offset for readability */
-    text-underline-offset: 0.2em;
+  /* [EL] Inherit color - style via classes or context */
+  color: currentColor;
+  
+  /* [AB] Better underline rendering - skips descenders (g, y, p) */
+  text-decoration-skip-ink: auto;
+  
+  /* [NEW] Modern underline offset for readability */
+  text-underline-offset: 0.2em;
 }
 
 /* [EL] Remove underline on hover */
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /* [NEW] Focus styles for keyboard navigation */
 a:focus-visible {
-    outline: 2px solid var(--color-accent, currentColor);
-    outline-offset: 2px;
+  outline: 2px solid var(--color-accent, currentColor);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -260,21 +236,21 @@ picture,
 video,
 canvas,
 svg {
-    display: block;
-    max-inline-size: 100%;
+  display: block;
+  max-inline-size: 100%;
 }
 
 img,
 picture,
 video {
-    /* [EL] Maintain aspect ratio */
-    block-size: auto;
+  /* [EL] Maintain aspect ratio */
+  block-size: auto;
 }
 
 /* [NEW] Style for alt text when image fails to load */
 img {
-    font-style: italic;
-    vertical-align: middle;
+  font-style: italic;
+  vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -285,21 +261,21 @@ input,
 button,
 textarea,
 select {
-    /* [AB + EL] Inherit font from parent */
-    font: inherit;
-    /* [EL] Inherit color too */
-    color: inherit;
+  /* [AB + EL] Inherit font from parent */
+  font: inherit;
+  /* [EL] Inherit color too */
+  color: inherit;
 }
 
 /* [EL] Indicate buttons are clickable */
 button,
 [role="button"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* [NEW] Textarea should not resize horizontally */
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 /* ==========================================================================
@@ -308,9 +284,9 @@ textarea {
 
 ul,
 ol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* [NEW] Restore list styles when explicitly marked for semantics */
@@ -318,8 +294,8 @@ ul[role="list"],
 ol[role="list"],
 ul.list,
 ol.list {
-    list-style: revert;
-    padding-inline-start: 1em;
+  list-style: revert;
+  padding-inline-start: 1em;
 }
 
 /* ==========================================================================
@@ -327,14 +303,14 @@ ol.list {
    ========================================================================== */
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 /* [NEW] Inherit text alignment */
 th {
-    text-align: inherit;
-    font-weight: inherit;
+  text-align: inherit;
+  font-weight: inherit;
 }
 
 /* ==========================================================================
@@ -345,12 +321,12 @@ pre,
 code,
 kbd,
 samp {
-    font-family: var(--font-mono);
+  font-family: var(--font-mono);
 }
 
 pre {
-    overflow-x: auto;
-    white-space: pre;
+  overflow-x: auto;
+  white-space: pre;
 }
 
 /* ==========================================================================
@@ -359,20 +335,20 @@ pre {
 
 /* [EL] Horizontal rule */
 hr {
-    border-width: var(--border-thin, 1px) 0 0 0;
-    color: inherit;
-    block-size: 0;
+  border-width: var(--border-thin, 1px) 0 0 0;
+  color: inherit;
+  block-size: 0;
 }
 
 /* [NEW] Abbreviations with title should indicate expandability */
 abbr[title] {
-    text-decoration: underline dotted;
-    cursor: help;
+  text-decoration: underline dotted;
+  cursor: help;
 }
 
 /* [NEW] Summary cursor */
 summary {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -380,8 +356,8 @@ summary {
    ========================================================================== */
 
 ::selection {
-    background-color: var(--color-accent, highlight);
-    color: var(--color-accent-text, highlighttext);
+  background-color: var(--color-accent, highlight);
+  color: var(--color-accent-text, highlighttext);
 }
 
 /* ==========================================================================
@@ -390,13 +366,13 @@ summary {
 
 /* Remove default focus outline */
 :focus {
-    outline: none;
+  outline: none;
 }
 
 /* Visible focus for keyboard navigation only */
 :focus-visible {
-    outline: 2px solid var(--color-accent, currentColor);
-    outline-offset: 2px;
+  outline: 2px solid var(--color-accent, currentColor);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -404,40 +380,40 @@ summary {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        /* [AB] Kill all animations */
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-
-        /* [AB] Kill all transitions */
-        transition-duration: 0.01ms !important;
-
-        /* [AB] Kill smooth scrolling */
-        scroll-behavior: auto !important;
-    }
-
-    /* [NEW] Also target View Transitions */
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
-    }
+  *,
+  *::before,
+  *::after {
+    /* [AB] Kill all animations */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    
+    /* [AB] Kill all transitions */
+    transition-duration: 0.01ms !important;
+    
+    /* [AB] Kill smooth scrolling */
+    scroll-behavior: auto !important;
+  }
+  
+  /* [NEW] Also target View Transitions */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 /* ==========================================================================
    DEBUG MODE - "MELLON" [NEW]
-
+   
    Add .mellon or .debug to <body> or any element to reveal layout structure.
    "Mellon" is Sindarin for "friend" - the password to enter Moria.
-
+   
    Features:
    - Dashed outlines show element boundaries (uses outline, not border)
    - Each nesting level gets a different hue (rainbow effect)
    - Optional .tint modifier adds subtle background colors
    - Zero specificity via :where() - easily overridden by real styles
-
+   
    Usage:
      <body class="mellon">         - Debug entire page
      <body class="mellon tint">    - Debug with background tints
@@ -446,90 +422,53 @@ summary {
 
 /* Debug color tokens */
 :root {
-    --debug-stroke: 1px;
-    --debug-style: dashed;
-    --debug-saturation: 0.25;
-    --debug-lightness: 55%;
+  --debug-stroke: 1px;
+  --debug-style: dashed;
+  --debug-saturation: 0.25;
+  --debug-lightness: 55%;
 }
 
 /* Calculate hue based on depth (golden angle ≈ 137.5° for optimal distribution) */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-    --debug-hue: 0;
+  --debug-hue: 0;
 }
 
-:where(.mellon, .debug) > :where(*) {
-    --debug-hue: 137;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) {
-    --debug-hue: 275;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) {
-    --debug-hue: 52;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) {
-    --debug-hue: 190;
-}
-:where(.mellon, .debug)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*) {
-    --debug-hue: 327;
-}
-:where(.mellon, .debug)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*) {
-    --debug-hue: 105;
-}
+:where(.mellon, .debug) > :where(*) { --debug-hue: 137; }
+:where(.mellon, .debug) > :where(*) > :where(*) { --debug-hue: 275; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) { --debug-hue: 52; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 190; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 327; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 105; }
 
 /* Show outlines in debug mode */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-    outline: var(--debug-stroke) var(--debug-style)
-        oklch(
-            var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)
-        ) !important;
-    outline-offset: -1px;
+  outline: var(--debug-stroke) var(--debug-style) 
+    oklch(var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)) !important;
+  outline-offset: -1px;
 }
 
 /* Highlight Elvish primitives more prominently */
-:where(.mellon, .debug)
-    :where(
-        i-hath,
-        i-bau,
-        i-enedh,
-        i-tiniath,
-        i-glan-veleg,
-        i-gwistindor,
-        i-esgal,
-        i-vircantie,
-        i-gant-thala,
-        i-glan-tholl,
-        i-fano,
-        i-thann,
-        i-adleithian,
-        i-him,
-        i-miriant,
-        i-gonath
-    ) {
-    --debug-stroke: 2px;
-    --debug-style: solid;
-    --debug-saturation: 0.4;
+:where(.mellon, .debug) :where(
+  i-hath, i-bau, i-enedh, i-tiniath, i-glan-veleg, i-gwistindor,
+  i-esgal, i-vircantie, i-gant-thala, i-glan-tholl, i-fano, i-thann,
+  i-adleithian, i-him, i-miriant, i-gonath
+) {
+  --debug-stroke: 2px;
+  --debug-style: solid;
+  --debug-saturation: 0.4;
 }
 
 /* Optional: Background tint mode */
 :where(.mellon.tint, .debug.tint),
 :where(.mellon.tint, .debug.tint) :where(*) {
-    background-color: oklch(
-        var(--debug-lightness) calc(var(--debug-saturation) * 0.4)
-            var(--debug-hue, 0) / 0.1
-    ) !important;
+  background-color: oklch(
+    var(--debug-lightness) 
+    calc(var(--debug-saturation) * 0.4) 
+    var(--debug-hue, 0) 
+    / 0.1
+  ) !important;
 }
 
 /* ==========================================================================
@@ -539,30 +478,30 @@ summary {
 /* [EL] Hidden but accessible to screen readers */
 .visually-hidden,
 .sr-only {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* [NEW] Skip link pattern for accessibility */
 .skip-link {
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0;
-    padding: var(--s-1, 0.5rem) var(--s0, 1rem);
-    background: var(--color-accent, highlight);
-    color: var(--color-accent-text, highlighttext);
-    transform: translateY(-100%);
-    z-index: 9999;
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  padding: var(--s-1, 0.5rem) var(--s0, 1rem);
+  background: var(--color-accent, highlight);
+  color: var(--color-accent-text, highlighttext);
+  transform: translateY(-100%);
+  z-index: 9999;
 }
 
 .skip-link:focus {
-    transform: translateY(0);
+  transform: translateY(0);
 }

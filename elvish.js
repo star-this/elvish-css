@@ -74,7 +74,7 @@ export const SINDARIN = {
   him: "steadfast, abiding (sticky)",
   miriant: "jewel-work (explicit placement)",
   gonath: "the stone collection (masonry)",
-  // Attribute names (i-thann)
+  // Attribute names
   echuiol: "awakening (active)",
   dhoren: "hidden, secret",
 };

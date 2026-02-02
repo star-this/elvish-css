@@ -126,9 +126,28 @@
   --border-thin: 1px;
   --border-thick: 3px;
   
-  /* ===== FONTS ===== */
-  --font-plain: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+  /* ===== FONT STACKS ===== */
+  /*
+   * Five font variables for flexible typography:
+   * - --font-serif   : Traditional, elegant text (body, quotes)
+   * - --font-sans    : Clean, modern text (UI, body)
+   * - --font-title   : Display/heading font (can be same as sans)
+   * - --font-code    : Monospace for code
+   * - --font-alt     : Escape hatch / accent font
+   *
+   * Override at any scope to change fonts locally:
+   *   <section style="--font-serif: 'Playfair Display', serif;">
+   */
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-title: var(--font-sans);
+  --font-code: ui-monospace, 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  --font-alt: var(--font-serif);
+  
+  /* Legacy aliases (backwards compatibility) */
+  --font-plain: var(--font-sans);
+  --font-mono: var(--font-code);
+  --font-display: var(--font-title);
   
   /* ===== LINE HEIGHT ===== */
   --line-height: 1.5;

@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish - Visual Effects (i-thîr) Demo</title>
+  <link rel="stylesheet" href="../global/global.css">
+  <link rel="stylesheet" href="../global/effects.css">
+  <style>
+    body {
+      font-family: var(--font-plain);
+      background: var(--color-surface);
+      color: var(--color-text);
+      padding: var(--s2);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: var(--s3);
+      margin-bottom: var(--s-1);
+    }
+    
+    .subtitle {
+      font-size: var(--s1);
+      color: var(--color-text-muted);
+      margin-bottom: var(--s2);
+    }
+    
+    h2 {
+      font-size: var(--s1);
+      margin-top: var(--s2);
+      margin-bottom: var(--s0);
+      color: var(--color-accent);
+    }
+    
+    p {
+      max-width: 70ch;
+      margin-bottom: var(--s1);
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--s1);
+      margin-bottom: var(--s2);
+    }
+    
+    .demo-grid--wide {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    i-thir {
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .effect-name {
+      font-family: var(--font-mono);
+      font-size: var(--s-1);
+      opacity: 0.8;
+    }
+    
+    pre {
+      background: var(--color-surface-sunken);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+      overflow-x: auto;
+      font-size: var(--s-1);
+      margin-bottom: var(--s1);
+      font-family: var(--font-mono);
+    }
+    
+    code {
+      font-family: var(--font-mono);
+    }
+    
+    /* Dark section for neon effects */
+    .dark-section {
+      background: oklch(15% 0.02 240);
+      padding: var(--s2);
+      border-radius: var(--s0);
+      margin-bottom: var(--s2);
+    }
+    
+    .dark-section h2 {
+      color: oklch(80% 0.15 200);
+    }
+    
+    .dark-section p {
+      color: oklch(75% 0 0);
+    }
+    
+    /* Inline demo */
+    .inline-demo {
+      font-size: var(--s1);
+      line-height: 2;
+      margin-bottom: var(--s2);
+    }
+    
+    /* Architecture diagram */
+    .architecture {
+      background: var(--color-surface-sunken);
+      padding: var(--s1);
+      border-radius: var(--s0);
+      margin-bottom: var(--s2);
+      font-family: var(--font-mono);
+      font-size: var(--s-1);
+    }
+    
+    .architecture pre {
+      background: transparent;
+      padding: 0;
+      margin: 0;
+    }
+    
+    /* Composition example */
+    .composition-demo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1);
+      margin-bottom: var(--s2);
+    }
+  </style>
+</head>
+<body>
+  <h1>🧝 i-thîr — The Face</h1>
+  <p class="subtitle">Visual effects for Elvish layouts. "Thîr" (Sindarin) = face, expression, appearance.</p>
+
+  <h2>Philosophy: Three Attribute Dimensions</h2>
+  <p>
+    <code>&lt;i-thir&gt;</code> unifies visual appearance with three attribute dimensions that combine freely:
+  </p>
+  
+  <div class="architecture">
+    <pre>┌─────────────────────────────────────────────────────────────┐
+│                        i-thir                               │
+├─────────────────────────────────────────────────────────────┤
+│  effect="..."  │  What it LOOKS like                        │
+│                │  neon, frosted, glass, shadow, shimmer...  │
+├────────────────┼────────────────────────────────────────────┤
+│  corners="..." │  How CORNERS are shaped (inverted)         │
+│                │  inverted, top, bottom, left, right, tl... │
+├────────────────┼────────────────────────────────────────────┤
+│  shape="..."   │  Overall SHAPE of element                  │
+│                │  ticket, scalloped, scalloped-bottom...    │
+└────────────────┴────────────────────────────────────────────┘
+
+&lt;!-- Effect only --&gt;
+&lt;i-thir effect="neon"&gt;Just glow&lt;/i-thir&gt;
+
+&lt;!-- Corners only --&gt;
+&lt;i-thir corners="inverted"&gt;All corners inward&lt;/i-thir&gt;
+&lt;i-thir corners="top"&gt;Top corners inward&lt;/i-thir&gt;
+
+&lt;!-- Shape only --&gt;
+&lt;i-thir shape="ticket"&gt;Side cutouts&lt;/i-thir&gt;
+
+&lt;!-- ✨ Combined --&gt;
+&lt;i-thir effect="frosted" corners="inverted"&gt;
+  Frosted glass with scalloped corners!
+&lt;/i-thir&gt;
+
+&lt;i-thir effect="neon" shape="ticket"&gt;
+  Neon ticket stub!
+&lt;/i-thir&gt;
+
+&lt;!-- Layout positions i-thir surfaces --&gt;
+&lt;i-hath space="var(--s1)"&gt;
+  &lt;i-thir effect="neon" corners="top"&gt;Card 1&lt;/i-thir&gt;
+  &lt;i-thir effect="glass" shape="pill"&gt;Card 2&lt;/i-thir&gt;
+&lt;/i-hath&gt;</pre>
+  </div>
+
+  <h2>Composition Example</h2>
+  <div class="composition-demo">
+    <i-thir effect="shadow" level="lg" style="flex: 1; min-width: 200px;">
+      <div>
+        <strong>Shadow Card</strong><br>
+        <span class="effect-name">effect="shadow" level="lg"</span>
+      </div>
+    </i-thir>
+    <i-thir effect="glassmorphism" style="flex: 1; min-width: 200px;">
+      <div>
+        <strong>Glass Card</strong><br>
+        <span class="effect-name">effect="glassmorphism"</span>
+      </div>
+    </i-thir>
+    <i-thir effect="gradient-border" style="flex: 1; min-width: 200px;">
+      <div>
+        <strong>Gradient Border</strong><br>
+        <span class="effect-name">effect="gradient-border"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <div class="dark-section">
+    <h2>✨ Neon Effects</h2>
+    <p>Glowing outlines like neon signs. Best on dark backgrounds.</p>
+    
+    <div class="demo-grid">
+      <i-thir effect="neon">
+        <div>
+          <strong>Default Neon</strong><br>
+          <span class="effect-name">effect="neon"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="pink">
+        <div>
+          <strong>Pink Neon</strong><br>
+          <span class="effect-name">color="pink"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="cyan">
+        <div>
+          <strong>Cyan Neon</strong><br>
+          <span class="effect-name">color="cyan"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="green">
+        <div>
+          <strong>Green Neon</strong><br>
+          <span class="effect-name">color="green"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="orange">
+        <div>
+          <strong>Orange Neon</strong><br>
+          <span class="effect-name">color="orange"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="purple">
+        <div>
+          <strong>Purple Neon</strong><br>
+          <span class="effect-name">color="purple"</span>
+        </div>
+      </i-thir>
+    </div>
+    
+    <h3 style="color: oklch(80% 0.1 200); margin-top: var(--s1);">Inline Neon Text</h3>
+    <p class="inline-demo" style="color: oklch(85% 0 0);">
+      Regular text with <i-thir effect="neon" inline>glowing words</i-thir> inside, 
+      or maybe <i-thir effect="neon" color="pink" inline>pink neon</i-thir> for emphasis,
+      and <i-thir effect="neon" color="green" inline>green</i-thir> for success.
+    </p>
+  </div>
+
+  <h2>🧊 Frosted Glass / Glassmorphism</h2>
+  <p>Blurred background effects using <code>backdrop-filter</code>.</p>
+  
+  <div style="background: linear-gradient(135deg, var(--color-accent), var(--brand-complement)); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir effect="frosted">
+        <div>
+          <strong>Frosted</strong><br>
+          <span class="effect-name">effect="frosted"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="frosted" variant="light">
+        <div>
+          <strong>Light Frost</strong><br>
+          <span class="effect-name">variant="light"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="frosted" variant="dark">
+        <div>
+          <strong>Dark Frost</strong><br>
+          <span class="effect-name">variant="dark"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="glassmorphism">
+        <div>
+          <strong>Glassmorphism</strong><br>
+          <span class="effect-name">effect="glassmorphism"</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+
+  <h2>🔘 Neumorphism / Soft UI</h2>
+  <p>Soft extruded appearance with dual light/dark shadows.</p>
+  
+  <div style="background: oklch(92% 0 0); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir effect="neumorphism">
+        <div>
+          <strong>Raised</strong><br>
+          <span class="effect-name">effect="neumorphism"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neumorphism" variant="inset">
+        <div>
+          <strong>Inset</strong><br>
+          <span class="effect-name">variant="inset"</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+  
+  <div style="background: oklch(25% 0 0); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir effect="neumorphism" variant="dark">
+        <div>
+          <strong>Dark Neu</strong><br>
+          <span class="effect-name">variant="dark"</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+
+  <h2>📦 Embossed / Debossed</h2>
+  <p>Classic raised or pressed appearance.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="embossed">
+      <div>
+        <strong>Embossed</strong><br>
+        <span class="effect-name">effect="embossed"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="debossed">
+      <div>
+        <strong>Debossed</strong><br>
+        <span class="effect-name">effect="debossed"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>🌈 Gradient Border</h2>
+  <p>Colorful borders using the background trick.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="gradient-border">
+      <div>
+        <strong>Gradient Border</strong><br>
+        <span class="effect-name">effect="gradient-border"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="gradient-border" animated>
+      <div>
+        <strong>Animated!</strong><br>
+        <span class="effect-name">animated</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>✨ Shimmer / Shine</h2>
+  <p>Animated light sweep across the element.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="shimmer" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>Auto Shimmer</strong><br>
+        <span class="effect-name">effect="shimmer"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="shimmer" on-hover style="background: var(--brand-complement); color: white;">
+      <div>
+        <strong>Hover to Shine</strong><br>
+        <span class="effect-name">on-hover</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>🌈 Holographic / Iridescent</h2>
+  <p>Color-shifting rainbow effect.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="holographic">
+      <div>
+        <strong>Holographic</strong><br>
+        <span class="effect-name">effect="holographic"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>📺 Grain / Noise</h2>
+  <p>Film grain texture overlay.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="grain" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>With Grain</strong><br>
+        <span class="effect-name">effect="grain"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="grain" style="background: oklch(25% 0 0); color: oklch(90% 0 0); --grain-opacity: 0.3;">
+      <div>
+        <strong>Heavy Grain</strong><br>
+        <span class="effect-name">--grain-opacity: 0.3</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>🎮 Retro / Pixel</h2>
+  <p>8-bit aesthetic with pixelated borders.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="retro" style="color: white;">
+      <div>
+        <strong>Retro</strong><br>
+        <span class="effect-name">effect="retro"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>🔲 Outline / Stroke</h2>
+  <p>Border-only effects.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="outline">
+      <div>
+        <strong>Outline</strong><br>
+        <span class="effect-name">effect="outline"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="outline" variant="double">
+      <div>
+        <strong>Double</strong><br>
+        <span class="effect-name">variant="double"</span>
+      </div>
+    </i-thir>
+  </div>
+  
+  <p class="inline-demo">
+    Text with <i-thir effect="outline" inline style="--outline-width: 2px;">stroked text</i-thir> inside.
+  </p>
+
+  <h2>🌑 Shadow Levels</h2>
+  <p>Pre-configured elevation shadows.</p>
+  
+  <div class="demo-grid">
+    <i-thir effect="shadow" level="sm">
+      <div>
+        <strong>Small</strong><br>
+        <span class="effect-name">level="sm"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="shadow" level="md">
+      <div>
+        <strong>Medium</strong><br>
+        <span class="effect-name">level="md"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="shadow" level="lg">
+      <div>
+        <strong>Large</strong><br>
+        <span class="effect-name">level="lg"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="shadow" level="xl">
+      <div>
+        <strong>Extra Large</strong><br>
+        <span class="effect-name">level="xl"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="shadow" colored>
+      <div>
+        <strong>Colored Shadow</strong><br>
+        <span class="effect-name">colored</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>Code Reference</h2>
+  <pre><code>&lt;!-- Effect only --&gt;
+&lt;i-thir effect="neon"&gt;Neon card&lt;/i-thir&gt;
+
+&lt;!-- Corners only (for inverted corner shapes) --&gt;
+&lt;i-thir corners="inverted"&gt;All corners scalloped&lt;/i-thir&gt;
+&lt;i-thir corners="top"&gt;Top corners only&lt;/i-thir&gt;
+&lt;i-thir corners="bottom"&gt;Bottom corners only&lt;/i-thir&gt;
+&lt;i-thir corners="tl"&gt;Just top-left&lt;/i-thir&gt;
+
+&lt;!-- Shape only (for overall element shape) --&gt;
+&lt;i-thir shape="ticket"&gt;Side cutouts&lt;/i-thir&gt;
+&lt;i-thir shape="scalloped-bottom"&gt;Decorative edge&lt;/i-thir&gt;
+&lt;i-thir shape="pill"&gt;Fully rounded&lt;/i-thir&gt;
+
+&lt;!-- ✨ Combined: Corners/Shape + Effect --&gt;
+&lt;i-thir effect="frosted" corners="inverted"&gt;Frosted scalloped panel&lt;/i-thir&gt;
+&lt;i-thir effect="neon" shape="ticket"&gt;Neon ticket!&lt;/i-thir&gt;
+&lt;i-thir effect="glassmorphism" corners="top"&gt;Glass header&lt;/i-thir&gt;
+
+&lt;!-- With variants --&gt;
+&lt;i-thir effect="neon" color="pink"&gt;Pink neon&lt;/i-thir&gt;
+&lt;i-thir effect="frosted" variant="dark"&gt;Dark frost&lt;/i-thir&gt;
+&lt;i-thir effect="shadow" level="xl"&gt;Big shadow&lt;/i-thir&gt;
+
+&lt;!-- Inline text effects --&gt;
+&lt;p&gt;Text with &lt;i-thir effect="neon" inline&gt;glowing&lt;/i-thir&gt; words&lt;/p&gt;
+
+&lt;!-- Custom shape radius --&gt;
+&lt;i-thir shape="scalloped" style="--thir-shape-radius: 8px;"&gt;
+  Small scallops
+&lt;/i-thir&gt;
+
+&lt;!-- Composition with layouts --&gt;
+&lt;i-vircantie min="250px" space="var(--s1)"&gt;
+  &lt;i-thir effect="glassmorphism" shape="rounded"&gt;Card 1&lt;/i-thir&gt;
+  &lt;i-thir effect="glassmorphism" shape="rounded"&gt;Card 2&lt;/i-thir&gt;
+&lt;/i-vircantie&gt;</code></pre>
+
+  <h2>🔷 Corners & Shapes</h2>
+  <p>
+    Use <code>corners="..."</code> for inverted corner modifications, 
+    or <code>shape="..."</code> for overall element shapes. Both can combine with any effect!
+  </p>
+  
+  <div class="demo-grid">
+    <i-thir corners="inverted" style="background: var(--color-accent); color: white; --thir-shape-radius: 20px;">
+      <div>
+        <strong>Inverted (all)</strong><br>
+        <span class="effect-name">corners="inverted"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir corners="top" style="background: var(--brand-complement); color: white; --thir-shape-radius: 20px;">
+      <div>
+        <strong>Top Corners</strong><br>
+        <span class="effect-name">corners="top"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir corners="bottom" style="background: var(--color-accent); color: white; --thir-shape-radius: 20px;">
+      <div>
+        <strong>Bottom Corners</strong><br>
+        <span class="effect-name">corners="bottom"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir shape="ticket" style="background: linear-gradient(90deg, var(--color-accent), var(--brand-complement)); color: white; --thir-shape-radius: 15px;">
+      <div>
+        <strong>Ticket</strong><br>
+        <span class="effect-name">shape="ticket"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir shape="ticket-vertical" style="background: var(--brand-complement); color: white; --thir-shape-radius: 15px;">
+      <div>
+        <strong>Ticket Vertical</strong><br>
+        <span class="effect-name">shape="ticket-vertical"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir shape="scalloped-bottom" style="background: var(--color-accent); color: white; --thir-shape-radius: 10px;">
+      <div>
+        <strong>Scalloped Bottom</strong><br>
+        <span class="effect-name">shape="scalloped-bottom"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir shape="pill" style="background: var(--brand-complement); color: white;">
+      <div>
+        <strong>Pill</strong><br>
+        <span class="effect-name">shape="pill"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir shape="notch-top" style="background: var(--color-accent); color: white; --thir-shape-radius: 12px; --thir-notch-width: 50px;">
+      <div>
+        <strong>Notch Top</strong><br>
+        <span class="effect-name">shape="notch-top"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>✨ Corners + Effect Combinations</h2>
+  <p>The magic: combine any corner/shape with any effect!</p>
+  
+  <div class="dark-section">
+    <div class="demo-grid">
+      <i-thir effect="neon" corners="inverted" style="--thir-shape-radius: 20px;">
+        <div>
+          <strong>Neon + Inverted</strong><br>
+          <span class="effect-name">Scalloped neon!</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="pink" shape="ticket" style="--thir-shape-radius: 18px;">
+        <div>
+          <strong>Neon + Ticket</strong><br>
+          <span class="effect-name">Neon ticket stub</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="neon" color="cyan" shape="pill">
+        <div>
+          <strong>Neon + Pill</strong><br>
+          <span class="effect-name">Glowing pill</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+  
+  <div style="background: linear-gradient(135deg, oklch(60% 0.2 250), oklch(50% 0.25 320)); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir effect="frosted" corners="inverted" style="--thir-shape-radius: 25px;">
+        <div>
+          <strong>Frosted + Inverted</strong><br>
+          <span class="effect-name">Scalloped glass</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="glassmorphism" shape="ticket" style="--thir-shape-radius: 20px;">
+        <div>
+          <strong>Glass + Ticket</strong><br>
+          <span class="effect-name">Glass ticket</span>
+        </div>
+      </i-thir>
+      
+      <i-thir effect="frosted" variant="dark" shape="scalloped-bottom" style="--thir-shape-radius: 8px;">
+        <div>
+          <strong>Dark Frost + Scalloped</strong><br>
+          <span class="effect-name">Decorative edge</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+  
+  <div class="demo-grid">
+    <i-thir effect="shadow" level="lg" shape="inverted" style="--thir-shape-radius: 20px; background: white;">
+      <div>
+        <strong>Shadow + Inverted</strong><br>
+        <span class="effect-name">Floating scalloped</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="gradient-border" animated shape="rounded" style="--thir-shape-radius: 16px;">
+      <div>
+        <strong>Gradient + Rounded</strong><br>
+        <span class="effect-name">Spinning border</span>
+      </div>
+    </i-thir>
+    
+    <i-thir effect="neumorphism" shape="pill" style="background: oklch(92% 0 0);">
+      <div>
+        <strong>Soft + Pill</strong><br>
+        <span class="effect-name">Soft pill button</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>Available Corners & Shapes</h2>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--s2);">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--color-border);">
+        <th style="text-align: left; padding: var(--s-1);">Attribute</th>
+        <th style="text-align: left; padding: var(--s-1);">Value</th>
+        <th style="text-align: left; padding: var(--s-1);">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background: oklch(95% 0 0);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">corners="..." — Inverted corner modifications</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>inverted</code></td><td>All four corners curve inward</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>top</code></td><td>Top corners curve inward</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>bottom</code></td><td>Bottom corners curve inward</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>left</code></td><td>Left corners curve inward</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>right</code></td><td>Right corners curve inward</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td><code>tl, tr, bl, br</code></td><td>Individual corners</td></tr>
+      <tr style="background: oklch(95% 0 0);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">shape="..." — Overall element shape</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>ticket</code></td><td>Semi-circle cutouts on left/right</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>ticket-vertical</code></td><td>Semi-circle cutouts on top/bottom</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>scalloped</code></td><td>Repeating waves on all edges</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>scalloped-top/bottom/left/right</code></td><td>Repeating waves on one edge</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>notch-top, notch-bottom</code></td><td>Single centered notch</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>pill</code></td><td>Fully rounded ends</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>rounded</code></td><td>Uses border-radius</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td><code>square</code></td><td>No rounding</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Available Effects</h2>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--s2);">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--color-border);">
+        <th style="text-align: left; padding: var(--s-1);">Effect</th>
+        <th style="text-align: left; padding: var(--s-1);">Variants</th>
+        <th style="text-align: left; padding: var(--s-1);">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding: var(--s-1);"><code>neon</code></td><td>pink, cyan, green, orange, purple</td><td>Glowing outline</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>frosted</code></td><td>light, dark</td><td>Blurred backdrop</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>glassmorphism</code></td><td>dark</td><td>Modern glass card</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>neumorphism</code></td><td>inset, dark</td><td>Soft UI shadows</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>embossed</code></td><td>—</td><td>Raised appearance</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>debossed</code></td><td>—</td><td>Pressed appearance</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>gradient-border</code></td><td>animated</td><td>Colorful border</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shimmer</code></td><td>on-hover</td><td>Light sweep</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>holographic</code></td><td>interactive</td><td>Color shift</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>grain</code></td><td>—</td><td>Film grain texture</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>retro</code></td><td>—</td><td>Pixel aesthetic</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>outline</code></td><td>double</td><td>Border only</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shadow</code></td><td>sm, md, lg, xl, colored</td><td>Drop shadow</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🎚️ Tier 2: Low-Level Shortcuts</h2>
+  <p>Single-property conveniences that combine with any effect, corner, or shape.</p>
+  
+  <h3>Filter Shortcuts</h3>
+  <div class="demo-grid">
+    <i-thir filter="grayscale" style="background: linear-gradient(45deg, var(--color-accent), var(--brand-complement)); color: white;">
+      <div>
+        <strong>Grayscale</strong><br>
+        <span class="effect-name">filter="grayscale"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="sepia" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>Sepia</strong><br>
+        <span class="effect-name">filter="sepia"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="blur-sm" style="background: var(--brand-complement); color: white;">
+      <div>
+        <strong>Blur Small</strong><br>
+        <span class="effect-name">filter="blur-sm"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="brightness-up" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>Brightness Up</strong><br>
+        <span class="effect-name">filter="brightness-up"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="contrast-high" style="background: oklch(50% 0.1 200); color: white;">
+      <div>
+        <strong>High Contrast</strong><br>
+        <span class="effect-name">filter="contrast-high"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="hue-180" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>Hue Rotate 180°</strong><br>
+        <span class="effect-name">filter="hue-180"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="vintage" style="background: linear-gradient(135deg, oklch(60% 0.2 30), oklch(50% 0.15 60)); color: white;">
+      <div>
+        <strong>Vintage Preset</strong><br>
+        <span class="effect-name">filter="vintage"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir filter="noir" style="background: linear-gradient(135deg, oklch(40% 0.1 200), oklch(30% 0.15 250)); color: white;">
+      <div>
+        <strong>Noir Preset</strong><br>
+        <span class="effect-name">filter="noir"</span>
+      </div>
+    </i-thir>
+  </div>
+  
+  <h3>Backdrop Shortcuts</h3>
+  <div style="background: linear-gradient(135deg, oklch(65% 0.25 250), oklch(55% 0.3 320)); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir backdrop="blur" style="background: oklch(100% 0 0 / 0.2); color: white;">
+        <div>
+          <strong>Backdrop Blur</strong><br>
+          <span class="effect-name">backdrop="blur"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir backdrop="blur-lg" style="background: oklch(100% 0 0 / 0.1); color: white;">
+        <div>
+          <strong>Backdrop Blur LG</strong><br>
+          <span class="effect-name">backdrop="blur-lg"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir backdrop="frost" style="background: oklch(100% 0 0 / 0.15); color: white;">
+        <div>
+          <strong>Frost Preset</strong><br>
+          <span class="effect-name">backdrop="frost"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir backdrop="grayscale" style="background: oklch(100% 0 0 / 0.3); color: white;">
+        <div>
+          <strong>Backdrop Grayscale</strong><br>
+          <span class="effect-name">backdrop="grayscale"</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+  
+  <h3>Blend Mode Shortcuts</h3>
+  <div style="background: linear-gradient(135deg, oklch(70% 0.2 30), oklch(60% 0.25 200)); padding: var(--s2); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <div class="demo-grid">
+      <i-thir blend="multiply" style="background: oklch(80% 0.15 60); color: oklch(20% 0 0);">
+        <div>
+          <strong>Multiply</strong><br>
+          <span class="effect-name">blend="multiply"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir blend="screen" style="background: oklch(30% 0.15 250); color: white;">
+        <div>
+          <strong>Screen</strong><br>
+          <span class="effect-name">blend="screen"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir blend="overlay" style="background: oklch(50% 0.2 150); color: white;">
+        <div>
+          <strong>Overlay</strong><br>
+          <span class="effect-name">blend="overlay"</span>
+        </div>
+      </i-thir>
+      
+      <i-thir blend="difference" style="background: oklch(60% 0.2 300); color: white;">
+        <div>
+          <strong>Difference</strong><br>
+          <span class="effect-name">blend="difference"</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+  
+  <h3>Hover & Touch Interactions</h3>
+  <p>Hover over these cards (or long-press on mobile) to see the effects:</p>
+  <div class="demo-grid">
+    <i-thir hover="lift" touch style="background: var(--color-accent); color: white; cursor: pointer;">
+      <div>
+        <strong>Lift</strong><br>
+        <span class="effect-name">hover="lift" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="grow" touch style="background: var(--brand-complement); color: white; cursor: pointer;">
+      <div>
+        <strong>Grow</strong><br>
+        <span class="effect-name">hover="grow" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="shrink" touch style="background: oklch(60% 0.2 150); color: white; cursor: pointer;">
+      <div>
+        <strong>Shrink</strong><br>
+        <span class="effect-name">hover="shrink" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="tilt" touch style="background: oklch(60% 0.2 200); color: white; cursor: pointer;">
+      <div>
+        <strong>Tilt</strong><br>
+        <span class="effect-name">hover="tilt" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="wiggle" touch style="background: oklch(70% 0.2 60); color: white; cursor: pointer;">
+      <div>
+        <strong>Wiggle</strong><br>
+        <span class="effect-name">hover="wiggle" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="pulse" touch style="background: oklch(60% 0.25 330); color: white; cursor: pointer;">
+      <div>
+        <strong>Pulse</strong><br>
+        <span class="effect-name">hover="pulse" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="pop" touch style="background: oklch(65% 0.2 100); color: white; cursor: pointer;">
+      <div>
+        <strong>Pop</strong><br>
+        <span class="effect-name">hover="pop" touch</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="jiggle" touch style="background: oklch(55% 0.2 270); color: white; cursor: pointer;">
+      <div>
+        <strong>Jiggle</strong><br>
+        <span class="effect-name">hover="jiggle" touch</span>
+      </div>
+    </i-thir>
+  </div>
+  
+  <h3>Platform-Specific Interactions</h3>
+  <p>Different effects for desktop hover vs mobile touch:</p>
+  <div class="demo-grid">
+    <i-thir hover="lift" touch="pulse" style="background: var(--color-accent); color: white; cursor: pointer;">
+      <div>
+        <strong>Lift → Pulse</strong><br>
+        <span class="effect-name">hover="lift" touch="pulse"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="grow" touch="wiggle" style="background: var(--brand-complement); color: white; cursor: pointer;">
+      <div>
+        <strong>Grow → Wiggle</strong><br>
+        <span class="effect-name">hover="grow" touch="wiggle"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover="tilt" style="background: oklch(60% 0.2 200); color: white; cursor: pointer;">
+      <div>
+        <strong>Hover Only</strong><br>
+        <span class="effect-name">hover="tilt" (no touch)</span>
+      </div>
+    </i-thir>
+  </div>
+  
+  <h3>Static Transforms</h3>
+  <div class="demo-grid">
+    <i-thir rotate="45" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>Rotate 45°</strong><br>
+        <span class="effect-name">rotate="45"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir flip="x" style="background: var(--brand-complement); color: white;">
+      <div>
+        <strong>Flip X</strong><br>
+        <span class="effect-name">flip="x"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir skew="x" style="background: oklch(60% 0.2 180); color: white;">
+      <div>
+        <strong>Skew X</strong><br>
+        <span class="effect-name">skew="x"</span>
+      </div>
+    </i-thir>
+  </div>
+  
+  <h3>Opacity & Cursor</h3>
+  <div class="demo-grid">
+    <i-thir opacity="50" style="background: var(--color-accent); color: white;">
+      <div>
+        <strong>50% Opacity</strong><br>
+        <span class="effect-name">opacity="50"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir hover-opacity="fade" style="background: var(--brand-complement); color: white; cursor: pointer;">
+      <div>
+        <strong>Fade on Hover</strong><br>
+        <span class="effect-name">hover-opacity="fade"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir cursor="pointer" style="background: oklch(60% 0.2 150); color: white;">
+      <div>
+        <strong>Pointer Cursor</strong><br>
+        <span class="effect-name">cursor="pointer"</span>
+      </div>
+    </i-thir>
+    
+    <i-thir cursor="grab" style="background: oklch(60% 0.2 200); color: white;">
+      <div>
+        <strong>Grab Cursor</strong><br>
+        <span class="effect-name">cursor="grab"</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>🎨 Tier 3: CSS Variables (Customization)</h2>
+  <p>Fine-tune any effect by overriding CSS custom properties:</p>
+  
+  <pre><code>&lt;i-thir effect="neon" style="
+  --thir-neon-color: oklch(70% 0.3 150);
+  --thir-neon-intensity: 1.5;
+"&gt;Custom Neon&lt;/i-thir&gt;
+
+&lt;i-thir corners="inverted" style="
+  --thir-shape-radius: 30px;
+"&gt;Big Scallops&lt;/i-thir&gt;
+
+&lt;i-thir effect="glassmorphism" style="
+  --thir-glass-blur: 20px;
+  --thir-glass-opacity: 0.5;
+"&gt;Heavy Glass&lt;/i-thir&gt;</code></pre>
+  
+  <div class="dark-section">
+    <div class="demo-grid">
+      <i-thir effect="neon" style="--thir-neon-color: oklch(70% 0.3 150); --thir-neon-intensity: 1.5;">
+        <div>
+          <strong>Custom Neon Color</strong><br>
+          <span class="effect-name">Tier 3: CSS vars</span>
+        </div>
+      </i-thir>
+      
+      <i-thir corners="inverted" effect="neon" color="cyan" style="--thir-shape-radius: 25px;">
+        <div>
+          <strong>Big Scalloped Neon</strong><br>
+          <span class="effect-name">Tier 1 + 3</span>
+        </div>
+      </i-thir>
+    </div>
+  </div>
+
+  <h2>🔧 Tier 4: Raw CSS (Escape Hatch)</h2>
+  <p>For truly custom effects, use <code>style=""</code> or the <code>custom</code> attribute:</p>
+  
+  <pre><code>&lt;!-- Full custom (removes all defaults) --&gt;
+&lt;i-thir custom style="
+  background: conic-gradient(from 45deg, red, orange, yellow, green, blue, purple, red);
+  padding: 2rem;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+"&gt;Diamond Rainbow&lt;/i-thir&gt;
+
+&lt;!-- Partial reset (keep layout, remove visuals) --&gt;
+&lt;i-thir custom="visual" style="..."&gt;...&lt;/i-thir&gt;</code></pre>
+  
+  <div class="demo-grid">
+    <i-thir custom style="
+      background: conic-gradient(from 45deg, oklch(70% 0.25 0), oklch(70% 0.25 60), oklch(70% 0.25 120), oklch(70% 0.25 180), oklch(70% 0.25 240), oklch(70% 0.25 300), oklch(70% 0.25 360));
+      padding: 2rem;
+      border-radius: 50%;
+      color: white;
+      text-shadow: 0 2px 4px oklch(0% 0 0 / 0.5);
+    ">
+      <div>
+        <strong>Rainbow Circle</strong><br>
+        <span class="effect-name">custom + style</span>
+      </div>
+    </i-thir>
+    
+    <i-thir custom style="
+      background: linear-gradient(135deg, oklch(30% 0.1 250) 0%, oklch(20% 0.15 280) 100%);
+      padding: 2rem;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      color: oklch(90% 0 0);
+    ">
+      <div>
+        <strong>Pentagon</strong><br>
+        <span class="effect-name">clip-path</span>
+      </div>
+    </i-thir>
+    
+    <i-thir custom style="
+      background: repeating-linear-gradient(
+        45deg,
+        oklch(95% 0 0),
+        oklch(95% 0 0) 10px,
+        oklch(60% 0.2 30) 10px,
+        oklch(60% 0.2 30) 20px
+      );
+      padding: 2rem;
+      border-radius: 1rem;
+    ">
+      <div>
+        <strong>Stripes</strong><br>
+        <span class="effect-name">repeating gradient</span>
+      </div>
+    </i-thir>
+  </div>
+
+  <h2>Tier Reference Table</h2>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--s2);">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--color-border);">
+        <th style="text-align: left; padding: var(--s-1);">Tier</th>
+        <th style="text-align: left; padding: var(--s-1);">Attribute</th>
+        <th style="text-align: left; padding: var(--s-1);">Example Values</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background: oklch(95% 0.05 200 / 0.3);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">Tier 1: Packaged Effects</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>effect</code></td><td>effect="neon"</td><td>neon, frosted, glassmorphism, neumorphism, shadow, shimmer, etc.</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>corners</code></td><td>corners="inverted"</td><td>inverted, top, bottom, left, right, tl, tr, bl, br</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>shape</code></td><td>shape="ticket"</td><td>ticket, scalloped, notch-top, pill, rounded, square</td></tr>
+      
+      <tr style="background: oklch(95% 0.05 150 / 0.3);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">Tier 2: Low-Level Shortcuts</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>filter</code></td><td>filter="grayscale"</td><td>blur-*, grayscale, sepia, brightness-*, contrast-*, hue-*, vintage, noir</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>backdrop</code></td><td>backdrop="blur"</td><td>blur-*, dim, brighten, saturate, grayscale, frost</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>blend</code></td><td>blend="multiply"</td><td>multiply, screen, overlay, darken, lighten, difference, etc.</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>hover</code></td><td>hover="lift"</td><td>lift, grow, shrink, tilt, wiggle, pulse, pop, jiggle, glow, dim</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>touch</code></td><td>touch (boolean) or touch="pulse"</td><td>Same values as hover; enables mobile long-press (requires touch.js)</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>rotate</code></td><td>rotate="45"</td><td>45, 90, 180, -45, -90</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>flip</code></td><td>flip="x"</td><td>x, y, both</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>skew</code></td><td>skew="x"</td><td>x, y, xy</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>opacity</code></td><td>opacity="50"</td><td>0, 10, 25, 50, 75, 90, 100</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>cursor</code></td><td>cursor="pointer"</td><td>pointer, grab, zoom-in, help, not-allowed, etc.</td></tr>
+      
+      <tr style="background: oklch(95% 0.05 60 / 0.3);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">Tier 3: CSS Variables</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>style="--thir-*"</code></td><td>--thir-neon-color</td><td>--thir-shape-radius, --thir-glass-blur, --thir-shadow-color, etc.</td></tr>
+      
+      <tr style="background: oklch(95% 0.05 330 / 0.3);"><td colspan="3" style="padding: var(--s-1); font-weight: bold;">Tier 4: Raw CSS</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>custom</code></td><td>custom</td><td>Removes all defaults for full control</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>custom="visual"</code></td><td>custom="visual"</td><td>Keeps layout, removes visual styles</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>custom="shape"</code></td><td>custom="shape"</td><td>Keeps visuals, removes mask/radius</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>style=""</code></td><td>Any CSS</td><td>Full CSS escape hatch</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Touch support script for mobile long-press -->
+  <script src="../global/touch.js"></script>
+</body>
+</html>

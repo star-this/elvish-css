@@ -1,6 +1,6 @@
 # Elvish - Intrinsic CSS Layout System
 
-A (mostly) complete design system using custom elements, with **Elvish names** from Tolkien's Sindarin language. Extended with modern CSS features including `@function`, `if()`, `sibling-index()`, and typed `attr()`.
+An implementation of a design system with custom elements, with **Elvish names** from Tolkien's Sindarin language. Extended with modern CSS features including `@function`, `if()`, `sibling-index()`, and typed `attr()`.
 
 *Mae govannen!* (Well met!)
 
@@ -45,12 +45,12 @@ All layout primitives use Sindarin (Grey-Elvish) names:
 
 ```html
 <!-- unpkg -->
-<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.0.0/dist/elvish.min.css">
-<script src="https://unpkg.com/elvish-css@1.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.2.0/dist/elvish.min.css">
+<script src="https://unpkg.com/elvish-css@1.2.0/dist/elvish.iife.js"></script>
 
 <!-- jsDelivr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.min.css">
-<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.0.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.2.0/dist/elvish.min.css">
+<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.2.0/dist/elvish.iife.js"></script>
 ```
 
 ### npm
@@ -128,7 +128,7 @@ Define one brand color, derive entire palettes:
 Define custom functions for reusable calculations:
 
 ```css
-@function --negate(--value) {
+@function --neg(--value) {
   result: calc(-1 * var(--value));
 }
 
@@ -137,7 +137,7 @@ Define custom functions for reusable calculations:
 }
 
 .element {
-  margin-left: --negate(20px);           /* -20px */
+  margin-left: --neg(20px);           /* -20px */
   background: --alpha(var(--brand), 0.5); /* 50% opacity */
 }
 ```
@@ -285,7 +285,7 @@ enableAutoNaming(gridElement, 'card'); // Each child animates independently
 | `<i-gwistindor>` | Switching | `threshold`, `space`, `limit` |
 | `<i-esgal>` | Covering | `centered`, `space`, `min-height` |
 | `<i-vircantie>` | Grid | `min`, `space` |
-| `<i-gant-thala>` | Aspect | `ratio` |
+| `<i-gant-thala>` | Ascpect | `ratio` |
 | `<i-glan-tholl>` | Side-Scrolling | `item-width`, `space`, `no-bar` |
 | `<i-fano>` | Overcast | `fixed`, `contain`, `margin` |
 | `<i-thann>` | Icon | `space`, `label`, `echuiol`, `dhoren` |
@@ -353,7 +353,7 @@ Elvish uses a modular scale for harmonious spacing and typography. Choose the ra
 |-------|-------|-----------|----------|
 | **Golden (φ)** | 1.618 | Dramatic, organic | Marketing, CTAs, hero sections |
 | **Silver (√2)** | 1.414 | Subtle, refined | Documentation, dashboards, dense content |
-| **Fifth (🎼)** | 1.5 | Balanced, musical | General purpose |
+| **Fifth** | 1.5 | Balanced, musical | General purpose |
 
 **Default:** Perfect Fifth (1.5) for balanced harmony.
 
@@ -484,8 +484,8 @@ elvish/
 │   ├── esgal/           # Covering
 │   ├── vircantie/       # Grid
 │   ├── gant-thala/      # Aspect (ratio)
-│   ├── glan-tholl/      # Side-Scrolling 
-│   ├── fano/            # Overcast 
+│   ├── glan-tholl/      # Side-Scrolling
+│   ├── fano/            # Overcast
 │   ├── thann/           # Icon
 │   ├── adleithian/      # Container
 │   ├── him/             # Sticky

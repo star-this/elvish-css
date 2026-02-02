@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish - Typography (i-têw) Demo</title>
+  <link rel="stylesheet" href="../global/global.css">
+  <link rel="stylesheet" href="../global/typography.css">
+  <style>
+    body {
+      font-family: var(--font-plain);
+      background: var(--color-surface);
+      color: var(--color-text);
+      padding: var(--s2);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: var(--s3);
+      margin-bottom: var(--s-1);
+    }
+    
+    .subtitle {
+      font-size: var(--s1);
+      color: var(--color-text-muted);
+      margin-bottom: var(--s2);
+    }
+    
+    h2 {
+      font-size: var(--s1);
+      margin-top: var(--s2);
+      margin-bottom: var(--s0);
+      color: var(--color-accent);
+    }
+    
+    p {
+      max-width: 70ch;
+      margin-bottom: var(--s1);
+    }
+    
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1);
+      margin-bottom: var(--s1);
+      align-items: baseline;
+    }
+    
+    .demo-box {
+      background: var(--color-surface-raised);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+      min-width: 150px;
+    }
+    
+    .demo-box--wide {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .attr {
+      font-family: var(--font-mono);
+      font-size: var(--s-1);
+      color: var(--color-text-muted);
+      display: block;
+      margin-top: var(--s-2);
+    }
+    
+    pre {
+      background: var(--color-surface-sunken);
+      padding: var(--s0);
+      border-radius: var(--s-1);
+      overflow-x: auto;
+      font-size: var(--s-1);
+      margin-bottom: var(--s1);
+      font-family: var(--font-mono);
+    }
+    
+    code {
+      font-family: var(--font-mono);
+    }
+    
+    .dark-section {
+      background: oklch(15% 0.02 240);
+      color: oklch(90% 0 0);
+      padding: var(--s2);
+      border-radius: var(--s0);
+      margin-bottom: var(--s2);
+    }
+    
+    .dark-section h2 {
+      color: oklch(80% 0.15 200);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: var(--s2);
+    }
+    
+    th, td {
+      text-align: left;
+      padding: var(--s-1);
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    th {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧝 i-têw — The Letters</h1>
+  <p class="subtitle">Typography controls for Elvish. "Têw" (Sindarin) = letters, characters, writing.</p>
+
+  <h2>Philosophy</h2>
+  <p>
+    Typography is about <strong>readability, hierarchy, and voice</strong>. It's separate from visual 
+    effects (<code>&lt;i-thir&gt;</code>) and layout (<code>&lt;i-hath&gt;</code>, etc.). 
+    <code>&lt;i-tew&gt;</code> handles fonts, sizes, spacing, and text styling.
+  </p>
+  
+  <pre><code>&lt;!-- Basic usage --&gt;
+&lt;i-tew family="serif" size="lg" weight="bold"&gt;Elegant Heading&lt;/i-tew&gt;
+
+&lt;!-- Spacing control --&gt;
+&lt;i-tew leading="loose" tracking="wide"&gt;Spacious text&lt;/i-tew&gt;
+
+&lt;!-- Transform and alignment --&gt;
+&lt;i-tew transform="uppercase" align="center" block&gt;CENTERED TITLE&lt;/i-tew&gt;
+
+&lt;!-- Presets for common patterns --&gt;
+&lt;i-tew preset="heading"&gt;Article Title&lt;/i-tew&gt;
+&lt;i-tew preset="lead"&gt;Introduction paragraph with larger text.&lt;/i-tew&gt;
+&lt;i-tew preset="caption"&gt;Photo credit: Someone&lt;/i-tew&gt;</code></pre>
+
+  <h2>Font Family</h2>
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew family="sans">Sans-serif text</i-tew>
+      <span class="attr">family="sans"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew family="serif">Serif text</i-tew>
+      <span class="attr">family="serif"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew family="mono">Monospace text</i-tew>
+      <span class="attr">family="mono"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew family="display">Display text</i-tew>
+      <span class="attr">family="display"</span>
+    </div>
+  </div>
+
+  <h2>Font Size (Modular Scale)</h2>
+  <div class="demo-row" style="flex-direction: column; align-items: flex-start;">
+    <i-tew size="-2">size="-2" / "2xs" — Tiny text</i-tew>
+    <i-tew size="-1">size="-1" / "xs" — Small text</i-tew>
+    <i-tew size="0">size="0" / "sm" — Base text</i-tew>
+    <i-tew size="1">size="1" / "md" — Medium text</i-tew>
+    <i-tew size="2">size="2" / "lg" — Large text</i-tew>
+    <i-tew size="3">size="3" / "xl" — Extra large</i-tew>
+    <i-tew size="4">size="4" / "2xl" — Huge</i-tew>
+    <i-tew size="5">size="5" / "3xl" — Massive</i-tew>
+  </div>
+  
+  <h3>Fluid Sizing</h3>
+  <p><i-tew size="fluid-lg" block>This text scales with viewport width (clamp-based)</i-tew></p>
+
+  <h2>Font Weight</h2>
+  <div class="demo-row" style="flex-direction: column; align-items: flex-start;">
+    <i-tew weight="thin">weight="thin" (100)</i-tew>
+    <i-tew weight="light">weight="light" (300)</i-tew>
+    <i-tew weight="normal">weight="normal" (400)</i-tew>
+    <i-tew weight="medium">weight="medium" (500)</i-tew>
+    <i-tew weight="semibold">weight="semibold" (600)</i-tew>
+    <i-tew weight="bold">weight="bold" (700)</i-tew>
+    <i-tew weight="extrabold">weight="extrabold" (800)</i-tew>
+    <i-tew weight="black">weight="black" (900)</i-tew>
+  </div>
+
+  <h2>Line Height (Leading)</h2>
+  <div class="demo-row">
+    <div class="demo-box demo-box--wide">
+      <i-tew leading="tight" block>
+        Tight leading (1.25). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Sed do eiusmod tempor incididunt ut labore.
+      </i-tew>
+      <span class="attr">leading="tight"</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew leading="normal" block>
+        Normal leading (1.5). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Sed do eiusmod tempor incididunt ut labore.
+      </i-tew>
+      <span class="attr">leading="normal"</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew leading="loose" block>
+        Loose leading (2). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Sed do eiusmod tempor incididunt ut labore.
+      </i-tew>
+      <span class="attr">leading="loose"</span>
+    </div>
+  </div>
+
+  <h2>Letter Spacing (Tracking)</h2>
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew tracking="tighter">Tighter tracking</i-tew>
+      <span class="attr">tracking="tighter"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew tracking="normal">Normal tracking</i-tew>
+      <span class="attr">tracking="normal"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew tracking="wide">Wide tracking</i-tew>
+      <span class="attr">tracking="wide"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew tracking="widest">Widest tracking</i-tew>
+      <span class="attr">tracking="widest"</span>
+    </div>
+  </div>
+
+  <h2>Text Transform (Case)</h2>
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew transform="uppercase">uppercase text</i-tew>
+      <span class="attr">transform="uppercase"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew transform="lowercase">LOWERCASE TEXT</i-tew>
+      <span class="attr">transform="lowercase"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew transform="capitalize">capitalized text</i-tew>
+      <span class="attr">transform="capitalize"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew transform="small-caps">Small Caps Text</i-tew>
+      <span class="attr">transform="small-caps"</span>
+    </div>
+  </div>
+
+  <h2>Text Alignment</h2>
+  <div class="demo-row">
+    <div class="demo-box demo-box--wide">
+      <i-tew align="left" block>Left aligned text</i-tew>
+      <span class="attr">align="left"</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew align="center" block>Center aligned text</i-tew>
+      <span class="attr">align="center"</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew align="right" block>Right aligned text</i-tew>
+      <span class="attr">align="right"</span>
+    </div>
+  </div>
+
+  <h2>Text Decoration</h2>
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew decoration="underline">Underlined</i-tew>
+      <span class="attr">decoration="underline"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew decoration="underline-wavy">Wavy underline</i-tew>
+      <span class="attr">decoration="underline-wavy"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew decoration="line-through">Strikethrough</i-tew>
+      <span class="attr">decoration="line-through"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew decoration="overline">Overline</i-tew>
+      <span class="attr">decoration="overline"</span>
+    </div>
+  </div>
+
+  <h2>Text Wrapping</h2>
+  <div class="demo-row">
+    <div class="demo-box demo-box--wide">
+      <i-tew wrap="balance" size="lg" block style="max-width: 300px;">
+        This headline text uses text-wrap: balance for even line lengths
+      </i-tew>
+      <span class="attr">wrap="balance"</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew wrap="pretty" block style="max-width: 300px;">
+        This paragraph uses text-wrap: pretty to avoid orphans and improve 
+        the appearance of the last line in a block of text.
+      </i-tew>
+      <span class="attr">wrap="pretty"</span>
+    </div>
+  </div>
+
+  <h2>Text Truncation</h2>
+  <div class="demo-row">
+    <div class="demo-box demo-box--wide">
+      <i-tew truncate block style="max-width: 200px;">
+        This text will be truncated with ellipsis when it overflows
+      </i-tew>
+      <span class="attr">truncate</span>
+    </div>
+    <div class="demo-box demo-box--wide">
+      <i-tew lines="2" block style="max-width: 200px;">
+        This text will be clamped to exactly two lines with an ellipsis at the end when it overflows the container
+      </i-tew>
+      <span class="attr">lines="2"</span>
+    </div>
+  </div>
+
+  <div class="dark-section">
+    <h2>Text Shadows</h2>
+    <div class="demo-row">
+      <div class="demo-box" style="background: transparent;">
+        <i-tew shadow="sm" size="xl">Subtle shadow</i-tew>
+        <span class="attr" style="color: oklch(70% 0 0);">shadow="sm"</span>
+      </div>
+      <div class="demo-box" style="background: transparent;">
+        <i-tew shadow="lg" size="xl">Strong shadow</i-tew>
+        <span class="attr" style="color: oklch(70% 0 0);">shadow="lg"</span>
+      </div>
+      <div class="demo-box" style="background: transparent;">
+        <i-tew shadow="glow" size="xl" style="color: oklch(80% 0.2 200);">Glowing text</i-tew>
+        <span class="attr" style="color: oklch(70% 0 0);">shadow="glow"</span>
+      </div>
+      <div class="demo-box" style="background: transparent;">
+        <i-tew shadow="3d" size="xl">3D/Emboss</i-tew>
+        <span class="attr" style="color: oklch(70% 0 0);">shadow="3d"</span>
+      </div>
+      <div class="demo-box" style="background: transparent;">
+        <i-tew shadow="long" size="xl">Long shadow</i-tew>
+        <span class="attr" style="color: oklch(70% 0 0);">shadow="long"</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Color</h2>
+  <div class="demo-row">
+    <i-tew color="primary">Primary</i-tew>
+    <i-tew color="muted">Muted</i-tew>
+    <i-tew color="accent">Accent</i-tew>
+    <i-tew color="success">Success</i-tew>
+    <i-tew color="warning">Warning</i-tew>
+    <i-tew color="error">Error</i-tew>
+    <i-tew color="info">Info</i-tew>
+  </div>
+
+  <h2>Font Features</h2>
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew numeric="tabular">123,456.78</i-tew>
+      <span class="attr">numeric="tabular"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew numeric="oldstyle">123,456.78</i-tew>
+      <span class="attr">numeric="oldstyle"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew numeric="slashed-zero">10203040</i-tew>
+      <span class="attr">numeric="slashed-zero"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew numeric="ordinal">1st 2nd 3rd</i-tew>
+      <span class="attr">numeric="ordinal"</span>
+    </div>
+  </div>
+
+  <h2>Presets</h2>
+  
+  <h3>Headings (h1-h6)</h3>
+  <div style="background: var(--color-surface-raised); padding: var(--s1); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <i-tew preset="h1">Heading 1 — The Main Title</i-tew>
+    <i-tew preset="h2">Heading 2 — Section Title</i-tew>
+    <i-tew preset="h3">Heading 3 — Subsection</i-tew>
+    <i-tew preset="h4">Heading 4 — Topic</i-tew>
+    <i-tew preset="h5">Heading 5 — Subtopic</i-tew>
+    <i-tew preset="h6">HEADING 6 — LABEL STYLE</i-tew>
+  </div>
+  
+  <h3>Body Text Presets</h3>
+  <div style="background: var(--color-surface-raised); padding: var(--s1); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <i-tew preset="heading">Article Title</i-tew>
+    <i-tew preset="lead">
+      This is a lead paragraph that introduces the article with slightly larger, 
+      muted text to draw the reader in.
+    </i-tew>
+    <i-tew preset="body">
+      Regular body text follows with comfortable reading settings. The line height 
+      is relaxed and the text wraps nicely using text-wrap: pretty for optimal 
+      typography.
+    </i-tew>
+    <i-tew preset="caption">Photo credit: Someone Famous, 2024</i-tew>
+  </div>
+  
+  <h3>Quote Presets</h3>
+  <div style="background: var(--color-surface-raised); padding: var(--s1); border-radius: var(--s0); margin-bottom: var(--s2);">
+    <p style="margin-bottom: var(--s0);"><strong>Simple quote</strong> (border left):</p>
+    <i-tew preset="quote">
+      "A well-designed quote stands out with serif font and italic styling, 
+      plus a subtle left border."
+    </i-tew>
+    
+    <p style="margin: var(--s1) 0 var(--s0);"><strong>Big quote / Pullquote</strong> (giant quotation mark):</p>
+    <i-tew preset="bquote">
+      The only way to do great work is to love what you do.
+    </i-tew>
+    
+    <p style="margin: var(--s1) 0 var(--s0);"><strong>With attribution</strong>:</p>
+    <i-tew preset="bquote" data-cite="Steve Jobs">
+      Stay hungry, stay foolish.
+    </i-tew>
+    
+    <p style="margin: var(--s1) 0 var(--s0);"><strong>Custom quote character</strong> (guillemets):</p>
+    <i-tew preset="bquote" style="--tew-quote-char: '«';">
+      L'imagination est plus importante que le savoir.
+    </i-tew>
+    
+    <p style="margin: var(--s1) 0 var(--s0);"><strong>Custom color & size</strong>:</p>
+    <i-tew preset="bquote" style="--tew-quote-color: oklch(60% 0.25 30); --tew-quote-size: 5rem; --tew-quote-opacity: 0.35;">
+      Design is not just what it looks like. Design is how it works.
+    </i-tew>
+  </div>
+  
+  <div class="demo-row">
+    <div class="demo-box">
+      <i-tew preset="code">const x = 42;</i-tew>
+      <span class="attr">preset="code"</span>
+    </div>
+    <div class="demo-box">
+      <i-tew preset="label">Form Label</i-tew>
+      <span class="attr">preset="label"</span>
+    </div>
+  </div>
+
+  <h2>Measure (Line Length)</h2>
+  <div style="background: var(--color-surface-raised); padding: var(--s1); margin-bottom: var(--s2);">
+    <i-tew measure="narrow" block style="background: oklch(90% 0.1 200 / 0.3); padding: var(--s-1); margin-bottom: var(--s-1);">
+      Narrow measure (45ch). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </i-tew>
+    <i-tew measure="normal" block style="background: oklch(90% 0.1 150 / 0.3); padding: var(--s-1); margin-bottom: var(--s-1);">
+      Normal measure (65ch). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad 
+      minim veniam, quis nostrud exercitation.
+    </i-tew>
+    <i-tew measure="wide" block style="background: oklch(90% 0.1 50 / 0.3); padding: var(--s-1);">
+      Wide measure (75ch). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad 
+      minim veniam, quis nostrud exercitation ullamco laboris.
+    </i-tew>
+  </div>
+
+  <h2>Writing Mode</h2>
+  <div class="demo-row" style="height: 150px; align-items: stretch;">
+    <div class="demo-box">
+      <i-tew writing="vertical-rl" style="height: 100%;">Vertical Right-to-Left</i-tew>
+    </div>
+    <div class="demo-box">
+      <i-tew writing="vertical-lr" style="height: 100%;">Vertical Left-to-Right</i-tew>
+    </div>
+  </div>
+
+  <h2>Combining i-tew with i-thir</h2>
+  <p>Typography and effects are orthogonal—combine them freely!</p>
+  
+  <div class="demo-row">
+    <i-thir effect="neon" style="background: oklch(15% 0.02 200); padding: var(--s0);">
+      <i-tew family="mono" size="lg" weight="bold" tracking="wide">NEON CODE</i-tew>
+    </i-thir>
+    
+    <i-thir effect="glassmorphism" style="padding: var(--s0);">
+      <i-tew family="serif" size="lg" italic>Elegant Glass</i-tew>
+    </i-thir>
+    
+    <i-thir effect="gradient-border" style="padding: var(--s0);">
+      <i-tew transform="uppercase" tracking="widest" weight="bold">Bordered</i-tew>
+    </i-thir>
+  </div>
+
+  <h2>Complete Attribute Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Values</th>
+        <th>CSS Property</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>family</code></td><td>sans, serif, title, code, alt, display, mono</td><td>font-family</td></tr>
+      <tr><td><code>size</code></td><td>-3 to 8, 3xs to 6xl, fluid-*</td><td>font-size</td></tr>
+      <tr><td><code>weight</code></td><td>thin, light, normal, medium, semibold, bold, extrabold, black</td><td>font-weight</td></tr>
+      <tr><td><code>leading</code></td><td>none, tight, snug, normal, relaxed, loose, 1-2</td><td>line-height</td></tr>
+      <tr><td><code>tracking</code></td><td>tighter, tight, normal, wide, wider, widest, caps</td><td>letter-spacing</td></tr>
+      <tr><td><code>align</code></td><td>left, center, right, justify, start, end</td><td>text-align</td></tr>
+      <tr><td><code>transform</code></td><td>uppercase, lowercase, capitalize, small-caps</td><td>text-transform</td></tr>
+      <tr><td><code>decoration</code></td><td>underline, underline-wavy, line-through, overline, none</td><td>text-decoration</td></tr>
+      <tr><td><code>wrap</code></td><td>balance, pretty, stable, nowrap</td><td>text-wrap</td></tr>
+      <tr><td><code>shadow</code></td><td>none, sm, md, lg, glow, 3d, long, outline</td><td>text-shadow</td></tr>
+      <tr><td><code>color</code></td><td>primary, muted, accent, success, warning, error, info</td><td>color</td></tr>
+      <tr><td><code>lines</code></td><td>1-5</td><td>line-clamp</td></tr>
+      <tr><td><code>measure</code></td><td>narrow, normal, wide, full</td><td>max-width (ch)</td></tr>
+      <tr><td><code>writing</code></td><td>horizontal, vertical-rl, vertical-lr</td><td>writing-mode</td></tr>
+      <tr><td><code>numeric</code></td><td>tabular, oldstyle, slashed-zero, ordinal</td><td>font-variant-numeric</td></tr>
+      <tr><td><code>preset</code></td><td>h1-h6, heading, body, lead, caption, code, quote, bquote, pullquote, label</td><td>(multiple)</td></tr>
+    </tbody>
+  </table>
+  
+  <h2>Font Stack Variables</h2>
+  <p>Override these at any scope to change fonts:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Used By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--font-serif</code></td><td>Georgia, Cambria, "Times New Roman", serif</td><td>family="serif", quote, bquote</td></tr>
+      <tr><td><code>--font-sans</code></td><td>system-ui, -apple-system, sans-serif</td><td>family="sans", body</td></tr>
+      <tr><td><code>--font-title</code></td><td>var(--font-sans)</td><td>family="title", h1-h6</td></tr>
+      <tr><td><code>--font-code</code></td><td>ui-monospace, "Cascadia Code", monospace</td><td>family="code", preset="code"</td></tr>
+      <tr><td><code>--font-alt</code></td><td>var(--font-serif)</td><td>family="alt" (escape hatch)</td></tr>
+    </tbody>
+  </table>
+  
+  <h2>Big Quote Customization</h2>
+  <p>CSS variables for <code>preset="bquote"</code>:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--tew-quote-char</code></td><td>"</td><td>The quote character (try « „ ' 「)</td></tr>
+      <tr><td><code>--tew-quote-color</code></td><td>var(--color-accent)</td><td>Color of the quote mark</td></tr>
+      <tr><td><code>--tew-quote-size</code></td><td>var(--s6, 4rem)</td><td>Size of the quote mark</td></tr>
+      <tr><td><code>--tew-quote-opacity</code></td><td>0.25</td><td>Opacity of the quote mark</td></tr>
+      <tr><td><code>data-cite</code></td><td>—</td><td>Attribution shown below quote</td></tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

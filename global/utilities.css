@@ -1,379 +1,151 @@
 /**
  * Elvish - Utilities
- *
+ * 
  * Final adjustments. Use sparingly.
  * Naming convention: property\:value
- *
+ * 
  * !important is intentional - utilities are for overrides.
  */
 
 /* ===== TEXT ALIGNMENT ===== */
-.text-align\:start {
-    text-align: start !important;
-}
-.text-align\:center {
-    text-align: center !important;
-}
-.text-align\:end {
-    text-align: end !important;
-}
+.text-align\:start { text-align: start !important; }
+.text-align\:center { text-align: center !important; }
+.text-align\:end { text-align: end !important; }
 
 /* ===== FONT SIZES ===== */
-.font-size\:s-2 {
-    font-size: var(--s-2) !important;
-}
-.font-size\:s-1 {
-    font-size: var(--s-1) !important;
-}
-.font-size\:s0 {
-    font-size: var(--s0) !important;
-}
-.font-size\:s1 {
-    font-size: var(--s1) !important;
-}
-.font-size\:s2 {
-    font-size: var(--s2) !important;
-}
-.font-size\:s3 {
-    font-size: var(--s3) !important;
-}
-.font-size\:s4 {
-    font-size: var(--s4) !important;
-}
+.font-size\:s-2 { font-size: var(--s-2) !important; }
+.font-size\:s-1 { font-size: var(--s-1) !important; }
+.font-size\:s0 { font-size: var(--s0) !important; }
+.font-size\:s1 { font-size: var(--s1) !important; }
+.font-size\:s2 { font-size: var(--s2) !important; }
+.font-size\:s3 { font-size: var(--s3) !important; }
+.font-size\:s4 { font-size: var(--s4) !important; }
 
 /* ===== FONT WEIGHT ===== */
-.font-weight\:normal {
-    font-weight: normal !important;
-}
-.font-weight\:bold {
-    font-weight: bold !important;
-}
+.font-weight\:normal { font-weight: normal !important; }
+.font-weight\:bold { font-weight: bold !important; }
 
 /* ===== COLORS ===== */
-.color\:dark {
-    color: var(--color-dark) !important;
-}
-.color\:light {
-    color: var(--color-light) !important;
-}
-.color\:accent {
-    color: var(--color-accent) !important;
-}
+.color\:dark { color: var(--color-dark) !important; }
+.color\:light { color: var(--color-light) !important; }
+.color\:accent { color: var(--color-accent) !important; }
 
-.bg\:dark {
-    background-color: var(--color-dark) !important;
-}
-.bg\:light {
-    background-color: var(--color-light) !important;
-}
-.bg\:accent {
-    background-color: var(--color-accent) !important;
-}
+.bg\:dark { background-color: var(--color-dark) !important; }
+.bg\:light { background-color: var(--color-light) !important; }
+.bg\:accent { background-color: var(--color-accent) !important; }
 
 /* ===== MEASURE ===== */
-.max-inline-size\:measure {
-    max-inline-size: var(--measure) !important;
-}
-.max-inline-size\:measure\/2 {
-    max-inline-size: calc(var(--measure) / 2) !important;
-}
-.max-inline-size\:measure\/3 {
-    max-inline-size: calc(var(--measure) / 3) !important;
-}
-.max-inline-size\:none {
-    max-inline-size: none !important;
-}
+.max-inline-size\:measure { max-inline-size: var(--measure) !important; }
+.max-inline-size\:measure\/2 { max-inline-size: calc(var(--measure) / 2) !important; }
+.max-inline-size\:measure\/3 { max-inline-size: calc(var(--measure) / 3) !important; }
+.max-inline-size\:none { max-inline-size: none !important; }
 
 /* ===== WIDTH ===== */
-.inline-size\:100 {
-    inline-size: 100% !important;
-}
-.inline-size\:auto {
-    inline-size: auto !important;
-}
+.inline-size\:100 { inline-size: 100% !important; }
+.inline-size\:auto { inline-size: auto !important; }
 
 /* ===== HEIGHT ===== */
-.block-size\:100 {
-    block-size: 100% !important;
-}
-.block-size\:100vh {
-    block-size: 100vh !important;
-}
-.block-size\:auto {
-    block-size: auto !important;
-}
+.block-size\:100 { block-size: 100% !important; }
+.block-size\:100vh { block-size: 100vh !important; }
+.block-size\:auto { block-size: auto !important; }
 
 /* ===== MARGIN ===== */
-.margin\:0 {
-    margin: 0 !important;
-}
-.margin-block\:0 {
-    margin-block: 0 !important;
-}
-.margin-inline\:0 {
-    margin-inline: 0 !important;
-}
-.margin-inline\:auto {
-    margin-inline: auto !important;
-}
+.margin\:0 { margin: 0 !important; }
+.margin-block\:0 { margin-block: 0 !important; }
+.margin-inline\:0 { margin-inline: 0 !important; }
+.margin-inline\:auto { margin-inline: auto !important; }
 
 /* ===== PADDING ===== */
-.padding\:s-1 {
-    padding: var(--s-1) !important;
-}
-.padding\:s0 {
-    padding: var(--s0) !important;
-}
-.padding\:s1 {
-    padding: var(--s1) !important;
-}
-.padding\:s2 {
-    padding: var(--s2) !important;
-}
+.padding\:s-1 { padding: var(--s-1) !important; }
+.padding\:s0 { padding: var(--s0) !important; }
+.padding\:s1 { padding: var(--s1) !important; }
+.padding\:s2 { padding: var(--s2) !important; }
 
 /* ===== GAP ===== */
-.gap\:s-1 {
-    gap: var(--s-1) !important;
-}
-.gap\:s0 {
-    gap: var(--s0) !important;
-}
-.gap\:s1 {
-    gap: var(--s1) !important;
-}
-.gap\:s2 {
-    gap: var(--s2) !important;
-}
+.gap\:s-1 { gap: var(--s-1) !important; }
+.gap\:s0 { gap: var(--s0) !important; }
+.gap\:s1 { gap: var(--s1) !important; }
+.gap\:s2 { gap: var(--s2) !important; }
 
 /* ===== FLEX ===== */
-.flex-grow\:1 {
-    flex-grow: 1 !important;
-}
-.flex-shrink\:0 {
-    flex-shrink: 0 !important;
-}
+.flex-grow\:1 { flex-grow: 1 !important; }
+.flex-shrink\:0 { flex-shrink: 0 !important; }
 
 /* ===== OVERFLOW ===== */
-.overflow\:hidden {
-    overflow: hidden !important;
-}
-.overflow\:auto {
-    overflow: auto !important;
-}
+.overflow\:hidden { overflow: hidden !important; }
+.overflow\:auto { overflow: auto !important; }
 
 /* ===== POSITION ===== */
-.position\:relative {
-    position: relative !important;
-}
-.position\:absolute {
-    position: absolute !important;
-}
-.position\:fixed {
-    position: fixed !important;
-}
-.position\:sticky {
-    position: sticky !important;
-}
+.position\:relative { position: relative !important; }
+.position\:absolute { position: absolute !important; }
+.position\:fixed { position: fixed !important; }
+.position\:sticky { position: sticky !important; }
 
 /* ===== DISPLAY ===== */
-.display\:none {
-    display: none !important;
-}
-.display\:block {
-    display: block !important;
-}
-.display\:inline {
-    display: inline !important;
-}
-.display\:inline-block {
-    display: inline-block !important;
-}
-.display\:flex {
-    display: flex !important;
-}
-.display\:grid {
-    display: grid !important;
-}
+.display\:none { display: none !important; }
+.display\:block { display: block !important; }
+.display\:inline { display: inline !important; }
+.display\:inline-block { display: inline-block !important; }
+.display\:flex { display: flex !important; }
+.display\:grid { display: grid !important; }
 
 /* ===== BORDERS ===== */
-.border\:thin {
-    border-width: var(--border-thin) !important;
-}
-.border\:thick {
-    border-width: var(--border-thick) !important;
-}
-.border-radius\:s-2 {
-    border-radius: var(--s-2) !important;
-}
-.border-radius\:s-1 {
-    border-radius: var(--s-1) !important;
-}
-.border-radius\:s0 {
-    border-radius: var(--s0) !important;
-}
+.border\:thin { border-width: var(--border-thin) !important; }
+.border\:thick { border-width: var(--border-thick) !important; }
+.border-radius\:s-2 { border-radius: var(--s-2) !important; }
+.border-radius\:s-1 { border-radius: var(--s-1) !important; }
+.border-radius\:s0 { border-radius: var(--s0) !important; }
 
 /* ===== SHADOWS ===== */
 .shadow\:small {
-    box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.12),
-        0 1px 2px rgba(0, 0, 0, 0.24) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
 }
 .shadow\:medium {
-    box-shadow:
-        0 3px 6px rgba(0, 0, 0, 0.15),
-        0 2px 4px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12) !important;
 }
 .shadow\:large {
-    box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.15),
-        0 3px 6px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10) !important;
 }
 
 /* ===== Z-INDEX ===== */
 /* Use sparingly! Prefer source order. */
-.z\:0 {
-    z-index: 0 !important;
-}
-.z\:1 {
-    z-index: 1 !important;
-}
-.z\:2 {
-    z-index: 2 !important;
-}
-.z\:3 {
-    z-index: 3 !important;
-}
-.z\:5 {
-    z-index: 5 !important;
-}
-.z\:8 {
-    z-index: 8 !important;
-}
-.z\:13 {
-    z-index: 13 !important;
-}
-.z\:21 {
-    z-index: 21 !important;
-}
-.z\:34 {
-    z-index: 34 !important;
-}
-.z\:55 {
-    z-index: 55 !important;
-}
-.z\:89 {
-    z-index: 89 !important;
-}
-.z\:100 {
-    z-index: 100 !important;
-}
-.z\:101 {
-    z-index: 101 !important;
-}
-.z\:102 {
-    z-index: 102 !important;
-}
-.z\:103 {
-    z-index: 103 !important;
-}
-.z\:105 {
-    z-index: 105 !important;
-}
-.z\:108 {
-    z-index: 108 !important;
-}
-.z\:113 {
-    z-index: 113 !important;
-}
-.z\:121 {
-    z-index: 121 !important;
-}
-.z\:134 {
-    z-index: 134 !important;
-}
-.z\:155 {
-    z-index: 155 !important;
-}
-.z\:189 {
-    z-index: 189 !important;
-}
-.z\:200 {
-    z-index: 200 !important;
-}
+.z\:0 { z-index: 0 !important; }
+.z\:1 { z-index: 1 !important; }
+.z\:10 { z-index: 10 !important; }
+.z\:100 { z-index: 100 !important; }
 
 /* ===== LISTS ===== */
-.list-style\:disc {
-    list-style: disc !important;
-    padding-inline-start: 1em !important;
-}
-.list-style\:decimal {
-    list-style: decimal !important;
-    padding-inline-start: 1em !important;
-}
+.list-style\:disc { list-style: disc !important; padding-inline-start: 1em !important; }
+.list-style\:decimal { list-style: decimal !important; padding-inline-start: 1em !important; }
 
 /* ===== CURSOR ===== */
-.cursor\:pointer {
-    cursor: pointer !important;
-}
-.cursor\:not-allowed {
-    cursor: not-allowed !important;
-}
+.cursor\:pointer { cursor: pointer !important; }
+.cursor\:not-allowed { cursor: not-allowed !important; }
 
 /* ===== USER SELECT ===== */
-.user-select\:none {
-    user-select: none !important;
-}
-.user-select\:all {
-    user-select: all !important;
-}
+.user-select\:none { user-select: none !important; }
+.user-select\:all { user-select: all !important; }
 
 /* ===== RATIO MODES ===== */
-/*
+/* 
  * Switch the modular scale ratio for a container and all descendants.
  * Golden (φ): Dramatic, high-impact - ideal for marketing, CTAs
  * Silver (√2): Subtle, refined - ideal for documentation, dense content
  * Fifth (1.5): Balanced middle-ground
- *
+ * 
  * Also adjusts --measure (line length) to complement each ratio:
  * Golden: 60ch (tighter), Fifth: 70ch (balanced), Silver: 80ch (looser)
  */
-.ratio\:golden {
-    --ratio: var(--ratio-golden) !important;
-    --measure: 60ch !important;
-}
-.ratio\:silver {
-    --ratio: var(--ratio-silver) !important;
-    --measure: 80ch !important;
-}
-.ratio\:fifth {
-    --ratio: var(--ratio-fifth) !important;
-    --measure: 70ch !important;
-}
+.ratio\:golden { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
+.ratio\:silver { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
+.ratio\:fifth { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
 
 /* Aliases for convenience */
-.ratio\:dramatic {
-    --ratio: var(--ratio-golden) !important;
-    --measure: 60ch !important;
-}
-.ratio\:subtle {
-    --ratio: var(--ratio-silver) !important;
-    --measure: 80ch !important;
-}
-.ratio\:balanced {
-    --ratio: var(--ratio-fifth) !important;
-    --measure: 70ch !important;
-}
+.ratio\:dramatic { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
+.ratio\:subtle { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
+.ratio\:balanced { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
 
 /* Data attribute alternative (for JS toggling) */
-[data-ratio="golden"] {
-    --ratio: var(--ratio-golden);
-    --measure: 60ch;
-}
-[data-ratio="silver"] {
-    --ratio: var(--ratio-silver);
-    --measure: 80ch;
-}
-[data-ratio="fifth"] {
-    --ratio: var(--ratio-fifth);
-    --measure: 70ch;
-}
+[data-ratio="golden"] { --ratio: var(--ratio-golden); --measure: 60ch; }
+[data-ratio="silver"] { --ratio: var(--ratio-silver); --measure: 80ch; }
+[data-ratio="fifth"] { --ratio: var(--ratio-fifth); --measure: 70ch; }

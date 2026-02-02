@@ -7,6 +7,9 @@
  * - Utility classes
  * - Modern CSS features (@function, if(), sibling-index, etc.)
  * - View Transitions for smooth layout changes
+ * - Inverted border radius (scalloped corners)
+ * - Visual effects (neon, glass, neumorphism, etc.)
+ * - Typography (fonts, sizes, spacing, text styling)
  */
 
 @import 'tokens.css';
@@ -14,3 +17,6 @@
 @import 'utilities.css';
 @import 'modern.css';
 @import 'transitions.css';
+@import 'inverted-radius.css';
+@import 'effects.css';
+@import 'typography.css';
