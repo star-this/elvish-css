@@ -4,10 +4,19 @@
  * Aligns an SVG icon with accompanying text.
  * Uses relative units for automatic scaling.
  * 
+ * For Pure CSS icons (mask-image based), use:
+ *   @import 'elvish/global/icons/base.css';
+ *   @import 'elvish/global/icons/home.css';
+ *   /* etc - import only icons you need */
+ * 
  * Attributes:
  * - echuiol: "active" state styling
  * - dhoren: "hidden" state (visually hidden but accessible)
  */
+
+/* ==========================================================================
+   SVG CHILD MODE: <i-thann><svg>...</svg> Label</i-thann>
+   ========================================================================== */
 
 i-thann {
   display: inline-flex;
@@ -29,11 +38,11 @@ i-thann svg {
 }
 
 /* When using natural word spacing (no explicit space) */
-i-thann:not([space]) {
+i-thann:not([space]):not([icon]) {
   display: inline;
 }
 
-i-thann:not([space]) svg {
+i-thann:not([space]):not([icon]) svg {
   display: inline;
   vertical-align: -0.125em; /* Fine-tune baseline alignment */
 }

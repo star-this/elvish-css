@@ -10,12 +10,12 @@ After publishing to npm, Elvish is automatically available via unpkg or jsDelivr
 
 ```html
 <!-- unpkg -->
-<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.3.1/dist/elvish.min.css">
-<script src="https://unpkg.com/elvish-css@1.3.1/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/elvish-css@2.1.0/dist/elvish.min.css">
+<script src="https://unpkg.com/elvish-css@2.1.0/dist/elvish.iife.js"></script>
 
 <!-- jsDelivr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.3.1/dist/elvish.min.css">
-<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.3.1/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@2.1.0/dist/elvish.min.css">
+<script src="https://cdn.jsdelivr.net/npm/elvish-css@2.1.0/dist/elvish.iife.js"></script>
 ```
 
 ### Option 2: Self-Hosted
@@ -347,7 +347,7 @@ cat dist/elvish.iife.js | openssl dgst -sha384 -binary | openssl base64 -A
 Usage:
 ```html
 <link rel="stylesheet" 
-      href="https://unpkg.com/elvish-css@1.3.1/dist/elvish.min.css"
+      href="https://unpkg.com/elvish-css@2.1.0/dist/elvish.min.css"
       integrity="sha384-HASH_HERE"
       crossorigin="anonymous">
 ```

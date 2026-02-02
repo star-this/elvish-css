@@ -3,22 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Color Comparison</title>
+  <title>Color Comparison - Elvish Brand Colors</title>
   <style>
     :root {
+      /* Base brand color */
       --brand: oklch(83% 0.17 168);
       
-      /* Derived colors */
-      --brand-lighter: oklch(from var(--brand) calc(l + 0.12) c h);
-      --brand-light: oklch(from var(--brand) calc(l + 0.06) c h);
-      --brand-dark: oklch(from var(--brand) calc(l - 0.12) c h);
-      --brand-darker: oklch(from var(--brand) calc(l - 0.24) c h);
-      --brand-muted: oklch(from var(--brand) l calc(c * 0.5) h);
-      --brand-subtle: oklch(from var(--brand) l calc(c * 0.25) h);
-      --brand-ghost: oklch(from var(--brand) l c h / 0.15);
-      --brand-complement: oklch(from var(--brand) l c calc(h + 180));
-      --brand-analogous-1: oklch(from var(--brand) l c calc(h + 30));
-      --brand-analogous-2: oklch(from var(--brand) l c calc(h - 30));
+      /* 
+       * Derived colors using Relative Color Syntax
+       * Requires: Chrome 119+, Safari 16.4+, Firefox 128+
+       * Fallbacks provided for older browsers
+       */
+      
+      /* Lightness variations - fallbacks first, then @supports override */
+      --brand-lighter: oklch(95% 0.17 168);
+      --brand-light: oklch(89% 0.17 168);
+      --brand-dark: oklch(71% 0.17 168);
+      --brand-darker: oklch(59% 0.17 168);
+      
+      /* Chroma variations */
+      --brand-muted: oklch(83% 0.085 168);
+      --brand-subtle: oklch(83% 0.0425 168);
+      --brand-ghost: oklch(83% 0.17 168 / 0.15);
+      
+      /* Hue shifts */
+      --brand-complement: oklch(83% 0.17 348);
+      --brand-analogous-1: oklch(83% 0.17 198);
+      --brand-analogous-2: oklch(83% 0.17 138);
+    }
+    
+    /* Modern browsers: use relative color syntax for true derivation */
+    @supports (color: oklch(from red l c h)) {
+      :root {
+        --brand-lighter: oklch(from var(--brand) calc(l + 0.12) c h);
+        --brand-light: oklch(from var(--brand) calc(l + 0.06) c h);
+        --brand-dark: oklch(from var(--brand) calc(l - 0.12) c h);
+        --brand-darker: oklch(from var(--brand) calc(l - 0.24) c h);
+        
+        --brand-muted: oklch(from var(--brand) l calc(c * 0.5) h);
+        --brand-subtle: oklch(from var(--brand) l calc(c * 0.25) h);
+        --brand-ghost: oklch(from var(--brand) l c h / 0.15);
+        
+        --brand-complement: oklch(from var(--brand) l c calc(h + 180));
+        --brand-analogous-1: oklch(from var(--brand) l c calc(h + 30));
+        --brand-analogous-2: oklch(from var(--brand) l c calc(h - 30));
+      }
     }
     
     body {
@@ -56,6 +85,23 @@
     
     h1 { margin-bottom: 0.5rem; }
     h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    
+    .support-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+    .support-badge.supported {
+      background: oklch(85% 0.15 145);
+      color: #1a1a2e;
+    }
+    .support-badge.fallback {
+      background: oklch(85% 0.15 85);
+      color: #1a1a2e;
+    }
     
     .swatches {
       display: flex;
@@ -206,7 +252,10 @@
   </button>
 
   <h1>Color Comparison</h1>
-  <p>Verifying the OKLCH conversion matches your original rgba value.</p>
+  <p>
+    Verifying the OKLCH conversion matches your original rgba value.
+    <span id="support-indicator" class="support-badge">Checking...</span>
+  </p>
   
   <div class="swatches">
     <div class="swatch">
@@ -333,18 +382,40 @@
   <pre>:root {
   --brand: oklch(83% 0.17 168);
   
+  /* Lightness variations */
   --brand-lighter: oklch(from var(--brand) calc(l + 0.12) c h);
   --brand-light: oklch(from var(--brand) calc(l + 0.06) c h);
   --brand-dark: oklch(from var(--brand) calc(l - 0.12) c h);
   --brand-darker: oklch(from var(--brand) calc(l - 0.24) c h);
   
+  /* Chroma variations */
   --brand-muted: oklch(from var(--brand) l calc(c * 0.5) h);
   --brand-subtle: oklch(from var(--brand) l calc(c * 0.25) h);
   --brand-ghost: oklch(from var(--brand) l c h / 0.15);
   
+  /* Hue shifts */
   --brand-complement: oklch(from var(--brand) l c calc(h + 180));
   --brand-analogous-1: oklch(from var(--brand) l c calc(h + 30));
   --brand-analogous-2: oklch(from var(--brand) l c calc(h - 30));
 }</pre>
+
+  <h2>Browser Support</h2>
+  <p>
+    <strong>Relative Color Syntax</strong> requires modern browsers:
+    Chrome 119+, Safari 16.4+, Firefox 128+.
+    This demo includes pre-computed fallbacks for older browsers.
+  </p>
+
+  <script>
+    // Detect relative color syntax support
+    const indicator = document.getElementById('support-indicator');
+    if (CSS.supports('color', 'oklch(from red l c h)')) {
+      indicator.textContent = '✓ Relative colors supported';
+      indicator.classList.add('supported');
+    } else {
+      indicator.textContent = '⚠ Using fallbacks';
+      indicator.classList.add('fallback');
+    }
+  </script>
 </body>
 </html>

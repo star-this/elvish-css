@@ -1,6 +1,6 @@
 {
   "name": "elvish-css",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Intrinsic CSS layout primitives, branding, and styling with Sindarin names and custom elements.",
   "keywords": [
     "css",

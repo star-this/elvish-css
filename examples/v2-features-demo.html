@@ -1,1127 +1,565 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Elvish CSS v2.0.0 - New Features Demo</title>
-        <link rel="stylesheet" href="../dist/elvish.css" />
-        <style>
-            /* Demo-specific styles */
-            body {
-                font-family: var(--font-sans);
-                background: var(--color-surface);
-                color: var(--color-text);
-                line-height: var(--line-height);
-                margin: 0;
-            }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish CSS v2.0.0 - New Features Demo</title>
+  <link rel="stylesheet" href="../dist/elvish.css">
+  <style>
+    /* Demo-specific styles */
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-surface);
+      color: var(--color-text);
+      line-height: var(--line-height);
+      margin: 0;
+    }
+    
+    .demo-section {
+      padding: var(--size-fluid-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .demo-section h2 {
+      margin: 0 0 var(--s1) 0;
+      font-size: var(--s2);
+    }
+    
+    .demo-section h3 {
+      margin: var(--s1) 0 var(--s-1) 0;
+      font-size: var(--s1);
+      color: var(--color-text-muted);
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--s-1);
+    }
+    
+    .demo-grid-lg {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .swatch {
+      aspect-ratio: 1;
+      border-radius: var(--radius-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .gradient-swatch {
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-3);
+    }
+    
+    .effect-card {
+      padding: var(--s1);
+      background: var(--color-surface-raised);
+      border-radius: var(--radius-3);
+      text-align: center;
+    }
+    
+    .icon-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1);
+    }
+    
+    .icon-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s-2);
+      padding: var(--s0);
+      background: var(--color-surface-raised);
+      border-radius: var(--radius-2);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    
+    .ease-demo {
+      display: flex;
+      align-items: center;
+      gap: var(--s0);
+      padding: var(--s-1);
+    }
+    
+    .ease-demo-label {
+      width: 150px;
+      font-size: 0.8rem;
+      font-family: var(--font-code);
+    }
+    
+    .ease-demo-track {
+      flex: 1;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 2px;
+      position: relative;
+    }
+    
+    .ease-demo-ball {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      background: var(--brand);
+      border-radius: 50%;
+      animation: ease-slide 2s infinite alternate;
+    }
+    
+    @keyframes ease-slide {
+      to { left: calc(100% - 16px); }
+    }
+    
+    .shadow-demo {
+      padding: var(--s1);
+      background: var(--color-surface);
+      border-radius: var(--radius-3);
+      text-align: center;
+      font-size: 0.8rem;
+    }
+    
+    .noise-demo {
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .mask-demo {
+      padding: var(--s2);
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .border-demo {
+      padding: var(--s1);
+      background: var(--color-surface-raised);
+      text-align: center;
+      font-size: 0.8rem;
+    }
+    
+    code {
+      font-family: var(--font-code);
+      background: var(--color-surface-sunken);
+      padding: 0.1em 0.3em;
+      border-radius: var(--radius-1);
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="demo-section" style="background: var(--gradient-cyberpunk); color: white;">
+    <i-hath space="s0">
+      <h1 style="margin: 0;">Elvish CSS v2.0.0</h1>
+      <p style="margin: 0; opacity: 0.9;">New Features Demo - No Build Step Required!</p>
+    </i-hath>
+  </header>
 
-            .demo-section {
-                padding: var(--size-fluid-4);
-                border-bottom: 1px solid var(--color-border);
-            }
+  <!-- Color Palettes -->
+  <section class="demo-section">
+    <h2>🎨 Color Palettes (19 × 13 shades)</h2>
+    <p>Full OKLCH color system with perceptual uniformity. Each palette has 13 shades (0-12).</p>
+    
+    <h3>Gray</h3>
+    <div class="demo-grid">
+      <div class="swatch" style="background: var(--gray-0); color: var(--gray-12);">0</div>
+      <div class="swatch" style="background: var(--gray-2); color: var(--gray-12);">2</div>
+      <div class="swatch" style="background: var(--gray-4); color: var(--gray-12);">4</div>
+      <div class="swatch" style="background: var(--gray-6); color: white;">6</div>
+      <div class="swatch" style="background: var(--gray-8); color: white;">8</div>
+      <div class="swatch" style="background: var(--gray-10); color: white;">10</div>
+      <div class="swatch" style="background: var(--gray-12); color: white;">12</div>
+    </div>
+    
+    <h3>Red</h3>
+    <div class="demo-grid">
+      <div class="swatch" style="background: var(--red-0); color: var(--red-12);">0</div>
+      <div class="swatch" style="background: var(--red-2); color: var(--red-12);">2</div>
+      <div class="swatch" style="background: var(--red-4); color: var(--red-12);">4</div>
+      <div class="swatch" style="background: var(--red-6); color: white;">6</div>
+      <div class="swatch" style="background: var(--red-8); color: white;">8</div>
+      <div class="swatch" style="background: var(--red-10); color: white;">10</div>
+      <div class="swatch" style="background: var(--red-12); color: white;">12</div>
+    </div>
+    
+    <h3>Blue</h3>
+    <div class="demo-grid">
+      <div class="swatch" style="background: var(--blue-0); color: var(--blue-12);">0</div>
+      <div class="swatch" style="background: var(--blue-2); color: var(--blue-12);">2</div>
+      <div class="swatch" style="background: var(--blue-4); color: var(--blue-12);">4</div>
+      <div class="swatch" style="background: var(--blue-6); color: white;">6</div>
+      <div class="swatch" style="background: var(--blue-8); color: white;">8</div>
+      <div class="swatch" style="background: var(--blue-10); color: white;">10</div>
+      <div class="swatch" style="background: var(--blue-12); color: white;">12</div>
+    </div>
+    
+    <h3>Green</h3>
+    <div class="demo-grid">
+      <div class="swatch" style="background: var(--green-0); color: var(--green-12);">0</div>
+      <div class="swatch" style="background: var(--green-2); color: var(--green-12);">2</div>
+      <div class="swatch" style="background: var(--green-4); color: var(--green-12);">4</div>
+      <div class="swatch" style="background: var(--green-6); color: white;">6</div>
+      <div class="swatch" style="background: var(--green-8); color: white;">8</div>
+      <div class="swatch" style="background: var(--green-10); color: white;">10</div>
+      <div class="swatch" style="background: var(--green-12); color: white;">12</div>
+    </div>
+    
+    <h3>More palettes: stone, sand, orange, yellow, choco, brown, pink, purple, violet, indigo, cyan, teal, lime, camo, jungle</h3>
+  </section>
 
-            .demo-section h2 {
-                margin: 0 0 var(--s1) 0;
-                font-size: var(--s2);
-            }
+  <!-- Gradients -->
+  <section class="demo-section">
+    <h2>🌈 Gradient Presets (30 curated)</h2>
+    <p>Ready-to-use gradients with semantic aliases.</p>
+    
+    <div class="demo-grid demo-grid-lg">
+      <div class="gradient-swatch" style="background: var(--gradient-sunrise);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-sunrise</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-sunset);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-sunset</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-ocean);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-ocean</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-forest);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-forest</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-aurora);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-aurora</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-cyberpunk);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-cyberpunk</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-gold);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-gold</span>
+      </div>
+      <div class="gradient-swatch" style="background: var(--gradient-holographic);">
+        <span style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">--gradient-holographic</span>
+      </div>
+    </div>
+  </section>
 
-            .demo-section h3 {
-                margin: var(--s1) 0 var(--s-1) 0;
-                font-size: var(--s1);
-                color: var(--color-text-muted);
-            }
+  <!-- Pure CSS Icons -->
+  <section class="demo-section">
+    <h2>✨ Pure CSS Icons</h2>
+    <p>50+ icons using CSS mask-image - no JavaScript, no external files. Just <code>&lt;i-thann icon="name"&gt;</code></p>
+    
+    <div class="icon-grid">
+      <div class="icon-demo">
+        <i-thann icon="home" size="xl"></i-thann>
+        <span>home</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="user" size="xl"></i-thann>
+        <span>user</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="settings" size="xl"></i-thann>
+        <span>settings</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="search" size="xl"></i-thann>
+        <span>search</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="mail" size="xl"></i-thann>
+        <span>mail</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="bell" size="xl"></i-thann>
+        <span>bell</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="heart" size="xl"></i-thann>
+        <span>heart</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="star" size="xl"></i-thann>
+        <span>star</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="check" size="xl" color="success"></i-thann>
+        <span>check (success)</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="x" size="xl" color="danger"></i-thann>
+        <span>x (danger)</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="warning" size="xl" color="warning"></i-thann>
+        <span>warning</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="info" size="xl" color="info"></i-thann>
+        <span>info</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="loading" size="xl" spin></i-thann>
+        <span>loading (spin)</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="refresh" size="xl" spin="slow"></i-thann>
+        <span>refresh (slow)</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="arrow-right" size="xl"></i-thann>
+        <span>arrow-right</span>
+      </div>
+      <div class="icon-demo">
+        <i-thann icon="chevron-down" size="xl"></i-thann>
+        <span>chevron-down</span>
+      </div>
+    </div>
+    
+    <h3>Icon Sizes</h3>
+    <div style="display: flex; align-items: center; gap: var(--s1); margin-top: var(--s0);">
+      <i-thann icon="star" size="xs"></i-thann>
+      <i-thann icon="star" size="sm"></i-thann>
+      <i-thann icon="star" size="md"></i-thann>
+      <i-thann icon="star" size="lg"></i-thann>
+      <i-thann icon="star" size="xl"></i-thann>
+      <i-thann icon="star" size="2xl"></i-thann>
+      <i-thann icon="star" size="3xl"></i-thann>
+    </div>
+  </section>
 
-            .demo-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: var(--s-1);
-            }
+  <!-- Expanded Easings -->
+  <section class="demo-section">
+    <h2>🎢 50+ Easing Functions</h2>
+    <p>Spring, bounce, elastic, and Penner equations. Hover to see animations.</p>
+    
+    <i-hath space="s-1">
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-spring-3</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-spring-3);"></div>
+        </div>
+      </div>
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-bounce-3</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-bounce-3);"></div>
+        </div>
+      </div>
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-elastic-out-3</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-elastic-out-3);"></div>
+        </div>
+      </div>
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-back-out</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-back-out);"></div>
+        </div>
+      </div>
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-expo-out</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-expo-out);"></div>
+        </div>
+      </div>
+      <div class="ease-demo">
+        <span class="ease-demo-label">--ease-circ-in-out</span>
+        <div class="ease-demo-track">
+          <div class="ease-demo-ball" style="animation-timing-function: var(--ease-circ-in-out);"></div>
+        </div>
+      </div>
+    </i-hath>
+  </section>
 
-            .demo-grid-lg {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
+  <!-- Shadows -->
+  <section class="demo-section">
+    <h2>💫 Outer & Inner Shadows</h2>
+    <p>6 levels of elevation plus 5 levels of inner shadows for pressed states.</p>
+    
+    <h3>Outer Shadows (Elevation)</h3>
+    <div class="demo-grid demo-grid-lg">
+      <div class="shadow-demo" style="box-shadow: var(--shadow-1);">--shadow-1</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-2);">--shadow-2</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-3);">--shadow-3</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-4);">--shadow-4</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-5);">--shadow-5</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-6);">--shadow-6</div>
+    </div>
+    
+    <h3>Inner Shadows (Pressed/Inset)</h3>
+    <div class="demo-grid demo-grid-lg">
+      <div class="shadow-demo" style="box-shadow: var(--inner-shadow-0);">--inner-shadow-0</div>
+      <div class="shadow-demo" style="box-shadow: var(--inner-shadow-1);">--inner-shadow-1</div>
+      <div class="shadow-demo" style="box-shadow: var(--inner-shadow-2);">--inner-shadow-2</div>
+      <div class="shadow-demo" style="box-shadow: var(--inner-shadow-3);">--inner-shadow-3</div>
+      <div class="shadow-demo" style="box-shadow: var(--inner-shadow-4);">--inner-shadow-4</div>
+    </div>
+    
+    <h3>Special Shadows</h3>
+    <div class="demo-grid demo-grid-lg">
+      <div class="shadow-demo" style="box-shadow: var(--shadow-raised);">--shadow-raised</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-pressed);">--shadow-pressed</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-floating);">--shadow-floating</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-glow-md);">--shadow-glow-md</div>
+    </div>
+  </section>
 
-            .swatch {
-                aspect-ratio: 1;
-                border-radius: var(--radius-2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.75rem;
-                font-weight: 500;
-            }
+  <!-- Noise Textures -->
+  <section class="demo-section">
+    <h2>📺 Noise & Grain Textures</h2>
+    <p>SVG-based noise patterns for film grain effects. Combine with gradients!</p>
+    
+    <div class="demo-grid demo-grid-lg">
+      <div class="noise-demo" style="background: var(--gradient-sunset), var(--noise-1); background-size: cover; filter: var(--noise-filter-1);">
+        Subtle grain
+      </div>
+      <div class="noise-demo" style="background: var(--gradient-ocean), var(--noise-3); background-size: cover; filter: var(--noise-filter-3);">
+        Medium grain
+      </div>
+      <div class="noise-demo" style="background: var(--gradient-forest), var(--noise-5); background-size: cover; filter: var(--noise-filter-5);">
+        Heavy grain
+      </div>
+      <div class="noise-demo" style="background: var(--gray-2);">
+        <div style="background: var(--grain-light); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--gray-11);">
+          --grain-light
+        </div>
+      </div>
+    </div>
+  </section>
 
-            .gradient-swatch {
-                aspect-ratio: 16/9;
-                border-radius: var(--radius-3);
-            }
+  <!-- CSS Masks on i-thir -->
+  <section class="demo-section">
+    <h2>🎭 CSS Masks (on i-thir)</h2>
+    <p>Edge masks and corner cuts for creative shapes.</p>
+    
+    <div class="demo-grid demo-grid-lg">
+      <i-thir effect="raised" mask="scoop-top" class="mask-demo" style="background: var(--blue-5); color: white;">
+        scoop-top
+      </i-thir>
+      <i-thir effect="raised" mask="scallop-bottom" class="mask-demo" style="background: var(--green-5); color: white;">
+        scallop-bottom
+      </i-thir>
+      <i-thir effect="raised" mask="zigzag-bottom" class="mask-demo" style="background: var(--purple-5); color: white;">
+        zigzag-bottom
+      </i-thir>
+      <i-thir effect="raised" mask="drip-bottom" class="mask-demo" style="background: var(--red-5); color: white;">
+        drip-bottom
+      </i-thir>
+      <i-thir effect="raised" mask="corner-cut" class="mask-demo" style="background: var(--orange-5); color: white;">
+        corner-cut
+      </i-thir>
+      <i-thir effect="raised" mask="corner-circle-2" class="mask-demo" style="background: var(--teal-5); color: white;">
+        corner-circle-2
+      </i-thir>
+      <i-thir effect="raised" mask="ticket" class="mask-demo" style="background: var(--pink-5); color: white;">
+        ticket
+      </i-thir>
+    </div>
+  </section>
 
-            .effect-card {
-                padding: var(--s1);
-                background: var(--color-surface-raised);
-                border-radius: var(--radius-3);
-                text-align: center;
-            }
+  <!-- Drawn/Blob Borders -->
+  <section class="demo-section">
+    <h2>✏️ Drawn & Blob Borders</h2>
+    <p>Hand-drawn organic shapes and blob radii.</p>
+    
+    <h3>Drawn Borders (hand-sketched look)</h3>
+    <div class="demo-grid demo-grid-lg">
+      <div class="border-demo" style="border-radius: var(--radius-drawn-1); border: 3px solid var(--brown-8);">--radius-drawn-1</div>
+      <div class="border-demo" style="border-radius: var(--radius-drawn-2); border: 3px solid var(--brown-8);">--radius-drawn-2</div>
+      <div class="border-demo" style="border-radius: var(--radius-drawn-3); border: 3px solid var(--brown-8);">--radius-drawn-3</div>
+      <div class="border-demo" style="border-radius: var(--radius-drawn-4); border: 3px solid var(--brown-8);">--radius-drawn-4</div>
+    </div>
+    
+    <h3>Blob Borders (organic shapes - best on square elements)</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--s1); margin-top: var(--s0);">
+      <div style="width: 100px; aspect-ratio: 1; background: var(--purple-4); border-radius: var(--radius-blob-1);"></div>
+      <div style="width: 100px; aspect-ratio: 1; background: var(--blue-4); border-radius: var(--radius-blob-2);"></div>
+      <div style="width: 100px; aspect-ratio: 1; background: var(--green-4); border-radius: var(--radius-blob-3);"></div>
+      <div style="width: 100px; aspect-ratio: 1; background: var(--orange-4); border-radius: var(--radius-blob-4);"></div>
+      <div style="width: 100px; aspect-ratio: 1; background: var(--pink-4); border-radius: var(--radius-blob-5);"></div>
+    </div>
+    
+    <h3>Conditional Radii (disappears at full-width)</h3>
+    <p>Cards using <code>--radius-conditional-3</code> will have rounded corners normally, but go edge-to-edge on mobile.</p>
+  </section>
 
-            .icon-grid {
-                display: flex;
-                flex-wrap: wrap;
-                gap: var(--s1);
-            }
+  <!-- Z-Index Layers -->
+  <section class="demo-section">
+    <h2>📚 Z-Index Layers</h2>
+    <p>Consistent stacking system instead of arbitrary z-index values.</p>
+    
+    <div style="display: flex; gap: var(--s1); flex-wrap: wrap;">
+      <code>--layer-1: 10</code>
+      <code>--layer-2: 20 (dropdowns)</code>
+      <code>--layer-3: 30 (sticky)</code>
+      <code>--layer-4: 40 (modals)</code>
+      <code>--layer-5: 50 (toasts)</code>
+      <code>--layer-important: max</code>
+    </div>
+  </section>
 
-            .icon-demo {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: var(--s-2);
-                padding: var(--s0);
-                background: var(--color-surface-raised);
-                border-radius: var(--radius-2);
-                font-size: 0.75rem;
-                color: var(--color-text-muted);
-            }
+  <!-- Fluid & Content Sizes -->
+  <section class="demo-section">
+    <h2>📐 Fluid & Content Sizes</h2>
+    <p>Viewport-responsive sizes and readable text widths.</p>
+    
+    <h3>Fluid Sizes (responsive)</h3>
+    <p><code>--size-fluid-1</code> through <code>--size-fluid-10</code> use <code>clamp()</code> for smooth scaling.</p>
+    
+    <h3>Content Widths</h3>
+    <div style="border: 1px dashed var(--color-border); padding: var(--s-1); width: var(--size-content-1); margin-bottom: var(--s-1);">
+      --size-content-1 (20ch) - Headlines
+    </div>
+    <div style="border: 1px dashed var(--color-border); padding: var(--s-1); width: var(--size-content-2); margin-bottom: var(--s-1);">
+      --size-content-2 (45ch) - Cards, sidebars
+    </div>
+    <div style="border: 1px dashed var(--color-border); padding: var(--s-1); width: var(--size-content-3); margin-bottom: var(--s-1);">
+      --size-content-3 (60ch) - Optimal body text
+    </div>
+  </section>
 
-            .ease-demo {
-                display: flex;
-                align-items: center;
-                gap: var(--s0);
-                padding: var(--s-1);
-            }
+  <!-- UX Durations -->
+  <section class="demo-section">
+    <h2>⏱️ UX Motion Durations</h2>
+    <p>Research-based animation timings aligned with human perception.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s0);">
+      <div><strong>Instant (0ms)</strong><br><small>State changes</small></div>
+      <div><strong>Quick-1 (80ms)</strong><br><small>Checkbox, hover</small></div>
+      <div><strong>Quick-2 (120ms)</strong><br><small>Toggle, tab, fade</small></div>
+      <div><strong>Moderate-1 (180ms)</strong><br><small>Dropdown, tooltip</small></div>
+      <div><strong>Moderate-2 (260ms)</strong><br><small>Modal, toast</small></div>
+      <div><strong>Gentle-1 (320ms)</strong><br><small>Bottom sheet, card expand</small></div>
+      <div><strong>Gentle-2 (420ms)</strong><br><small>Page transitions</small></div>
+    </div>
+  </section>
 
-            .ease-demo-label {
-                width: 150px;
-                font-size: 0.8rem;
-                font-family: var(--font-code);
-            }
+  <!-- Design Tokens JSON -->
+  <section class="demo-section">
+    <h2>📦 Design Tokens JSON</h2>
+    <p>Export tokens to <code>elvish.tokens.json</code> for Figma, Style Dictionary, and design tools.</p>
+    <p>Following the <a href="https://www.designtokens.org/">Design Tokens Community Group</a> specification.</p>
+  </section>
 
-            .ease-demo-track {
-                flex: 1;
-                height: 4px;
-                background: var(--color-border);
-                border-radius: 2px;
-                position: relative;
-            }
+  <!-- Footer -->
+  <footer class="demo-section" style="text-align: center; background: var(--gray-11); color: var(--gray-3);">
+    <p>Elvish CSS v2.0.0 - No build step required. Just import and use!</p>
+    <p style="opacity: 0.7;">
+      <code>&lt;link rel="stylesheet" href="elvish.css"&gt;</code>
+    </p>
+  </footer>
 
-            .ease-demo-ball {
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 16px;
-                height: 16px;
-                background: var(--brand);
-                border-radius: 50%;
-                animation: ease-slide 2s infinite alternate;
-            }
-
-            @keyframes ease-slide {
-                to {
-                    left: calc(100% - 16px);
-                }
-            }
-
-            .shadow-demo {
-                padding: var(--s1);
-                background: var(--color-surface);
-                border-radius: var(--radius-3);
-                text-align: center;
-                font-size: 0.8rem;
-            }
-
-            .noise-demo {
-                aspect-ratio: 16/9;
-                border-radius: var(--radius-3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 600;
-                color: white;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            }
-
-            .mask-demo {
-                padding: var(--s2);
-                text-align: center;
-                font-weight: 500;
-            }
-
-            .border-demo {
-                padding: var(--s1);
-                background: var(--color-surface-raised);
-                text-align: center;
-                font-size: 0.8rem;
-            }
-
-            code {
-                font-family: var(--font-code);
-                background: var(--color-surface-sunken);
-                padding: 0.1em 0.3em;
-                border-radius: var(--radius-1);
-                font-size: 0.85em;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Header -->
-        <header
-            class="demo-section"
-            style="background: var(--gradient-cyberpunk); color: white"
-        >
-            <i-hath space="s0">
-                <h1 style="margin: 0">Elvish CSS v2.0.0</h1>
-                <p style="margin: 0; opacity: 0.9">
-                    New Features Demo - No Build Step Required!
-                </p>
-            </i-hath>
-        </header>
-
-        <!-- Color Palettes -->
-        <section class="demo-section">
-            <h2>🎨 Color Palettes (19 × 13 shades)</h2>
-            <p>
-                Full OKLCH color system with perceptual uniformity. Each palette
-                has 13 shades (0-12).
-            </p>
-
-            <h3>Gray</h3>
-            <div class="demo-grid">
-                <div
-                    class="swatch"
-                    style="background: var(--gray-0); color: var(--gray-12)"
-                >
-                    0
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-2); color: var(--gray-12)"
-                >
-                    2
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-4); color: var(--gray-12)"
-                >
-                    4
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-6); color: white"
-                >
-                    6
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-8); color: white"
-                >
-                    8
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-10); color: white"
-                >
-                    10
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--gray-12); color: white"
-                >
-                    12
-                </div>
-            </div>
-
-            <h3>Red</h3>
-            <div class="demo-grid">
-                <div
-                    class="swatch"
-                    style="background: var(--red-0); color: var(--red-12)"
-                >
-                    0
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-2); color: var(--red-12)"
-                >
-                    2
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-4); color: var(--red-12)"
-                >
-                    4
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-6); color: white"
-                >
-                    6
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-8); color: white"
-                >
-                    8
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-10); color: white"
-                >
-                    10
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--red-12); color: white"
-                >
-                    12
-                </div>
-            </div>
-
-            <h3>Blue</h3>
-            <div class="demo-grid">
-                <div
-                    class="swatch"
-                    style="background: var(--blue-0); color: var(--blue-12)"
-                >
-                    0
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-2); color: var(--blue-12)"
-                >
-                    2
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-4); color: var(--blue-12)"
-                >
-                    4
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-6); color: white"
-                >
-                    6
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-8); color: white"
-                >
-                    8
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-10); color: white"
-                >
-                    10
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--blue-12); color: white"
-                >
-                    12
-                </div>
-            </div>
-
-            <h3>Green</h3>
-            <div class="demo-grid">
-                <div
-                    class="swatch"
-                    style="background: var(--green-0); color: var(--green-12)"
-                >
-                    0
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-2); color: var(--green-12)"
-                >
-                    2
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-4); color: var(--green-12)"
-                >
-                    4
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-6); color: white"
-                >
-                    6
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-8); color: white"
-                >
-                    8
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-10); color: white"
-                >
-                    10
-                </div>
-                <div
-                    class="swatch"
-                    style="background: var(--green-12); color: white"
-                >
-                    12
-                </div>
-            </div>
-
-            <h3>
-                More palettes: stone, sand, orange, yellow, choco, brown, pink,
-                purple, violet, indigo, cyan, teal, lime, camo, jungle
-            </h3>
-        </section>
-
-        <!-- Gradients -->
-        <section class="demo-section">
-            <h2>🌈 Gradient Presets (30 curated)</h2>
-            <p>Ready-to-use gradients with semantic aliases.</p>
-
-            <div class="demo-grid demo-grid-lg">
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-sunrise)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-sunrise</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-sunset)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-sunset</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-ocean)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-ocean</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-forest)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-forest</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-aurora)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-aurora</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-cyberpunk)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-cyberpunk</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-gold)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-gold</span
-                    >
-                </div>
-                <div
-                    class="gradient-swatch"
-                    style="background: var(--gradient-holographic)"
-                >
-                    <span
-                        style="
-                            color: white;
-                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                        "
-                        >--gradient-holographic</span
-                    >
-                </div>
-            </div>
-        </section>
-
-        <!-- Pure CSS Icons -->
-        <section class="demo-section">
-            <h2>✨ Pure CSS Icons</h2>
-            <p>
-                50+ icons using CSS mask-image - no JavaScript, no external
-                files. Just <code>&lt;i-thann icon="name"&gt;</code>
-            </p>
-
-            <div class="icon-grid">
-                <div class="icon-demo">
-                    <i-thann icon="home" size="xl"></i-thann>
-                    <span>home</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="user" size="xl"></i-thann>
-                    <span>user</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="settings" size="xl"></i-thann>
-                    <span>settings</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="search" size="xl"></i-thann>
-                    <span>search</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="mail" size="xl"></i-thann>
-                    <span>mail</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="bell" size="xl"></i-thann>
-                    <span>bell</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="heart" size="xl"></i-thann>
-                    <span>heart</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="star" size="xl"></i-thann>
-                    <span>star</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="check" size="xl" color="success"></i-thann>
-                    <span>check (success)</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="x" size="xl" color="danger"></i-thann>
-                    <span>x (danger)</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="warning" size="xl" color="warning"></i-thann>
-                    <span>warning</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="info" size="xl" color="info"></i-thann>
-                    <span>info</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="loading" size="xl" spin></i-thann>
-                    <span>loading (spin)</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="refresh" size="xl" spin="slow"></i-thann>
-                    <span>refresh (slow)</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="arrow-right" size="xl"></i-thann>
-                    <span>arrow-right</span>
-                </div>
-                <div class="icon-demo">
-                    <i-thann icon="chevron-down" size="xl"></i-thann>
-                    <span>chevron-down</span>
-                </div>
-            </div>
-
-            <h3>Icon Sizes</h3>
-            <div
-                style="
-                    display: flex;
-                    align-items: center;
-                    gap: var(--s1);
-                    margin-top: var(--s0);
-                "
-            >
-                <i-thann icon="star" size="xs"></i-thann>
-                <i-thann icon="star" size="sm"></i-thann>
-                <i-thann icon="star" size="md"></i-thann>
-                <i-thann icon="star" size="lg"></i-thann>
-                <i-thann icon="star" size="xl"></i-thann>
-                <i-thann icon="star" size="2xl"></i-thann>
-                <i-thann icon="star" size="3xl"></i-thann>
-            </div>
-        </section>
-
-        <!-- Expanded Easings -->
-        <section class="demo-section">
-            <h2>🎢 50+ Easing Functions</h2>
-            <p>
-                Spring, bounce, elastic, and Penner equations. Hover to see
-                animations.
-            </p>
-
-            <i-hath space="s-1">
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-spring-3</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(--ease-spring-3);
-                            "
-                        ></div>
-                    </div>
-                </div>
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-bounce-3</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(--ease-bounce-3);
-                            "
-                        ></div>
-                    </div>
-                </div>
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-elastic-out-3</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(
-                                    --ease-elastic-out-3
-                                );
-                            "
-                        ></div>
-                    </div>
-                </div>
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-back-out</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(--ease-back-out);
-                            "
-                        ></div>
-                    </div>
-                </div>
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-expo-out</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(--ease-expo-out);
-                            "
-                        ></div>
-                    </div>
-                </div>
-                <div class="ease-demo">
-                    <span class="ease-demo-label">--ease-circ-in-out</span>
-                    <div class="ease-demo-track">
-                        <div
-                            class="ease-demo-ball"
-                            style="
-                                animation-timing-function: var(
-                                    --ease-circ-in-out
-                                );
-                            "
-                        ></div>
-                    </div>
-                </div>
-            </i-hath>
-        </section>
-
-        <!-- Shadows -->
-        <section class="demo-section">
-            <h2>💫 Outer & Inner Shadows</h2>
-            <p>
-                6 levels of elevation plus 5 levels of inner shadows for pressed
-                states.
-            </p>
-
-            <h3>Outer Shadows (Elevation)</h3>
-            <div class="demo-grid demo-grid-lg">
-                <div class="shadow-demo" style="box-shadow: var(--shadow-1)">
-                    --shadow-1
-                </div>
-                <div class="shadow-demo" style="box-shadow: var(--shadow-2)">
-                    --shadow-2
-                </div>
-                <div class="shadow-demo" style="box-shadow: var(--shadow-3)">
-                    --shadow-3
-                </div>
-                <div class="shadow-demo" style="box-shadow: var(--shadow-4)">
-                    --shadow-4
-                </div>
-                <div class="shadow-demo" style="box-shadow: var(--shadow-5)">
-                    --shadow-5
-                </div>
-                <div class="shadow-demo" style="box-shadow: var(--shadow-6)">
-                    --shadow-6
-                </div>
-            </div>
-
-            <h3>Inner Shadows (Pressed/Inset)</h3>
-            <div class="demo-grid demo-grid-lg">
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--inner-shadow-0)"
-                >
-                    --inner-shadow-0
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--inner-shadow-1)"
-                >
-                    --inner-shadow-1
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--inner-shadow-2)"
-                >
-                    --inner-shadow-2
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--inner-shadow-3)"
-                >
-                    --inner-shadow-3
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--inner-shadow-4)"
-                >
-                    --inner-shadow-4
-                </div>
-            </div>
-
-            <h3>Special Shadows</h3>
-            <div class="demo-grid demo-grid-lg">
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--shadow-raised)"
-                >
-                    --shadow-raised
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--shadow-pressed)"
-                >
-                    --shadow-pressed
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--shadow-floating)"
-                >
-                    --shadow-floating
-                </div>
-                <div
-                    class="shadow-demo"
-                    style="box-shadow: var(--shadow-glow-md)"
-                >
-                    --shadow-glow-md
-                </div>
-            </div>
-        </section>
-
-        <!-- Noise Textures -->
-        <section class="demo-section">
-            <h2>📺 Noise & Grain Textures</h2>
-            <p>
-                SVG-based noise patterns for film grain effects. Combine with
-                gradients!
-            </p>
-
-            <div class="demo-grid demo-grid-lg">
-                <div
-                    class="noise-demo"
-                    style="
-                        background: var(--gradient-sunset), var(--noise-1);
-                        background-size: cover;
-                        filter: var(--noise-filter-1);
-                    "
-                >
-                    Subtle grain
-                </div>
-                <div
-                    class="noise-demo"
-                    style="
-                        background: var(--gradient-ocean), var(--noise-3);
-                        background-size: cover;
-                        filter: var(--noise-filter-3);
-                    "
-                >
-                    Medium grain
-                </div>
-                <div
-                    class="noise-demo"
-                    style="
-                        background: var(--gradient-forest), var(--noise-5);
-                        background-size: cover;
-                        filter: var(--noise-filter-5);
-                    "
-                >
-                    Heavy grain
-                </div>
-                <div class="noise-demo" style="background: var(--gray-2)">
-                    <div
-                        style="
-                            background: var(--grain-light);
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: var(--gray-11);
-                        "
-                    >
-                        --grain-light
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CSS Masks on i-thir -->
-        <section class="demo-section">
-            <h2>🎭 CSS Masks (on i-thir)</h2>
-            <p>Edge masks and corner cuts for creative shapes.</p>
-
-            <div class="demo-grid demo-grid-lg">
-                <i-thir
-                    effect="raised"
-                    mask="scoop-top"
-                    class="mask-demo"
-                    style="background: var(--blue-5); color: white"
-                >
-                    scoop-top
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="scallop-bottom"
-                    class="mask-demo"
-                    style="background: var(--green-5); color: white"
-                >
-                    scallop-bottom
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="zigzag-bottom"
-                    class="mask-demo"
-                    style="background: var(--purple-5); color: white"
-                >
-                    zigzag-bottom
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="drip-bottom"
-                    class="mask-demo"
-                    style="background: var(--red-5); color: white"
-                >
-                    drip-bottom
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="corner-cut"
-                    class="mask-demo"
-                    style="background: var(--orange-5); color: white"
-                >
-                    corner-cut
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="corner-circle-2"
-                    class="mask-demo"
-                    style="background: var(--teal-5); color: white"
-                >
-                    corner-circle-2
-                </i-thir>
-                <i-thir
-                    effect="raised"
-                    mask="ticket"
-                    class="mask-demo"
-                    style="background: var(--pink-5); color: white"
-                >
-                    ticket
-                </i-thir>
-            </div>
-        </section>
-
-        <!-- Drawn/Blob Borders -->
-        <section class="demo-section">
-            <h2>✏️ Drawn & Blob Borders</h2>
-            <p>Hand-drawn organic shapes and blob radii.</p>
-
-            <h3>Drawn Borders (hand-sketched look)</h3>
-            <div class="demo-grid demo-grid-lg">
-                <div
-                    class="border-demo"
-                    style="
-                        border-radius: var(--radius-drawn-1);
-                        border: 3px solid var(--brown-8);
-                    "
-                >
-                    --radius-drawn-1
-                </div>
-                <div
-                    class="border-demo"
-                    style="
-                        border-radius: var(--radius-drawn-2);
-                        border: 3px solid var(--brown-8);
-                    "
-                >
-                    --radius-drawn-2
-                </div>
-                <div
-                    class="border-demo"
-                    style="
-                        border-radius: var(--radius-drawn-3);
-                        border: 3px solid var(--brown-8);
-                    "
-                >
-                    --radius-drawn-3
-                </div>
-                <div
-                    class="border-demo"
-                    style="
-                        border-radius: var(--radius-drawn-4);
-                        border: 3px solid var(--brown-8);
-                    "
-                >
-                    --radius-drawn-4
-                </div>
-            </div>
-
-            <h3>Blob Borders (organic shapes - best on square elements)</h3>
-            <div
-                style="
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: var(--s1);
-                    margin-top: var(--s0);
-                "
-            >
-                <div
-                    style="
-                        width: 100px;
-                        aspect-ratio: 1;
-                        background: var(--purple-4);
-                        border-radius: var(--radius-blob-1);
-                    "
-                ></div>
-                <div
-                    style="
-                        width: 100px;
-                        aspect-ratio: 1;
-                        background: var(--blue-4);
-                        border-radius: var(--radius-blob-2);
-                    "
-                ></div>
-                <div
-                    style="
-                        width: 100px;
-                        aspect-ratio: 1;
-                        background: var(--green-4);
-                        border-radius: var(--radius-blob-3);
-                    "
-                ></div>
-                <div
-                    style="
-                        width: 100px;
-                        aspect-ratio: 1;
-                        background: var(--orange-4);
-                        border-radius: var(--radius-blob-4);
-                    "
-                ></div>
-                <div
-                    style="
-                        width: 100px;
-                        aspect-ratio: 1;
-                        background: var(--pink-4);
-                        border-radius: var(--radius-blob-5);
-                    "
-                ></div>
-            </div>
-
-            <h3>Conditional Radii (disappears at full-width)</h3>
-            <p>
-                Cards using <code>--radius-conditional-3</code> will have
-                rounded corners normally, but go edge-to-edge on mobile.
-            </p>
-        </section>
-
-        <!-- Z-Index Layers -->
-        <section class="demo-section">
-            <h2>📚 Z-Index Layers</h2>
-            <p>
-                Consistent stacking system instead of arbitrary z-index values.
-            </p>
-
-            <div style="display: flex; gap: var(--s1); flex-wrap: wrap">
-                <code>--layer-1: 10</code>
-                <code>--layer-2: 20 (dropdowns)</code>
-                <code>--layer-3: 30 (sticky)</code>
-                <code>--layer-4: 40 (modals)</code>
-                <code>--layer-5: 50 (toasts)</code>
-                <code>--layer-important: max</code>
-            </div>
-        </section>
-
-        <!-- Fluid & Content Sizes -->
-        <section class="demo-section">
-            <h2>📐 Fluid & Content Sizes</h2>
-            <p>Viewport-responsive sizes and readable text widths.</p>
-
-            <h3>Fluid Sizes (responsive)</h3>
-            <p>
-                <code>--size-fluid-1</code> through
-                <code>--size-fluid-10</code> use <code>clamp()</code> for smooth
-                scaling.
-            </p>
-
-            <h3>Content Widths</h3>
-            <div
-                style="
-                    border: 1px dashed var(--color-border);
-                    padding: var(--s-1);
-                    width: var(--size-content-1);
-                    margin-bottom: var(--s-1);
-                "
-            >
-                --size-content-1 (20ch) - Headlines
-            </div>
-            <div
-                style="
-                    border: 1px dashed var(--color-border);
-                    padding: var(--s-1);
-                    width: var(--size-content-2);
-                    margin-bottom: var(--s-1);
-                "
-            >
-                --size-content-2 (45ch) - Cards, sidebars
-            </div>
-            <div
-                style="
-                    border: 1px dashed var(--color-border);
-                    padding: var(--s-1);
-                    width: var(--size-content-3);
-                    margin-bottom: var(--s-1);
-                "
-            >
-                --size-content-3 (60ch) - Optimal body text
-            </div>
-        </section>
-
-        <!-- UX Durations -->
-        <section class="demo-section">
-            <h2>⏱️ UX Motion Durations</h2>
-            <p>
-                Research-based animation timings aligned with human perception.
-            </p>
-
-            <div
-                style="
-                    display: grid;
-                    grid-template-columns: repeat(
-                        auto-fill,
-                        minmax(200px, 1fr)
-                    );
-                    gap: var(--s0);
-                "
-            >
-                <div>
-                    <strong>Instant (0ms)</strong><br /><small
-                        >State changes</small
-                    >
-                </div>
-                <div>
-                    <strong>Quick-1 (80ms)</strong><br /><small
-                        >Checkbox, hover</small
-                    >
-                </div>
-                <div>
-                    <strong>Quick-2 (120ms)</strong><br /><small
-                        >Toggle, tab, fade</small
-                    >
-                </div>
-                <div>
-                    <strong>Moderate-1 (180ms)</strong><br /><small
-                        >Dropdown, tooltip</small
-                    >
-                </div>
-                <div>
-                    <strong>Moderate-2 (260ms)</strong><br /><small
-                        >Modal, toast</small
-                    >
-                </div>
-                <div>
-                    <strong>Gentle-1 (320ms)</strong><br /><small
-                        >Bottom sheet, card expand</small
-                    >
-                </div>
-                <div>
-                    <strong>Gentle-2 (420ms)</strong><br /><small
-                        >Page transitions</small
-                    >
-                </div>
-            </div>
-        </section>
-
-        <!-- Design Tokens JSON -->
-        <section class="demo-section">
-            <h2>📦 Design Tokens JSON</h2>
-            <p>
-                Export tokens to <code>elvish.tokens.json</code> for Figma,
-                Style Dictionary, and design tools.
-            </p>
-            <p>
-                Following the
-                <a href="https://www.designtokens.org/"
-                    >Design Tokens Community Group</a
-                >
-                specification.
-            </p>
-        </section>
-
-        <!-- Footer -->
-        <footer
-            class="demo-section"
-            style="
-                text-align: center;
-                background: var(--gray-11);
-                color: var(--gray-3);
-            "
-        >
-            <p>
-                Elvish CSS v2.0.0 - No build step required. Just import and use!
-            </p>
-            <p style="opacity: 0.7">
-                <code>&lt;link rel="stylesheet" href="elvish.css"&gt;</code>
-            </p>
-        </footer>
-
-        <script src="../dist/elvish.iife.js"></script>
-    </body>
+  <script src="../dist/elvish.iife.js"></script>
+</body>
 </html>

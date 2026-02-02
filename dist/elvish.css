@@ -1,8 +1,8 @@
 /**
- * Elvish Layout System v1.3.1
+ * Elvish Layout System v2.0.0
  * Intrinsic CSS layout primitives with Sindarin names
- *
- * https://github.com/star-this/elvish-css
+ * 
+ * https://github.com/yourusername/elvish-layout
  * License: MIT
  */
 
@@ -59,7 +59,58 @@
   --s4: calc(var(--s3) * var(--ratio));
   --s5: calc(var(--s4) * var(--ratio));
   
-  /* ===== MEASURE (Text) ===== */
+  /* ===== STATIC SIZES (rem-based) ===== */
+  --size-1: 0.25rem;    /* 4px */
+  --size-2: 0.5rem;     /* 8px */
+  --size-3: 0.75rem;    /* 12px */
+  --size-4: 1rem;       /* 16px */
+  --size-5: 1.25rem;    /* 20px */
+  --size-6: 1.5rem;     /* 24px */
+  --size-7: 1.75rem;    /* 28px */
+  --size-8: 2rem;       /* 32px */
+  --size-9: 2.5rem;     /* 40px */
+  --size-10: 3rem;      /* 48px */
+  --size-11: 4rem;      /* 64px */
+  --size-12: 5rem;      /* 80px */
+  --size-13: 6rem;      /* 96px */
+  --size-14: 8rem;      /* 128px */
+  --size-15: 10rem;     /* 160px */
+  
+  /* ===== FLUID SIZES (viewport-responsive) ===== */
+  /* 
+   * Fluid sizes use clamp() to scale between min and max based on viewport.
+   * Great for responsive padding, margins, gaps.
+   */
+  --size-fluid-1: clamp(0.5rem, 1vw, 1rem);
+  --size-fluid-2: clamp(1rem, 2vw, 1.5rem);
+  --size-fluid-3: clamp(1.5rem, 3vw, 2rem);
+  --size-fluid-4: clamp(2rem, 4vw, 3rem);
+  --size-fluid-5: clamp(3rem, 5vw, 4rem);
+  --size-fluid-6: clamp(4rem, 6vw, 5rem);
+  --size-fluid-7: clamp(5rem, 8vw, 7rem);
+  --size-fluid-8: clamp(6rem, 10vw, 10rem);
+  --size-fluid-9: clamp(8rem, 15vw, 15rem);
+  --size-fluid-10: clamp(10rem, 20vw, 20rem);
+  
+  /* ===== CONTENT WIDTH SIZES ===== */
+  /* 
+   * For readable text blocks. Use ch (character width) for text content.
+   * Based on readability research: 45-75 characters per line optimal.
+   */
+  --size-content-1: 20ch;     /* Narrow - headlines, captions */
+  --size-content-2: 45ch;     /* Compact - sidebars, cards */
+  --size-content-3: 60ch;     /* Optimal - body text */
+  --size-content-4: 75ch;     /* Wide - documentation */
+  --size-content-5: 90ch;     /* Extra wide - code blocks */
+  
+  /* ===== HEADER/HEADLINE SIZES ===== */
+  /* For constraining headline widths to prevent overly long lines */
+  --size-header-1: 15ch;      /* Short tagline */
+  --size-header-2: 20ch;      /* Headline */
+  --size-header-3: 25ch;      /* Subheadline */
+  --size-header-4: 35ch;      /* Long headline */
+  
+  /* ===== MEASURE (Legacy - Text line length) ===== */
   /* Maximum line length for readable text - varies by ratio */
   --measure: 70ch;  /* Default for Fifth; Golden=60ch, Silver=80ch */
   
@@ -131,7 +182,7 @@
   --color-light: var(--color-surface);
   --color-mid: var(--color-text-muted);
   
-  /* ===== BORDERS ===== */
+  /* ===== BORDERS (Legacy - moved to borders.css) ===== */
   --border-thin: 1px;
   --border-thick: 3px;
   
@@ -163,13 +214,55 @@
   --line-height-tight: 1.2;
   --line-height-loose: 1.8;
   
-  /* ===== TIMING ===== */
-  --duration-instant: 100ms;
-  --duration-fast: 200ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
+  /* ===== Z-INDEX LAYERS ===== */
+  /*
+   * Consistent stacking context system.
+   * Use these instead of arbitrary z-index values.
+   */
+  --layer-1: 10;        /* Slightly above normal flow */
+  --layer-2: 20;        /* Dropdowns, tooltips */
+  --layer-3: 30;        /* Fixed headers, sticky elements */
+  --layer-4: 40;        /* Modals, dialogs */
+  --layer-5: 50;        /* Notifications, toasts */
+  --layer-important: 2147483647;  /* Maximum safe integer - use sparingly! */
   
-  /* ===== EASING ===== */
+  /* Semantic layer aliases */
+  --layer-dropdown: var(--layer-2);
+  --layer-sticky: var(--layer-3);
+  --layer-modal: var(--layer-4);
+  --layer-toast: var(--layer-5);
+  
+  /* ===== UX MOTION DURATIONS ===== */
+  /*
+   * Research-based animation durations from Brainly UX Motion guidelines.
+   * Aligned with human perception and common UI patterns.
+   */
+  
+  /* Instant - imperceptible, for state changes */
+  --duration-instant: 0ms;
+  
+  /* Quick - micro-interactions */
+  --duration-quick-1: 80ms;   /* Checkbox, radio, hover feedback */
+  --duration-quick-2: 120ms;  /* Toggle, tab switch, chip, color change, fade */
+  
+  /* Moderate - standard UI elements */
+  --duration-moderate-1: 180ms;  /* Dropdown open, tooltip appear */
+  --duration-moderate-2: 260ms;  /* Modal open, toast appear, dialog */
+  
+  /* Gentle - larger/complex animations */
+  --duration-gentle-1: 320ms;    /* Bottom sheet, card expand */
+  --duration-gentle-2: 420ms;    /* Advanced animations, page transitions */
+  
+  /* Slow - deliberate, attention-drawing */
+  --duration-slow-1: 600ms;      /* Complex reveals */
+  --duration-slow-2: 1000ms;     /* Emphasis animations */
+  
+  /* Legacy aliases */
+  --duration-fast: var(--duration-quick-2);
+  --duration-normal: var(--duration-moderate-1);
+  --duration-slow: var(--duration-gentle-2);
+  
+  /* ===== EASING (Basic - see easings.css for full set) ===== */
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -2419,10 +2512,17 @@ i-fano[contain] {
  * Aligns an SVG icon with accompanying text.
  * Uses relative units for automatic scaling.
  * 
+ * For Pure CSS icons (mask-image based), use:
+ *    *    *   /* etc - import only icons you need */
+ * 
  * Attributes:
  * - echuiol: "active" state styling
  * - dhoren: "hidden" state (visually hidden but accessible)
  */
+
+/* ==========================================================================
+   SVG CHILD MODE: <i-thann><svg>...</svg> Label</i-thann>
+   ========================================================================== */
 
 i-thann {
   display: inline-flex;
@@ -2444,11 +2544,11 @@ i-thann svg {
 }
 
 /* When using natural word spacing (no explicit space) */
-i-thann:not([space]) {
+i-thann:not([space]):not([icon]) {
   display: inline;
 }
 
-i-thann:not([space]) svg {
+i-thann:not([space]):not([icon]) svg {
   display: inline;
   vertical-align: -0.125em; /* Fine-tune baseline alignment */
 }
@@ -4011,6 +4111,242 @@ i-thir[custom="shape"] {
     transform: none !important;
     transition: none !important;
   }
+}
+
+/* ==========================================================================
+   CSS MASKS
+   
+   Edge masks and corner cuts for creative shapes.
+   Uses CSS mask-image for performant clipping.
+   
+   Attributes:
+     mask="scoop-top"       - Scoop cut on top edge
+     mask="scallop-bottom"  - Scalloped edge on bottom
+     mask="zigzag-top"      - Zigzag pattern on top
+     mask="drip-bottom"     - Dripping effect on bottom
+     mask="corner-cut"      - Angled corner cuts
+     mask="corner-circle"   - Circular corner cuts
+   ========================================================================== */
+
+/* --- Edge Masks: Scoop --- */
+i-thir[mask="scoop-top"] {
+  -webkit-mask: radial-gradient(circle at 50% 0, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 50% 0, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-bottom"] {
+  -webkit-mask: radial-gradient(circle at 50% 100%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 50% 100%, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-left"] {
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 0 50%, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-right"] {
+  -webkit-mask: radial-gradient(circle at 100% 50%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 100% 50%, transparent 30px, black 31px);
+}
+
+/* --- Edge Masks: Scalloped --- */
+i-thir[mask="scallop-top"] {
+  --scallop-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 50% 0, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 0 / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 calc(var(--scallop-size) * 0.5) / 100% 100% no-repeat;
+  mask: 
+    radial-gradient(circle at 50% 0, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 0 / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 calc(var(--scallop-size) * 0.5) / 100% 100% no-repeat;
+}
+
+i-thir[mask="scallop-bottom"] {
+  --scallop-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 50% 100%, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 100% / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--scallop-size) * 0.5) no-repeat;
+  mask: 
+    radial-gradient(circle at 50% 100%, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 100% / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--scallop-size) * 0.5) no-repeat;
+}
+
+/* --- Edge Masks: Zigzag --- */
+i-thir[mask="zigzag-top"] {
+  --zigzag-size: 15px;
+  -webkit-mask: 
+    conic-gradient(from 135deg at 50% 0, black 25%, transparent 25% 50%, black 50%) 
+    0 0 / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 var(--zigzag-size) / 100% 100% no-repeat;
+  mask: 
+    conic-gradient(from 135deg at 50% 0, black 25%, transparent 25% 50%, black 50%) 
+    0 0 / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 var(--zigzag-size) / 100% 100% no-repeat;
+}
+
+i-thir[mask="zigzag-bottom"] {
+  --zigzag-size: 15px;
+  -webkit-mask: 
+    conic-gradient(from -45deg at 50% 100%, black 25%, transparent 25% 50%, black 50%) 
+    0 100% / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--zigzag-size)) no-repeat;
+  mask: 
+    conic-gradient(from -45deg at 50% 100%, black 25%, transparent 25% 50%, black 50%) 
+    0 100% / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--zigzag-size)) no-repeat;
+}
+
+/* --- Edge Masks: Drip --- */
+i-thir[mask="drip-bottom"] {
+  --drip-size: 30px;
+  -webkit-mask: 
+    radial-gradient(ellipse 60% 100% at 50% 100%, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 100% / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--drip-size) * 0.3) no-repeat;
+  mask: 
+    radial-gradient(ellipse 60% 100% at 50% 100%, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 100% / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--drip-size) * 0.3) no-repeat;
+}
+
+i-thir[mask="drip-top"] {
+  --drip-size: 30px;
+  -webkit-mask: 
+    radial-gradient(ellipse 60% 100% at 50% 0, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 0 / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 var(--drip-size) / 100% 100% no-repeat;
+  mask: 
+    radial-gradient(ellipse 60% 100% at 50% 0, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 0 / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 var(--drip-size) / 100% 100% no-repeat;
+}
+
+/* --- Corner Cuts: Angled --- */
+i-thir[mask="corner-cut"],
+i-thir[mask="corner-cut-1"] {
+  --corner-size: 15px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-cut-2"] {
+  --corner-size: 25px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-cut-3"] {
+  --corner-size: 40px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Corner Cuts: Circular --- */
+i-thir[mask="corner-circle"],
+i-thir[mask="corner-circle-1"] {
+  --corner-size: 15px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-circle-2"] {
+  --corner-size: 25px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-circle-3"] {
+  --corner-size: 40px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Ticket/Notch (coupon style) --- */
+i-thir[mask="ticket"] {
+  --notch-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px));
+  -webkit-mask-composite: source-in;
+  mask: 
+    radial-gradient(circle at 0 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px));
+  mask-composite: intersect;
 }
 
 /* ==========================================================================

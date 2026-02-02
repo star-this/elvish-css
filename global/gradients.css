@@ -1,0 +1,305 @@
+/**
+ * Elvish - Gradient Presets
+ * 
+ * 30 curated gradient presets for backgrounds, overlays, and accents.
+ * Uses OKLCH for perceptually uniform color transitions.
+ * 
+ * Categories:
+ *   1-10:  Warm/Sunset gradients
+ *   11-20: Cool/Ocean gradients  
+ *   21-25: Nature gradients
+ *   26-30: Special/Premium gradients
+ * 
+ * Usage:
+ *   background: var(--gradient-5);
+ *   background: var(--gradient-sunset);
+ */
+
+:root {
+  /* ==========================================================================
+     WARM / SUNSET GRADIENTS (1-10)
+     ========================================================================== */
+  
+  /* Soft peach sunrise */
+  --gradient-1: linear-gradient(
+    to bottom right,
+    oklch(90% 0.08 50),
+    oklch(85% 0.12 30),
+    oklch(80% 0.15 350)
+  );
+  
+  /* Golden hour */
+  --gradient-2: linear-gradient(
+    135deg,
+    oklch(85% 0.15 85),
+    oklch(75% 0.18 55),
+    oklch(65% 0.2 25)
+  );
+  
+  /* Warm sunset */
+  --gradient-3: linear-gradient(
+    to right,
+    oklch(75% 0.2 40),
+    oklch(65% 0.22 350),
+    oklch(55% 0.2 310)
+  );
+  
+  /* Fire */
+  --gradient-4: linear-gradient(
+    to top,
+    oklch(50% 0.25 30),
+    oklch(65% 0.22 45),
+    oklch(80% 0.18 70)
+  );
+  
+  /* Peach fuzz */
+  --gradient-5: linear-gradient(
+    135deg,
+    oklch(88% 0.1 55),
+    oklch(82% 0.14 25)
+  );
+  
+  /* Coral reef */
+  --gradient-6: linear-gradient(
+    to right,
+    oklch(70% 0.18 30),
+    oklch(65% 0.2 350)
+  );
+  
+  /* Mango tango */
+  --gradient-7: linear-gradient(
+    160deg,
+    oklch(82% 0.16 80),
+    oklch(70% 0.2 40)
+  );
+  
+  /* Flamingo */
+  --gradient-8: linear-gradient(
+    to bottom right,
+    oklch(80% 0.15 10),
+    oklch(70% 0.2 340)
+  );
+  
+  /* Terracotta */
+  --gradient-9: linear-gradient(
+    135deg,
+    oklch(65% 0.12 50),
+    oklch(50% 0.1 35)
+  );
+  
+  /* Rose gold */
+  --gradient-10: linear-gradient(
+    to right,
+    oklch(85% 0.08 30),
+    oklch(78% 0.12 350),
+    oklch(85% 0.06 80)
+  );
+  
+  /* ==========================================================================
+     COOL / OCEAN GRADIENTS (11-20)
+     ========================================================================== */
+  
+  /* Ocean depths */
+  --gradient-11: linear-gradient(
+    to bottom,
+    oklch(75% 0.15 220),
+    oklch(55% 0.18 240),
+    oklch(35% 0.15 250)
+  );
+  
+  /* Arctic */
+  --gradient-12: linear-gradient(
+    135deg,
+    oklch(95% 0.03 220),
+    oklch(85% 0.1 200),
+    oklch(75% 0.15 210)
+  );
+  
+  /* Electric blue */
+  --gradient-13: linear-gradient(
+    to right,
+    oklch(60% 0.2 250),
+    oklch(70% 0.22 220)
+  );
+  
+  /* Midnight */
+  --gradient-14: linear-gradient(
+    to bottom,
+    oklch(25% 0.1 280),
+    oklch(15% 0.08 250)
+  );
+  
+  /* Aquamarine */
+  --gradient-15: linear-gradient(
+    160deg,
+    oklch(80% 0.12 195),
+    oklch(70% 0.15 175)
+  );
+  
+  /* Teal dream */
+  --gradient-16: linear-gradient(
+    to right,
+    oklch(65% 0.15 195),
+    oklch(55% 0.18 220)
+  );
+  
+  /* Cool steel */
+  --gradient-17: linear-gradient(
+    135deg,
+    oklch(70% 0.03 250),
+    oklch(55% 0.05 240)
+  );
+  
+  /* Lavender mist */
+  --gradient-18: linear-gradient(
+    to bottom right,
+    oklch(88% 0.08 290),
+    oklch(80% 0.12 270)
+  );
+  
+  /* Purple haze */
+  --gradient-19: linear-gradient(
+    135deg,
+    oklch(55% 0.2 300),
+    oklch(45% 0.22 280)
+  );
+  
+  /* Cyberpunk */
+  --gradient-20: linear-gradient(
+    to right,
+    oklch(50% 0.25 330),
+    oklch(60% 0.22 270),
+    oklch(55% 0.2 200)
+  );
+  
+  /* ==========================================================================
+     NATURE GRADIENTS (21-25)
+     ========================================================================== */
+  
+  /* Forest */
+  --gradient-21: linear-gradient(
+    to bottom,
+    oklch(65% 0.15 145),
+    oklch(45% 0.12 135),
+    oklch(30% 0.1 130)
+  );
+  
+  /* Spring meadow */
+  --gradient-22: linear-gradient(
+    135deg,
+    oklch(85% 0.18 130),
+    oklch(75% 0.15 145)
+  );
+  
+  /* Moss */
+  --gradient-23: linear-gradient(
+    to right,
+    oklch(55% 0.1 140),
+    oklch(50% 0.12 120)
+  );
+  
+  /* Earth */
+  --gradient-24: linear-gradient(
+    to bottom,
+    oklch(60% 0.08 80),
+    oklch(45% 0.1 60),
+    oklch(35% 0.08 45)
+  );
+  
+  /* Aurora */
+  --gradient-25: linear-gradient(
+    135deg,
+    oklch(75% 0.2 145),
+    oklch(65% 0.18 180),
+    oklch(60% 0.2 290)
+  );
+  
+  /* ==========================================================================
+     SPECIAL / PREMIUM GRADIENTS (26-30)
+     ========================================================================== */
+  
+  /* Chrome */
+  --gradient-26: linear-gradient(
+    to bottom,
+    oklch(90% 0.02 0),
+    oklch(60% 0 0),
+    oklch(85% 0.02 0)
+  );
+  
+  /* Gold foil */
+  --gradient-27: linear-gradient(
+    135deg,
+    oklch(85% 0.12 85),
+    oklch(70% 0.14 75),
+    oklch(85% 0.1 90)
+  );
+  
+  /* Holographic */
+  --gradient-28: linear-gradient(
+    135deg,
+    oklch(85% 0.15 350),
+    oklch(80% 0.18 200),
+    oklch(85% 0.15 300),
+    oklch(80% 0.12 140)
+  );
+  
+  /* Glassmorphism base */
+  --gradient-29: linear-gradient(
+    135deg,
+    oklch(100% 0 0 / 0.3),
+    oklch(100% 0 0 / 0.1)
+  );
+  
+  /* Dark glass */
+  --gradient-30: linear-gradient(
+    135deg,
+    oklch(0% 0 0 / 0.5),
+    oklch(0% 0 0 / 0.2)
+  );
+  
+  /* ==========================================================================
+     SEMANTIC ALIASES
+     ========================================================================== */
+  
+  --gradient-sunrise: var(--gradient-1);
+  --gradient-sunset: var(--gradient-3);
+  --gradient-fire: var(--gradient-4);
+  --gradient-coral: var(--gradient-6);
+  --gradient-ocean: var(--gradient-11);
+  --gradient-arctic: var(--gradient-12);
+  --gradient-midnight: var(--gradient-14);
+  --gradient-teal: var(--gradient-16);
+  --gradient-lavender: var(--gradient-18);
+  --gradient-cyberpunk: var(--gradient-20);
+  --gradient-forest: var(--gradient-21);
+  --gradient-aurora: var(--gradient-25);
+  --gradient-chrome: var(--gradient-26);
+  --gradient-gold: var(--gradient-27);
+  --gradient-holographic: var(--gradient-28);
+  --gradient-glass: var(--gradient-29);
+  --gradient-dark-glass: var(--gradient-30);
+  
+  /* ==========================================================================
+     UTILITY GRADIENTS
+     ========================================================================== */
+  
+  /* Fade to transparent */
+  --gradient-fade-down: linear-gradient(to bottom, black, transparent);
+  --gradient-fade-up: linear-gradient(to top, black, transparent);
+  --gradient-fade-left: linear-gradient(to left, black, transparent);
+  --gradient-fade-right: linear-gradient(to right, black, transparent);
+  
+  /* Vignette (for overlays) */
+  --gradient-vignette: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    oklch(0% 0 0 / 0.3) 100%
+  );
+  
+  /* Spotlight */
+  --gradient-spotlight: radial-gradient(
+    ellipse at center,
+    oklch(100% 0 0 / 0.15) 0%,
+    transparent 70%
+  );
+}

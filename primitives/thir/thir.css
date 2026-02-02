@@ -1336,6 +1336,242 @@ i-thir[custom="shape"] {
 }
 
 /* ==========================================================================
+   CSS MASKS
+   
+   Edge masks and corner cuts for creative shapes.
+   Uses CSS mask-image for performant clipping.
+   
+   Attributes:
+     mask="scoop-top"       - Scoop cut on top edge
+     mask="scallop-bottom"  - Scalloped edge on bottom
+     mask="zigzag-top"      - Zigzag pattern on top
+     mask="drip-bottom"     - Dripping effect on bottom
+     mask="corner-cut"      - Angled corner cuts
+     mask="corner-circle"   - Circular corner cuts
+   ========================================================================== */
+
+/* --- Edge Masks: Scoop --- */
+i-thir[mask="scoop-top"] {
+  -webkit-mask: radial-gradient(circle at 50% 0, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 50% 0, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-bottom"] {
+  -webkit-mask: radial-gradient(circle at 50% 100%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 50% 100%, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-left"] {
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 0 50%, transparent 30px, black 31px);
+}
+
+i-thir[mask="scoop-right"] {
+  -webkit-mask: radial-gradient(circle at 100% 50%, transparent 30px, black 31px);
+  mask: radial-gradient(circle at 100% 50%, transparent 30px, black 31px);
+}
+
+/* --- Edge Masks: Scalloped --- */
+i-thir[mask="scallop-top"] {
+  --scallop-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 50% 0, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 0 / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 calc(var(--scallop-size) * 0.5) / 100% 100% no-repeat;
+  mask: 
+    radial-gradient(circle at 50% 0, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 0 / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 calc(var(--scallop-size) * 0.5) / 100% 100% no-repeat;
+}
+
+i-thir[mask="scallop-bottom"] {
+  --scallop-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 50% 100%, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 100% / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--scallop-size) * 0.5) no-repeat;
+  mask: 
+    radial-gradient(circle at 50% 100%, transparent 69%, black 70%) 
+    calc(var(--scallop-size) * -0.5) 100% / var(--scallop-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--scallop-size) * 0.5) no-repeat;
+}
+
+/* --- Edge Masks: Zigzag --- */
+i-thir[mask="zigzag-top"] {
+  --zigzag-size: 15px;
+  -webkit-mask: 
+    conic-gradient(from 135deg at 50% 0, black 25%, transparent 25% 50%, black 50%) 
+    0 0 / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 var(--zigzag-size) / 100% 100% no-repeat;
+  mask: 
+    conic-gradient(from 135deg at 50% 0, black 25%, transparent 25% 50%, black 50%) 
+    0 0 / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 var(--zigzag-size) / 100% 100% no-repeat;
+}
+
+i-thir[mask="zigzag-bottom"] {
+  --zigzag-size: 15px;
+  -webkit-mask: 
+    conic-gradient(from -45deg at 50% 100%, black 25%, transparent 25% 50%, black 50%) 
+    0 100% / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--zigzag-size)) no-repeat;
+  mask: 
+    conic-gradient(from -45deg at 50% 100%, black 25%, transparent 25% 50%, black 50%) 
+    0 100% / var(--zigzag-size) 51% repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--zigzag-size)) no-repeat;
+}
+
+/* --- Edge Masks: Drip --- */
+i-thir[mask="drip-bottom"] {
+  --drip-size: 30px;
+  -webkit-mask: 
+    radial-gradient(ellipse 60% 100% at 50% 100%, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 100% / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--drip-size) * 0.3) no-repeat;
+  mask: 
+    radial-gradient(ellipse 60% 100% at 50% 100%, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 100% / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 0 / 100% calc(100% - var(--drip-size) * 0.3) no-repeat;
+}
+
+i-thir[mask="drip-top"] {
+  --drip-size: 30px;
+  -webkit-mask: 
+    radial-gradient(ellipse 60% 100% at 50% 0, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 0 / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 var(--drip-size) / 100% 100% no-repeat;
+  mask: 
+    radial-gradient(ellipse 60% 100% at 50% 0, black 60%, transparent 61%)
+    calc(var(--drip-size) * -0.3) 0 / var(--drip-size) var(--drip-size) repeat-x,
+    linear-gradient(black, black) 0 var(--drip-size) / 100% 100% no-repeat;
+}
+
+/* --- Corner Cuts: Angled --- */
+i-thir[mask="corner-cut"],
+i-thir[mask="corner-cut-1"] {
+  --corner-size: 15px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-cut-2"] {
+  --corner-size: 25px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-cut-3"] {
+  --corner-size: 40px;
+  -webkit-mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    linear-gradient(135deg, transparent var(--corner-size), black var(--corner-size)) top left,
+    linear-gradient(-135deg, transparent var(--corner-size), black var(--corner-size)) top right,
+    linear-gradient(45deg, transparent var(--corner-size), black var(--corner-size)) bottom left,
+    linear-gradient(-45deg, transparent var(--corner-size), black var(--corner-size)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Corner Cuts: Circular --- */
+i-thir[mask="corner-circle"],
+i-thir[mask="corner-circle-1"] {
+  --corner-size: 15px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-circle-2"] {
+  --corner-size: 25px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+i-thir[mask="corner-circle-3"] {
+  --corner-size: 40px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask: 
+    radial-gradient(circle at 0 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top left,
+    radial-gradient(circle at 100% 0, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) top right,
+    radial-gradient(circle at 0 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom left,
+    radial-gradient(circle at 100% 100%, transparent var(--corner-size), black calc(var(--corner-size) + 1px)) bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Ticket/Notch (coupon style) --- */
+i-thir[mask="ticket"] {
+  --notch-size: 20px;
+  -webkit-mask: 
+    radial-gradient(circle at 0 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px));
+  -webkit-mask-composite: source-in;
+  mask: 
+    radial-gradient(circle at 0 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--notch-size), black calc(var(--notch-size) + 1px));
+  mask-composite: intersect;
+}
+
+/* ==========================================================================
    DARK MODE ADJUSTMENTS
    ========================================================================== */
 

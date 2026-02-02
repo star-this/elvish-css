@@ -45,12 +45,12 @@ All layout primitives use Sindarin (Grey-Elvish) names:
 
 ```html
 <!-- unpkg -->
-<link rel="stylesheet" href="https://unpkg.com/elvish-css@1.2.0/dist/elvish.min.css">
-<script src="https://unpkg.com/elvish-css@1.2.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/elvish-css@2.0.2/dist/elvish.min.css">
+<script src="https://unpkg.com/elvish-css@2.0.2/dist/elvish.iife.js"></script>
 
 <!-- jsDelivr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@1.2.0/dist/elvish.min.css">
-<script src="https://cdn.jsdelivr.net/npm/elvish-css@1.2.0/dist/elvish.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elvish-css@2.0.2/dist/elvish.min.css">
+<script src="https://cdn.jsdelivr.net/npm/elvish-css@2.0.2/dist/elvish.iife.js"></script>
 ```
 
 ### npm

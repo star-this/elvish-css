@@ -1,0 +1,98 @@
+/**
+ * Elvish - Noise & Grain Textures
+ * 
+ * SVG-based noise patterns for texture effects.
+ * No external files needed - all textures are inline data URIs.
+ * 
+ * Usage:
+ *   background-image: var(--noise-1);
+ *   filter: var(--noise-filter-2);
+ * 
+ * Combine with gradients for grainy effects:
+ *   background-image: var(--gradient-sunset), var(--noise-3);
+ *   filter: var(--noise-filter-3);
+ */
+
+:root {
+  /* ==========================================================================
+     NOISE PATTERNS (SVG turbulence)
+     
+     Numbered 1-5: fine to coarse grain
+     ========================================================================== */
+  
+  /* Ultra-fine grain - barely visible texture */
+  --noise-1: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Fine grain - subtle film grain effect */
+  --noise-2: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Medium grain - visible texture */
+  --noise-3: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Coarse grain - prominent texture */
+  --noise-4: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Extra coarse - dramatic grain */
+  --noise-5: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.3' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     NOISE FILTERS
+     
+     Apply these to make noise textures blend with colors.
+     Use contrast and brightness to control intensity.
+     ========================================================================== */
+  
+  /* Subtle - barely visible grain */
+  --noise-filter-1: contrast(150%) brightness(500%);
+  
+  /* Light - gentle film grain */
+  --noise-filter-2: contrast(170%) brightness(400%);
+  
+  /* Medium - noticeable texture */
+  --noise-filter-3: contrast(200%) brightness(300%);
+  
+  /* Strong - prominent grain */
+  --noise-filter-4: contrast(250%) brightness(250%);
+  
+  /* Heavy - dramatic texture */
+  --noise-filter-5: contrast(300%) brightness(200%);
+  
+  /* ==========================================================================
+     GRAIN OVERLAYS (ready-to-use noise + blend)
+     
+     These combine noise with blend mode for easy application.
+     Just add as background-image over your gradient.
+     ========================================================================== */
+  
+  /* Light grain overlay (for light backgrounds) */
+  --grain-light: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  
+  /* Dark grain overlay (for dark backgrounds) */
+  --grain-dark: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     PAPER TEXTURES
+     ========================================================================== */
+  
+  /* Smooth paper */
+  --texture-paper: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Rough paper */
+  --texture-paper-rough: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='3'%3E%3CfeDistantLight azimuth='45' elevation='50'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     DOT/HALFTONE PATTERNS
+     ========================================================================== */
+  
+  /* Subtle dots */
+  --pattern-dots-sm: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='currentColor' opacity='0.15'/%3E%3C/svg%3E");
+  
+  /* Medium dots */
+  --pattern-dots-md: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='currentColor' opacity='0.2'/%3E%3C/svg%3E");
+  
+  /* Grid pattern */
+  --pattern-grid: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40' fill='none' stroke='currentColor' stroke-width='1' opacity='0.1'/%3E%3C/svg%3E");
+  
+  /* Diagonal lines */
+  --pattern-diagonal: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10L10 0' stroke='currentColor' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E");
+}

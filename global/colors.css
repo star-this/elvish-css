@@ -1,0 +1,347 @@
+/**
+ * Elvish - Color Palettes
+ * 
+ * 19 color palettes × 13 shades each (0-12).
+ * Uses OKLCH for perceptual uniformity.
+ * 
+ * Shade Guide:
+ *   0-2: Very light (backgrounds in light mode)
+ *   3-5: Light (borders, subtle elements)
+ *   6:   Mid-tone (neutral reference)
+ *   7-9: Dark (text in light mode, backgrounds in dark mode)
+ *   10-12: Very dark (high contrast, emphasis)
+ * 
+ * Usage:
+ *   background: var(--gray-1);
+ *   color: var(--gray-11);
+ *   border-color: var(--blue-4);
+ */
+
+:root {
+  /* ==========================================================================
+     NEUTRAL PALETTES
+     ========================================================================== */
+  
+  /* --- Gray (Pure neutral, no hue) --- */
+  --gray-0: oklch(99% 0 0);
+  --gray-1: oklch(97% 0 0);
+  --gray-2: oklch(93% 0 0);
+  --gray-3: oklch(87% 0 0);
+  --gray-4: oklch(79% 0 0);
+  --gray-5: oklch(70% 0 0);
+  --gray-6: oklch(60% 0 0);
+  --gray-7: oklch(50% 0 0);
+  --gray-8: oklch(40% 0 0);
+  --gray-9: oklch(32% 0 0);
+  --gray-10: oklch(24% 0 0);
+  --gray-11: oklch(16% 0 0);
+  --gray-12: oklch(9% 0 0);
+  
+  /* --- Stone (Warm neutral, slight yellow) --- */
+  --stone-0: oklch(99% 0.005 90);
+  --stone-1: oklch(97% 0.007 90);
+  --stone-2: oklch(93% 0.01 85);
+  --stone-3: oklch(87% 0.015 80);
+  --stone-4: oklch(79% 0.02 75);
+  --stone-5: oklch(70% 0.02 70);
+  --stone-6: oklch(60% 0.02 65);
+  --stone-7: oklch(50% 0.02 60);
+  --stone-8: oklch(40% 0.015 55);
+  --stone-9: oklch(32% 0.015 50);
+  --stone-10: oklch(24% 0.01 45);
+  --stone-11: oklch(16% 0.008 40);
+  --stone-12: oklch(9% 0.005 35);
+  
+  /* --- Sand (Warm beige/tan) --- */
+  --sand-0: oklch(98% 0.01 80);
+  --sand-1: oklch(96% 0.02 75);
+  --sand-2: oklch(92% 0.03 70);
+  --sand-3: oklch(86% 0.04 65);
+  --sand-4: oklch(78% 0.05 60);
+  --sand-5: oklch(69% 0.05 55);
+  --sand-6: oklch(59% 0.05 50);
+  --sand-7: oklch(49% 0.04 45);
+  --sand-8: oklch(40% 0.04 40);
+  --sand-9: oklch(32% 0.03 35);
+  --sand-10: oklch(24% 0.025 30);
+  --sand-11: oklch(17% 0.02 25);
+  --sand-12: oklch(10% 0.015 20);
+
+  /* ==========================================================================
+     WARM PALETTES
+     ========================================================================== */
+  
+  /* --- Red (Vibrant, alert) --- */
+  --red-0: oklch(97% 0.02 25);
+  --red-1: oklch(93% 0.05 25);
+  --red-2: oklch(87% 0.1 25);
+  --red-3: oklch(80% 0.15 25);
+  --red-4: oklch(72% 0.19 25);
+  --red-5: oklch(64% 0.22 25);
+  --red-6: oklch(57% 0.23 25);
+  --red-7: oklch(50% 0.22 25);
+  --red-8: oklch(43% 0.2 25);
+  --red-9: oklch(36% 0.17 25);
+  --red-10: oklch(29% 0.14 25);
+  --red-11: oklch(22% 0.1 25);
+  --red-12: oklch(15% 0.06 25);
+  
+  /* --- Orange (Energetic, warm) --- */
+  --orange-0: oklch(97% 0.02 55);
+  --orange-1: oklch(93% 0.05 55);
+  --orange-2: oklch(87% 0.1 55);
+  --orange-3: oklch(80% 0.14 55);
+  --orange-4: oklch(75% 0.17 55);
+  --orange-5: oklch(70% 0.18 55);
+  --orange-6: oklch(65% 0.18 50);
+  --orange-7: oklch(55% 0.16 45);
+  --orange-8: oklch(46% 0.14 40);
+  --orange-9: oklch(38% 0.11 35);
+  --orange-10: oklch(30% 0.08 30);
+  --orange-11: oklch(22% 0.06 25);
+  --orange-12: oklch(15% 0.04 20);
+  
+  /* --- Yellow (Bright, optimistic) --- */
+  --yellow-0: oklch(99% 0.02 95);
+  --yellow-1: oklch(97% 0.06 95);
+  --yellow-2: oklch(94% 0.12 95);
+  --yellow-3: oklch(91% 0.16 95);
+  --yellow-4: oklch(88% 0.18 95);
+  --yellow-5: oklch(84% 0.17 92);
+  --yellow-6: oklch(78% 0.15 88);
+  --yellow-7: oklch(65% 0.12 80);
+  --yellow-8: oklch(52% 0.1 70);
+  --yellow-9: oklch(42% 0.08 60);
+  --yellow-10: oklch(32% 0.06 50);
+  --yellow-11: oklch(23% 0.04 40);
+  --yellow-12: oklch(15% 0.03 30);
+  
+  /* --- Choco (Rich brown) --- */
+  --choco-0: oklch(97% 0.015 55);
+  --choco-1: oklch(93% 0.03 50);
+  --choco-2: oklch(86% 0.05 45);
+  --choco-3: oklch(77% 0.07 40);
+  --choco-4: oklch(67% 0.09 35);
+  --choco-5: oklch(57% 0.1 32);
+  --choco-6: oklch(48% 0.1 30);
+  --choco-7: oklch(40% 0.09 28);
+  --choco-8: oklch(33% 0.08 26);
+  --choco-9: oklch(27% 0.06 24);
+  --choco-10: oklch(21% 0.05 22);
+  --choco-11: oklch(16% 0.04 20);
+  --choco-12: oklch(11% 0.03 18);
+  
+  /* --- Brown (Earthy, natural) --- */
+  --brown-0: oklch(97% 0.01 60);
+  --brown-1: oklch(93% 0.025 55);
+  --brown-2: oklch(86% 0.04 50);
+  --brown-3: oklch(77% 0.06 45);
+  --brown-4: oklch(67% 0.07 40);
+  --brown-5: oklch(57% 0.08 38);
+  --brown-6: oklch(48% 0.08 36);
+  --brown-7: oklch(40% 0.07 34);
+  --brown-8: oklch(33% 0.06 32);
+  --brown-9: oklch(27% 0.05 30);
+  --brown-10: oklch(21% 0.04 28);
+  --brown-11: oklch(16% 0.03 26);
+  --brown-12: oklch(11% 0.02 24);
+
+  /* ==========================================================================
+     PINK/MAGENTA PALETTES
+     ========================================================================== */
+  
+  /* --- Pink (Soft, playful) --- */
+  --pink-0: oklch(97% 0.02 350);
+  --pink-1: oklch(94% 0.05 350);
+  --pink-2: oklch(89% 0.1 350);
+  --pink-3: oklch(83% 0.14 350);
+  --pink-4: oklch(76% 0.17 350);
+  --pink-5: oklch(69% 0.19 345);
+  --pink-6: oklch(62% 0.2 340);
+  --pink-7: oklch(52% 0.18 335);
+  --pink-8: oklch(43% 0.15 330);
+  --pink-9: oklch(35% 0.12 325);
+  --pink-10: oklch(28% 0.09 320);
+  --pink-11: oklch(21% 0.06 315);
+  --pink-12: oklch(14% 0.04 310);
+  
+  /* --- Purple (Royal, creative) --- */
+  --purple-0: oklch(97% 0.02 310);
+  --purple-1: oklch(93% 0.05 310);
+  --purple-2: oklch(87% 0.1 305);
+  --purple-3: oklch(79% 0.15 300);
+  --purple-4: oklch(70% 0.18 295);
+  --purple-5: oklch(62% 0.2 295);
+  --purple-6: oklch(53% 0.21 295);
+  --purple-7: oklch(45% 0.19 295);
+  --purple-8: oklch(38% 0.16 295);
+  --purple-9: oklch(31% 0.13 295);
+  --purple-10: oklch(24% 0.1 295);
+  --purple-11: oklch(18% 0.07 295);
+  --purple-12: oklch(12% 0.04 295);
+  
+  /* --- Violet (Deep, mysterious) --- */
+  --violet-0: oklch(97% 0.02 290);
+  --violet-1: oklch(93% 0.05 285);
+  --violet-2: oklch(86% 0.1 280);
+  --violet-3: oklch(78% 0.15 275);
+  --violet-4: oklch(68% 0.19 270);
+  --violet-5: oklch(58% 0.22 270);
+  --violet-6: oklch(50% 0.23 270);
+  --violet-7: oklch(42% 0.21 270);
+  --violet-8: oklch(35% 0.18 270);
+  --violet-9: oklch(28% 0.14 270);
+  --violet-10: oklch(22% 0.1 270);
+  --violet-11: oklch(16% 0.07 270);
+  --violet-12: oklch(11% 0.04 270);
+
+  /* ==========================================================================
+     BLUE PALETTES
+     ========================================================================== */
+  
+  /* --- Indigo (Deep blue-violet) --- */
+  --indigo-0: oklch(97% 0.02 270);
+  --indigo-1: oklch(93% 0.04 265);
+  --indigo-2: oklch(87% 0.08 260);
+  --indigo-3: oklch(78% 0.13 255);
+  --indigo-4: oklch(68% 0.17 250);
+  --indigo-5: oklch(58% 0.2 250);
+  --indigo-6: oklch(50% 0.21 250);
+  --indigo-7: oklch(42% 0.19 250);
+  --indigo-8: oklch(35% 0.16 250);
+  --indigo-9: oklch(28% 0.13 250);
+  --indigo-10: oklch(22% 0.1 250);
+  --indigo-11: oklch(16% 0.07 250);
+  --indigo-12: oklch(11% 0.04 250);
+  
+  /* --- Blue (Classic, trustworthy) --- */
+  --blue-0: oklch(97% 0.02 240);
+  --blue-1: oklch(94% 0.04 235);
+  --blue-2: oklch(88% 0.08 230);
+  --blue-3: oklch(80% 0.13 225);
+  --blue-4: oklch(71% 0.17 220);
+  --blue-5: oklch(62% 0.2 220);
+  --blue-6: oklch(54% 0.21 220);
+  --blue-7: oklch(46% 0.19 220);
+  --blue-8: oklch(38% 0.16 220);
+  --blue-9: oklch(31% 0.13 220);
+  --blue-10: oklch(24% 0.1 220);
+  --blue-11: oklch(18% 0.07 220);
+  --blue-12: oklch(12% 0.04 220);
+  
+  /* --- Cyan (Fresh, digital) --- */
+  --cyan-0: oklch(97% 0.02 200);
+  --cyan-1: oklch(94% 0.05 200);
+  --cyan-2: oklch(89% 0.1 195);
+  --cyan-3: oklch(83% 0.14 195);
+  --cyan-4: oklch(76% 0.17 195);
+  --cyan-5: oklch(70% 0.18 195);
+  --cyan-6: oklch(62% 0.18 195);
+  --cyan-7: oklch(52% 0.16 195);
+  --cyan-8: oklch(43% 0.14 195);
+  --cyan-9: oklch(35% 0.11 195);
+  --cyan-10: oklch(27% 0.08 195);
+  --cyan-11: oklch(20% 0.06 195);
+  --cyan-12: oklch(13% 0.04 195);
+
+  /* ==========================================================================
+     GREEN PALETTES
+     ========================================================================== */
+  
+  /* --- Teal (Blue-green, balanced) --- */
+  --teal-0: oklch(97% 0.02 175);
+  --teal-1: oklch(94% 0.05 175);
+  --teal-2: oklch(88% 0.1 175);
+  --teal-3: oklch(81% 0.14 175);
+  --teal-4: oklch(73% 0.16 175);
+  --teal-5: oklch(65% 0.17 175);
+  --teal-6: oklch(57% 0.17 175);
+  --teal-7: oklch(48% 0.15 175);
+  --teal-8: oklch(40% 0.13 175);
+  --teal-9: oklch(32% 0.1 175);
+  --teal-10: oklch(25% 0.08 175);
+  --teal-11: oklch(18% 0.06 175);
+  --teal-12: oklch(12% 0.04 175);
+  
+  /* --- Green (Natural, growth) --- */
+  --green-0: oklch(97% 0.02 145);
+  --green-1: oklch(94% 0.05 145);
+  --green-2: oklch(88% 0.1 145);
+  --green-3: oklch(81% 0.15 145);
+  --green-4: oklch(73% 0.18 145);
+  --green-5: oklch(65% 0.2 145);
+  --green-6: oklch(57% 0.2 145);
+  --green-7: oklch(48% 0.17 145);
+  --green-8: oklch(40% 0.14 145);
+  --green-9: oklch(32% 0.11 145);
+  --green-10: oklch(25% 0.08 145);
+  --green-11: oklch(18% 0.06 145);
+  --green-12: oklch(12% 0.04 145);
+  
+  /* --- Lime (Vibrant, energetic) --- */
+  --lime-0: oklch(98% 0.03 125);
+  --lime-1: oklch(95% 0.08 125);
+  --lime-2: oklch(91% 0.14 125);
+  --lime-3: oklch(86% 0.19 125);
+  --lime-4: oklch(81% 0.22 125);
+  --lime-5: oklch(75% 0.23 125);
+  --lime-6: oklch(67% 0.21 125);
+  --lime-7: oklch(55% 0.17 125);
+  --lime-8: oklch(45% 0.14 125);
+  --lime-9: oklch(36% 0.1 125);
+  --lime-10: oklch(28% 0.07 125);
+  --lime-11: oklch(20% 0.05 125);
+  --lime-12: oklch(13% 0.03 125);
+  
+  /* --- Camo (Olive/military green) --- */
+  --camo-0: oklch(97% 0.015 115);
+  --camo-1: oklch(93% 0.03 115);
+  --camo-2: oklch(86% 0.05 110);
+  --camo-3: oklch(77% 0.07 105);
+  --camo-4: oklch(67% 0.08 100);
+  --camo-5: oklch(57% 0.08 95);
+  --camo-6: oklch(48% 0.08 90);
+  --camo-7: oklch(40% 0.07 85);
+  --camo-8: oklch(33% 0.06 80);
+  --camo-9: oklch(27% 0.05 75);
+  --camo-10: oklch(21% 0.04 70);
+  --camo-11: oklch(16% 0.03 65);
+  --camo-12: oklch(11% 0.02 60);
+  
+  /* --- Jungle (Deep forest green) --- */
+  --jungle-0: oklch(97% 0.015 155);
+  --jungle-1: oklch(93% 0.03 155);
+  --jungle-2: oklch(86% 0.06 155);
+  --jungle-3: oklch(77% 0.1 155);
+  --jungle-4: oklch(67% 0.13 155);
+  --jungle-5: oklch(57% 0.14 155);
+  --jungle-6: oklch(48% 0.14 155);
+  --jungle-7: oklch(40% 0.12 155);
+  --jungle-8: oklch(33% 0.1 155);
+  --jungle-9: oklch(27% 0.08 155);
+  --jungle-10: oklch(21% 0.06 155);
+  --jungle-11: oklch(16% 0.04 155);
+  --jungle-12: oklch(11% 0.03 155);
+
+  /* ==========================================================================
+     BRAND PALETTE (Dynamic - based on --brand variable)
+     
+     Set your brand color and get automatic 13-shade palette:
+       :root { --brand: oklch(65% 0.2 195); }
+     ========================================================================== */
+  
+  /* Brand uses the --brand from tokens.css */
+  --brand-0: oklch(from var(--brand) 98% calc(c * 0.15) h);
+  --brand-1: oklch(from var(--brand) 95% calc(c * 0.3) h);
+  --brand-2: oklch(from var(--brand) 90% calc(c * 0.5) h);
+  --brand-3: oklch(from var(--brand) 85% calc(c * 0.7) h);
+  --brand-4: oklch(from var(--brand) 78% calc(c * 0.85) h);
+  --brand-5: oklch(from var(--brand) 72% c h);
+  --brand-6: oklch(from var(--brand) l c h);  /* Original brand color */
+  --brand-7: oklch(from var(--brand) calc(l - 0.1) c h);
+  --brand-8: oklch(from var(--brand) calc(l - 0.2) c h);
+  --brand-9: oklch(from var(--brand) calc(l - 0.28) calc(c * 0.9) h);
+  --brand-10: oklch(from var(--brand) calc(l - 0.36) calc(c * 0.8) h);
+  --brand-11: oklch(from var(--brand) calc(l - 0.44) calc(c * 0.6) h);
+  --brand-12: oklch(from var(--brand) calc(l - 0.52) calc(c * 0.4) h);
+}

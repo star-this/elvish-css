@@ -1,0 +1,65 @@
+/**
+ * Elvish Icons - Base Styles Only
+ * 
+ * Import this ONCE, then add individual icon imports.
+ * This provides the base i-thann[icon] styling without any icon data.
+ */
+
+i-thann[icon] {
+  --thann-size: 1.25em;
+  --thann-color: currentColor;
+  
+  display: inline-block;
+  width: var(--thann-size);
+  height: var(--thann-size);
+  vertical-align: -0.125em;
+  background-color: var(--thann-color);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Size variants */
+i-thann[icon][size="xs"] { --thann-size: 0.75em; }
+i-thann[icon][size="sm"] { --thann-size: 1em; }
+i-thann[icon][size="md"] { --thann-size: 1.25em; }
+i-thann[icon][size="lg"] { --thann-size: 1.5em; }
+i-thann[icon][size="xl"] { --thann-size: 2em; }
+i-thann[icon][size="2xl"] { --thann-size: 2.5em; }
+i-thann[icon][size="3xl"] { --thann-size: 3em; }
+i-thann[icon][size="4xl"] { --thann-size: 4em; }
+
+/* Color presets */
+i-thann[icon][color="brand"] { --thann-color: var(--brand, oklch(83% 0.17 168)); }
+i-thann[icon][color="success"] { --thann-color: var(--color-success, oklch(55% 0.17 145)); }
+i-thann[icon][color="warning"] { --thann-color: var(--color-warning, oklch(70% 0.15 85)); }
+i-thann[icon][color="danger"] { --thann-color: var(--color-danger, oklch(55% 0.2 25)); }
+i-thann[icon][color="info"] { --thann-color: var(--color-info, oklch(55% 0.15 230)); }
+i-thann[icon][color="muted"] { --thann-color: var(--color-text-muted, oklch(60% 0 0)); }
+
+/* Transforms */
+i-thann[icon][flip="h"] { transform: scaleX(-1); }
+i-thann[icon][flip="v"] { transform: scaleY(-1); }
+i-thann[icon][flip="both"] { transform: scale(-1, -1); }
+i-thann[icon][rotate="90"] { transform: rotate(90deg); }
+i-thann[icon][rotate="180"] { transform: rotate(180deg); }
+i-thann[icon][rotate="270"] { transform: rotate(270deg); }
+
+/* Animations */
+i-thann[icon][spin] { animation: thann-icon-spin 1s linear infinite; }
+i-thann[icon][spin="slow"] { animation: thann-icon-spin 2s linear infinite; }
+i-thann[icon][spin="fast"] { animation: thann-icon-spin 0.5s linear infinite; }
+i-thann[icon][pulse] { animation: thann-icon-pulse 1.5s ease-in-out infinite; }
+
+@keyframes thann-icon-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes thann-icon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

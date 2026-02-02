@@ -1,0 +1,35 @@
+/**
+ * i-gil - Smart Prefetch Link
+ * 
+ * Sindarin: "gil" = star, bright spark
+ * 
+ * Minimal styling - inherits from context.
+ * The element is primarily JavaScript-driven.
+ */
+
+i-gil {
+  display: inline;
+}
+
+i-gil a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Loading indicator (optional) */
+i-gil[prefetching] a::after {
+  content: '';
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.25em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: i-gil-spin 0.6s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes i-gil-spin {
+  to { transform: rotate(360deg); }
+}

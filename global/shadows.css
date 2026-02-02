@@ -1,0 +1,140 @@
+/**
+ * Elvish - Shadow System
+ * 
+ * Outer shadows (elevation) and inner shadows (inset/pressed states).
+ * Shadows adapt to light/dark mode using CSS variables.
+ * 
+ * Outer Shadows: For elevation (cards, buttons, modals)
+ * Inner Shadows: For pressed states, inputs, inset effects
+ */
+
+:root {
+  /* Shadow color adapts to color scheme */
+  --shadow-color: light-dark(
+    oklch(20% 0 0 / 0.1),
+    oklch(0% 0 0 / 0.3)
+  );
+  
+  --shadow-color-strong: light-dark(
+    oklch(20% 0 0 / 0.2),
+    oklch(0% 0 0 / 0.5)
+  );
+  
+  /* ==========================================================================
+     OUTER SHADOWS (Elevation)
+     
+     Numbered 1-6: subtle to dramatic elevation
+     ========================================================================== */
+  
+  --shadow-1: 
+    0 1px 2px 0 var(--shadow-color);
+  
+  --shadow-2: 
+    0 1px 3px 0 var(--shadow-color),
+    0 1px 2px -1px var(--shadow-color);
+  
+  --shadow-3: 
+    0 4px 6px -1px var(--shadow-color),
+    0 2px 4px -2px var(--shadow-color);
+  
+  --shadow-4: 
+    0 10px 15px -3px var(--shadow-color),
+    0 4px 6px -4px var(--shadow-color);
+  
+  --shadow-5: 
+    0 20px 25px -5px var(--shadow-color),
+    0 8px 10px -6px var(--shadow-color);
+  
+  --shadow-6: 
+    0 25px 50px -12px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     INNER SHADOWS (Inset/Pressed)
+     
+     For pressed buttons, active states, input fields
+     ========================================================================== */
+  
+  /* Subtle inset - minimal depth */
+  --inner-shadow-0: 
+    inset 0 1px 2px var(--shadow-color);
+  
+  /* Light inset - inputs, subtle pressed */
+  --inner-shadow-1: 
+    inset 0 2px 4px var(--shadow-color);
+  
+  /* Medium inset - pressed buttons */
+  --inner-shadow-2: 
+    inset 0 2px 4px var(--shadow-color),
+    inset 0 4px 6px var(--shadow-color);
+  
+  /* Deep inset - strong pressed state */
+  --inner-shadow-3: 
+    inset 0 4px 8px var(--shadow-color),
+    inset 0 2px 4px var(--shadow-color-strong);
+  
+  /* Very deep inset - recessed panels */
+  --inner-shadow-4: 
+    inset 0 4px 12px var(--shadow-color-strong),
+    inset 0 2px 4px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     INNER SHADOWS - DIRECTIONAL
+     ========================================================================== */
+  
+  --inner-shadow-top: 
+    inset 0 4px 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-bottom: 
+    inset 0 -4px 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-left: 
+    inset 4px 0 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-right: 
+    inset -4px 0 6px -4px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     COMBINED SHADOWS (3D effects)
+     ========================================================================== */
+  
+  /* Raised button with highlight and shadow */
+  --shadow-raised: 
+    0 1px 0 oklch(100% 0 0 / 0.1),
+    0 2px 4px var(--shadow-color),
+    0 4px 8px var(--shadow-color);
+  
+  /* Pressed button */
+  --shadow-pressed: 
+    inset 0 2px 4px var(--shadow-color-strong),
+    0 1px 0 oklch(100% 0 0 / 0.05);
+  
+  /* Floating element */
+  --shadow-floating: 
+    0 8px 30px var(--shadow-color-strong),
+    0 4px 10px var(--shadow-color);
+  
+  /* Text input field */
+  --shadow-input: 
+    inset 0 1px 2px var(--shadow-color),
+    0 1px 0 oklch(100% 0 0 / 0.05);
+  
+  /* Focus ring shadow (for accessibility) */
+  --shadow-focus: 
+    0 0 0 3px oklch(from var(--brand) l c h / 0.3);
+  
+  /* ==========================================================================
+     GLOW SHADOWS (for highlights, neon effects)
+     ========================================================================== */
+  
+  --shadow-glow-sm: 
+    0 0 10px oklch(from var(--brand) l c h / 0.3);
+  
+  --shadow-glow-md: 
+    0 0 20px oklch(from var(--brand) l c h / 0.3),
+    0 0 40px oklch(from var(--brand) l c h / 0.2);
+  
+  --shadow-glow-lg: 
+    0 0 30px oklch(from var(--brand) l c h / 0.3),
+    0 0 60px oklch(from var(--brand) l c h / 0.2),
+    0 0 90px oklch(from var(--brand) l c h / 0.1);
+}
