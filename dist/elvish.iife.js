@@ -1,8 +1,8 @@
 /**
- * Elvish Layout System v2.0.0
+ * Elvish CSS Layout System v1.3.1
  * Custom Elements for intrinsic CSS layouts
- * 
- * https://github.com/yourusername/elvish-layout
+ *
+ * https://github.com/star-this/elvish-css
  * License: MIT
  */
 
@@ -2138,6 +2138,325 @@ if ('customElements' in window) {
 
 
 
+// thir
+/**
+ * Visual Effects Custom Element (i-thîr)
+ * 
+ * "Thîr" (Sindarin) = look, face, expression, appearance
+ * Handles visual effects, shapes, and interactions.
+ * 
+ * @property {string} effect - Visual effect preset (neon, frosted, glassmorphism, etc.)
+ * @property {string} corners - Corner shape (inverted, top, bottom, tl, tr, bl, br)
+ * @property {string} shape - Overall shape (ticket, scalloped, pill, etc.)
+ * @property {string} hover - Hover interaction (lift, grow, shrink, tilt, etc.)
+ * @property {string} touch - Touch interaction (same values as hover, or boolean for same-as-hover)
+ * @property {string} filter - CSS filter shortcut (grayscale, sepia, blur-*, etc.)
+ * @property {string} backdrop - Backdrop filter (blur, frost, dim, etc.)
+ * @property {string} blend - Blend mode (multiply, screen, overlay, etc.)
+ * 
+ * @example
+ * <i-thir effect="neon" color="cyan">Glowing card</i-thir>
+ * <i-thir effect="glassmorphism" corners="inverted">Glass with scalloped corners</i-thir>
+ * <i-thir hover="lift" touch>Lifts on hover and long-press</i-thir>
+ */
+
+class ThirElement extends HTMLElement {
+  static get observedAttributes() {
+    return [
+      'effect', 'corners', 'shape',
+      'hover', 'touch',
+      'filter', 'backdrop', 'blend',
+      'opacity', 'cursor',
+      'rotate', 'flip', 'skew'
+    ];
+  }
+
+  constructor() {
+    super();
+    this._touchTimer = null;
+    this._touchActive = false;
+  }
+
+  connectedCallback() {
+    // Initialize touch support if [touch] attribute is present
+    if (this.hasAttribute('touch')) {
+      this._initTouchSupport();
+    }
+  }
+
+  disconnectedCallback() {
+    this._cleanupTouchSupport();
+  }
+
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name === 'touch') {
+      if (newVal !== null) {
+        this._initTouchSupport();
+      } else {
+        this._cleanupTouchSupport();
+      }
+    }
+  }
+
+  // Touch support methods
+  _initTouchSupport() {
+    this._onTouchStart = this._handleTouchStart.bind(this);
+    this._onTouchEnd = this._handleTouchEnd.bind(this);
+    this._onTouchCancel = this._handleTouchCancel.bind(this);
+
+    this.addEventListener('touchstart', this._onTouchStart, { passive: true });
+    this.addEventListener('touchend', this._onTouchEnd, { passive: true });
+    this.addEventListener('touchcancel', this._onTouchCancel, { passive: true });
+  }
+
+  _cleanupTouchSupport() {
+    if (this._onTouchStart) {
+      this.removeEventListener('touchstart', this._onTouchStart);
+      this.removeEventListener('touchend', this._onTouchEnd);
+      this.removeEventListener('touchcancel', this._onTouchCancel);
+    }
+    this._clearTouchTimer();
+  }
+
+  _handleTouchStart(e) {
+    this._clearTouchTimer();
+    
+    // Long press threshold (300ms)
+    this._touchTimer = setTimeout(() => {
+      this._activateTouch();
+    }, 300);
+  }
+
+  _handleTouchEnd(e) {
+    this._clearTouchTimer();
+    
+    // Keep active briefly after release
+    if (this._touchActive) {
+      setTimeout(() => {
+        this._deactivateTouch();
+      }, 600);
+    }
+  }
+
+  _handleTouchCancel(e) {
+    this._clearTouchTimer();
+    this._deactivateTouch();
+  }
+
+  _clearTouchTimer() {
+    if (this._touchTimer) {
+      clearTimeout(this._touchTimer);
+      this._touchTimer = null;
+    }
+  }
+
+  _activateTouch() {
+    this._touchActive = true;
+    this.classList.add('touch-active');
+    
+    this.dispatchEvent(new CustomEvent('thir:touch-active', {
+      bubbles: true,
+      detail: { effect: this._getTouchEffect() }
+    }));
+  }
+
+  _deactivateTouch() {
+    this._touchActive = false;
+    this.classList.remove('touch-active');
+    
+    this.dispatchEvent(new CustomEvent('thir:touch-inactive', {
+      bubbles: true
+    }));
+  }
+
+  _getTouchEffect() {
+    const touchAttr = this.getAttribute('touch');
+    
+    // If touch has a specific value, use it
+    if (touchAttr && touchAttr !== '' && touchAttr !== 'true') {
+      return touchAttr;
+    }
+    
+    // Otherwise, use the hover value
+    return this.getAttribute('hover') || 'default';
+  }
+
+  // Attribute getters/setters
+  get effect() { return this.getAttribute('effect'); }
+  set effect(val) { val ? this.setAttribute('effect', val) : this.removeAttribute('effect'); }
+
+  get corners() { return this.getAttribute('corners'); }
+  set corners(val) { val ? this.setAttribute('corners', val) : this.removeAttribute('corners'); }
+
+  get shape() { return this.getAttribute('shape'); }
+  set shape(val) { val ? this.setAttribute('shape', val) : this.removeAttribute('shape'); }
+
+  get hover() { return this.getAttribute('hover'); }
+  set hover(val) { val ? this.setAttribute('hover', val) : this.removeAttribute('hover'); }
+
+  get touch() { return this.hasAttribute('touch'); }
+  set touch(val) { val ? this.setAttribute('touch', val === true ? '' : val) : this.removeAttribute('touch'); }
+
+  get filter() { return this.getAttribute('filter'); }
+  set filter(val) { val ? this.setAttribute('filter', val) : this.removeAttribute('filter'); }
+
+  get backdrop() { return this.getAttribute('backdrop'); }
+  set backdrop(val) { val ? this.setAttribute('backdrop', val) : this.removeAttribute('backdrop'); }
+
+  get blend() { return this.getAttribute('blend'); }
+  set blend(val) { val ? this.setAttribute('blend', val) : this.removeAttribute('blend'); }
+}
+
+// Define the custom element
+if ('customElements' in window) {
+  customElements.define('i-thir', ThirElement);
+}
+
+
+
+
+// tew
+/**
+ * Typography Custom Element (i-têw)
+ * 
+ * "Têw" (Sindarin) = letters, characters, writing
+ * Handles all text and font styling concerns.
+ * 
+ * @property {string} family - Font family (sans, serif, title, code, alt)
+ * @property {string} size - Font size from modular scale (-3 to 8, xs to 6xl, fluid-*)
+ * @property {string} weight - Font weight (thin, light, normal, medium, semibold, bold, etc.)
+ * @property {string} leading - Line height (none, tight, snug, normal, relaxed, loose)
+ * @property {string} tracking - Letter spacing (tighter, tight, normal, wide, wider, widest)
+ * @property {string} align - Text alignment (left, center, right, justify)
+ * @property {string} transform - Text transform (uppercase, lowercase, capitalize, small-caps)
+ * @property {string} decoration - Text decoration (underline, line-through, overline, etc.)
+ * @property {string} wrap - Text wrap behavior (balance, pretty, stable, nowrap)
+ * @property {string} shadow - Text shadow (sm, md, lg, glow, 3d, long)
+ * @property {string} color - Text color (primary, muted, accent, success, etc.)
+ * @property {string} preset - Typography preset (h1-h6, body, lead, caption, code, quote, bquote)
+ * @property {string} measure - Line length constraint (narrow, normal, wide, full)
+ * @property {string} numeric - Numeric font features (tabular, oldstyle, slashed-zero, ordinal)
+ * 
+ * @example
+ * <i-tew family="serif" size="lg" weight="bold">Elegant heading</i-tew>
+ * <i-tew preset="bquote" data-cite="Author">A memorable quote.</i-tew>
+ * <i-tew leading="loose" tracking="wide">Spacious text</i-tew>
+ */
+
+class TewElement extends HTMLElement {
+  static get observedAttributes() {
+    return [
+      'family', 'size', 'weight',
+      'leading', 'tracking', 'word-spacing',
+      'align', 'valign',
+      'transform', 'case',
+      'style', 'italic',
+      'decoration', 'decoration-thickness',
+      'wrap', 'whitespace', 'break', 'hyphens',
+      'overflow', 'truncate', 'lines',
+      'indent', 'color',
+      'shadow', 'selection',
+      'numeric', 'ligatures', 'kerning',
+      'rendering', 'smoothing',
+      'writing', 'dir', 'orientation',
+      'preset', 'measure',
+      'block', 'inline-block', 'responsive',
+      'data-cite', 'closing'
+    ];
+  }
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    // Ensure proper display for block-level presets
+    this._updateDisplay();
+  }
+
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name === 'preset' || name === 'block' || name === 'inline-block') {
+      this._updateDisplay();
+    }
+  }
+
+  _updateDisplay() {
+    // Block-level presets automatically get display: block via CSS
+    // This method is for any JS-based enhancements if needed
+  }
+
+  // Attribute getters/setters for common properties
+  get family() { return this.getAttribute('family'); }
+  set family(val) { val ? this.setAttribute('family', val) : this.removeAttribute('family'); }
+
+  get size() { return this.getAttribute('size'); }
+  set size(val) { val ? this.setAttribute('size', val) : this.removeAttribute('size'); }
+
+  get weight() { return this.getAttribute('weight'); }
+  set weight(val) { val ? this.setAttribute('weight', val) : this.removeAttribute('weight'); }
+
+  get leading() { return this.getAttribute('leading'); }
+  set leading(val) { val ? this.setAttribute('leading', val) : this.removeAttribute('leading'); }
+
+  get tracking() { return this.getAttribute('tracking'); }
+  set tracking(val) { val ? this.setAttribute('tracking', val) : this.removeAttribute('tracking'); }
+
+  get align() { return this.getAttribute('align'); }
+  set align(val) { val ? this.setAttribute('align', val) : this.removeAttribute('align'); }
+
+  get transform() { return this.getAttribute('transform'); }
+  set transform(val) { val ? this.setAttribute('transform', val) : this.removeAttribute('transform'); }
+
+  get decoration() { return this.getAttribute('decoration'); }
+  set decoration(val) { val ? this.setAttribute('decoration', val) : this.removeAttribute('decoration'); }
+
+  get wrap() { return this.getAttribute('wrap'); }
+  set wrap(val) { val ? this.setAttribute('wrap', val) : this.removeAttribute('wrap'); }
+
+  get shadow() { return this.getAttribute('shadow'); }
+  set shadow(val) { val ? this.setAttribute('shadow', val) : this.removeAttribute('shadow'); }
+
+  get color() { return this.getAttribute('color'); }
+  set color(val) { val ? this.setAttribute('color', val) : this.removeAttribute('color'); }
+
+  get preset() { return this.getAttribute('preset'); }
+  set preset(val) { val ? this.setAttribute('preset', val) : this.removeAttribute('preset'); }
+
+  get measure() { return this.getAttribute('measure'); }
+  set measure(val) { val ? this.setAttribute('measure', val) : this.removeAttribute('measure'); }
+
+  get numeric() { return this.getAttribute('numeric'); }
+  set numeric(val) { val ? this.setAttribute('numeric', val) : this.removeAttribute('numeric'); }
+
+  get lines() { return this.getAttribute('lines'); }
+  set lines(val) { val ? this.setAttribute('lines', val) : this.removeAttribute('lines'); }
+
+  // Boolean attributes
+  get block() { return this.hasAttribute('block'); }
+  set block(val) { val ? this.setAttribute('block', '') : this.removeAttribute('block'); }
+
+  get italic() { return this.hasAttribute('italic'); }
+  set italic(val) { val ? this.setAttribute('italic', '') : this.removeAttribute('italic'); }
+
+  get truncate() { return this.hasAttribute('truncate'); }
+  set truncate(val) { val ? this.setAttribute('truncate', '') : this.removeAttribute('truncate'); }
+
+  get responsive() { return this.hasAttribute('responsive'); }
+  set responsive(val) { val ? this.setAttribute('responsive', '') : this.removeAttribute('responsive'); }
+
+  // Data attribute for citation (bquote preset)
+  get cite() { return this.dataset.cite; }
+  set cite(val) { val ? this.dataset.cite = val : delete this.dataset.cite; }
+}
+
+// Define the custom element
+if ('customElements' in window) {
+  customElements.define('i-tew', TewElement);
+}
+
+
+
+
 
 
   // Expose to window
@@ -2158,6 +2477,8 @@ if ('customElements' in window) {
     HimLayout,
     MiriantLayout,
     GonathLayout,
+    ThirElement,
+    TewElement,
     transition: transition,
     transitionTo: transitionTo,
     transitionTheme: transitionTheme,

@@ -1,8 +1,8 @@
 /**
- * Elvish Layout System v2.0.0
+ * Elvish Layout System v1.3.1
  * Intrinsic CSS layout primitives with Sindarin names
- * 
- * https://github.com/yourusername/elvish-layout
+ *
+ * https://github.com/star-this/elvish-css
  * License: MIT
  */
 
@@ -1909,7 +1909,773 @@ i-nelu[shape="scalloped"] {
 }
 
 
-/* === global/effects.css === */
+/* === primitives/hath/hath.css === */
+/**
+ * Stack Layout
+ * 
+ * Injects vertical margin between successive child elements.
+ * The foundation of vertical rhythm.
+ */
+
+i-hath {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+i-hath > * {
+  /* Remove any existing vertical margins */
+  margin-block: 0;
+}
+
+i-hath > * + * {
+  /* Apply margin only between successive elements */
+  margin-block-start: var(--hath-space, var(--s1));
+}
+
+/* Recursive variant - applies to all descendants */
+i-hath[recursive] * + * {
+  margin-block-start: var(--hath-space, var(--s1));
+}
+
+/* Split variant - pushes element and siblings after it to the bottom */
+i-hath[split-after="1"] > :nth-child(1) { margin-block-end: auto; }
+i-hath[split-after="2"] > :nth-child(2) { margin-block-end: auto; }
+i-hath[split-after="3"] > :nth-child(3) { margin-block-end: auto; }
+i-hath[split-after="4"] > :nth-child(4) { margin-block-end: auto; }
+i-hath[split-after="5"] > :nth-child(5) { margin-block-end: auto; }
+
+/* When Stack needs to fill its parent */
+i-hath:only-child {
+  block-size: 100%;
+}
+
+
+/* === primitives/bau/bau.css === */
+/**
+ * Box Layout (i-bau)
+ * 
+ * A container primitive focused on padding/structure.
+ * Visual styling (borders, backgrounds) is opt-in via attributes.
+ * 
+ * Layout-first philosophy: invisible by default, styled explicitly.
+ * 
+ * Attributes:
+ *   padding="..."     - Override padding (default: var(--s1))
+ *   border            - Add border
+ *   border-width="..."- Custom border width
+ *   bg                - Add background color
+ *   invert            - Invert colors (dark bg, light text)
+ *   compact           - Remove padding
+ *   borderless        - Explicitly remove border (for overriding)
+ */
+
+i-bau {
+  display: block;
+  padding: var(--bau-padding, var(--s1));
+  
+  /* Color tokens - can be overridden per-instance */
+  --bau-color-light: var(--color-surface-raised, var(--color-light));
+  --bau-color-dark: var(--color-text, var(--color-dark));
+  --bau-border-color: var(--color-border, currentColor);
+  
+  /* Layout-first: no visual styling by default */
+  /* Border width and background are 0/transparent from reset.css */
+}
+
+/* ===== VISUAL STYLING (Opt-in) ===== */
+
+/* Add border - use [border] attribute */
+i-bau[border] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* Custom border width */
+i-bau[border-width] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* Add background - use [bg] attribute */
+i-bau[bg] {
+  background-color: var(--bau-color-light);
+  color: var(--bau-color-dark);
+}
+
+/* Inverted color scheme (implies bg) */
+i-bau[invert] {
+  background-color: var(--bau-color-dark);
+  color: var(--bau-color-light);
+}
+
+/* Combined: border + background */
+i-bau[border][bg],
+i-bau[border][invert] {
+  border-width: var(--bau-border-width, var(--border-thin, 1px));
+  border-color: var(--bau-border-color);
+}
+
+/* ===== LAYOUT VARIANTS ===== */
+
+/* No padding */
+i-bau[compact] {
+  padding: 0;
+}
+
+/* Explicitly no border (for overriding inherited styles) */
+i-bau[borderless] {
+  border-width: 0;
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+/* Transparent outline for Windows High Contrast Mode */
+@media (forced-colors: active) {
+  i-bau[border],
+  i-bau[bg],
+  i-bau[invert] {
+    outline: var(--bau-border-width, 1px) solid transparent;
+    outline-offset: calc(var(--bau-border-width, 1px) * -1);
+  }
+}
+
+
+/* === primitives/enedh/enedh.css === */
+/**
+ * Center Layout
+ * 
+ * Horizontally centers content with a maximum width.
+ * Preserves gutters (minimum space on sides) in narrow contexts.
+ */
+
+i-enedh {
+  display: block;
+  
+  /* Use content-box so padding adds to the max-width, not subtracts */
+  box-sizing: content-box;
+  
+  /* Center with auto margins */
+  margin-inline: auto;
+  
+  /* 
+   * Maximum width - JS sets --enedh-max from the max attribute.
+   * Fallback chain: attribute value → 100% (full width until JS runs)
+   * This ensures layouts work even if JS fails to load.
+   */
+  max-inline-size: var(--enedh-max, 100%);
+  
+  /* Gutters - minimum space on either side */
+  padding-inline: var(--enedh-gutters, 0);
+}
+
+/* Intrinsic centering - center children based on their content width */
+i-enedh[intrinsic] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Also center the text */
+i-enedh[and-text] {
+  text-align: center;
+}
+
+
+/* === primitives/tiniath/tiniath.css === */
+/**
+ * Cluster Layout
+ * 
+ * Groups elements that differ in length and wrap naturally.
+ * Perfect for tags, buttons, navigation items.
+ */
+
+i-tiniath {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tiniath-space, var(--s1));
+  
+  /* Default justification and alignment */
+  justify-content: var(--tiniath-justify, flex-start);
+  align-items: var(--tiniath-align, center);
+}
+
+
+/* === primitives/glan-veleg/glan-veleg.css === */
+/**
+ * GlanVeleg Layout
+ * 
+ * A two-element layout where one has a fixed width (sidebar)
+ * and the other fills remaining space. Switches to vertical
+ * when the non-sidebar would be less than a threshold.
+ */
+
+i-glan-veleg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--glan-veleg-space, var(--s1));
+}
+
+/* Default: sidebar is the first child (left side) */
+i-glan-veleg > * {
+  flex-grow: 1;
+}
+
+i-glan-veleg > :first-child {
+  flex-basis: var(--glan-veleg-width, 20rem);
+}
+
+i-glan-veleg > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: var(--glan-veleg-content-min, 50%);
+}
+
+/* When sidebar is on the right */
+i-glan-veleg[side="right"] > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: var(--glan-veleg-content-min, 50%);
+}
+
+i-glan-veleg[side="right"] > :last-child {
+  flex-basis: var(--glan-veleg-width, 20rem);
+  flex-grow: 1;
+}
+
+/* Disable equal height stretching */
+i-glan-veleg[no-stretch] {
+  align-items: flex-start;
+}
+
+
+/* === primitives/gwistindor/gwistindor.css === */
+/**
+ * Switcher Layout
+ * 
+ * Switches directly between horizontal and vertical layouts
+ * at a container-based threshold. No intermediary states.
+ * 
+ * Uses the "Holy Albatross" technique.
+ */
+
+i-gwistindor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gwistindor-space, var(--s1));
+}
+
+i-gwistindor > * {
+  flex-grow: 1;
+  /* 
+   * The magic: produces huge positive (vertical) or negative (horizontal) values.
+   * Default: --layout-threshold-md (45rem ≈ 720px) - switches at tablet width.
+   * NOTE: This is a *layout* threshold, not a text measure!
+   */
+  flex-basis: calc((var(--gwistindor-threshold, var(--layout-threshold-md, 45rem)) - 100%) * 999);
+}
+
+/* Quantity query: force vertical if more than threshold items */
+i-gwistindor[limit="2"] > :nth-last-child(n+3),
+i-gwistindor[limit="2"] > :nth-last-child(n+3) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="3"] > :nth-last-child(n+4),
+i-gwistindor[limit="3"] > :nth-last-child(n+4) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor:not([limit]) > :nth-last-child(n+5),
+i-gwistindor:not([limit]) > :nth-last-child(n+5) ~ *,
+i-gwistindor[limit="4"] > :nth-last-child(n+5),
+i-gwistindor[limit="4"] > :nth-last-child(n+5) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="5"] > :nth-last-child(n+6),
+i-gwistindor[limit="5"] > :nth-last-child(n+6) ~ * {
+  flex-basis: 100%;
+}
+
+i-gwistindor[limit="6"] > :nth-last-child(n+7),
+i-gwistindor[limit="6"] > :nth-last-child(n+7) ~ * {
+  flex-basis: 100%;
+}
+
+
+/* === primitives/esgal/esgal.css === */
+/**
+ * Cover Layout
+ * 
+ * Vertically centers a principal element with optional
+ * header and footer elements. Perfect for hero sections.
+ */
+
+i-esgal {
+  display: flex;
+  flex-direction: column;
+  min-block-size: var(--esgal-min-height, 100vh);
+  padding: var(--esgal-space, var(--s1));
+}
+
+i-esgal > * {
+  margin-block: var(--esgal-space, var(--s1));
+}
+
+/* The centered element - default is h1 */
+i-esgal > :first-child:not(h1, h2, h3, [data-centered]) {
+  margin-block-start: 0;
+}
+
+i-esgal > :last-child:not(h1, h2, h3, [data-centered]) {
+  margin-block-end: 0;
+}
+
+/* Elements that should be centered */
+i-esgal > h1,
+i-esgal > h2,
+i-esgal > h3,
+i-esgal > [data-centered] {
+  margin-block: auto;
+}
+
+/* No padding variant */
+i-esgal[no-pad] {
+  padding: 0;
+}
+
+
+/* === primitives/vircantie/vircantie.css === */
+/**
+ * Vircantie Layout (Grid)
+ * 
+ * Auto-flowing grid with responsive columns based on minimum width.
+ * Uses CSS Grid's auto-fit with min() for robust responsiveness.
+ */
+
+i-vircantie {
+  display: grid;
+  gap: var(--vircantie-space, var(--s1));
+}
+
+/* 
+ * Using min() prevents overflow when container is narrower than minimum.
+ * The 100% value kicks in when min would cause overflow.
+ */
+@supports (width: min(var(--vircantie-min, 250px), 100%)) {
+  i-vircantie {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--vircantie-min, 250px), 100%), 1fr)
+    );
+  }
+}
+
+
+/* === primitives/gant-thala/gant-thala.css === */
+/**
+ * Frame Layout
+ * 
+ * Constrains content to a specific aspect ratio.
+ * Perfect for images, videos, and embedded content.
+ */
+
+i-gant-thala {
+  display: block;
+  overflow: hidden;
+  
+  /* Default 16:9 ratio */
+  gant-thala-ratio: var(--gant-thala-n, 16) / var(--gant-thala-d, 9);
+}
+
+/* For images and videos, cover the frame */
+i-gant-thala > img,
+i-gant-thala > video {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  /* Default: center the crop */
+  object-position: center;
+}
+
+/* Non-media content gets centered */
+i-gant-thala > :not(img):not(video) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 100%;
+}
+
+
+/* === primitives/glan-tholl/glan-tholl.css === */
+/**
+ * Reel Layout
+ * 
+ * Horizontal scrolling container for overflow content.
+ * A robust alternative to JavaScript carousels.
+ */
+
+i-glan-tholl {
+  display: flex;
+  block-size: var(--glan-tholl-height, auto);
+  
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  /* Smooth scrolling where supported and preferred */
+  scroll-behavior: smooth;
+  
+  /* Scroll snap for better UX */
+  scroll-snap-type: x mandatory;
+  
+  /* Firefox scrollbar styling */
+  scrollbar-color: var(--color-dark) var(--color-light);
+}
+
+i-glan-tholl > * {
+  flex: 0 0 var(--glan-tholl-item-width, auto);
+  scroll-snap-align: start;
+}
+
+i-glan-tholl > * + * {
+  margin-inline-start: var(--glan-tholl-space, var(--s1));
+}
+
+/* Images should maintain aspect ratio */
+i-glan-tholl > img {
+  block-size: 100%;
+  inline-size: auto;
+  flex-basis: auto;
+}
+
+/* Webkit scrollbar styling */
+i-glan-tholl::-webkit-scrollbar {
+  block-size: 0.75rem;
+}
+
+i-glan-tholl::-webkit-scrollbar-track {
+  background-color: var(--color-light);
+}
+
+i-glan-tholl::-webkit-scrollbar-thumb {
+  background-color: var(--color-mid);
+  border-radius: var(--s-2);
+}
+
+/* Hide scrollbar variant */
+i-glan-tholl[no-bar] {
+  scrollbar-width: none;
+}
+
+i-glan-tholl[no-bar]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Overflowing state (added via JS) */
+i-glan-tholl.overflowing {
+  padding-block-end: var(--glan-tholl-space, var(--s1));
+}
+
+i-glan-tholl.overflowing.no-bar {
+  padding-block-end: 0;
+}
+
+
+/* === primitives/fano/fano.css === */
+/**
+ * Imposter Layout
+ * 
+ * Positions an element over content, centered within a
+ * positioning container. Perfect for modals and overlays.
+ */
+
+i-fano {
+  /* Default: absolute positioning relative to nearest positioned ancestor */
+  position: var(--fano-position, absolute);
+  
+  /* Center the element */
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Fixed positioning variant (relative to viewport) */
+i-fano[fixed] {
+  --fano-position: fixed;
+}
+
+/* Contain within positioning container */
+i-fano[contain] {
+  overflow: auto;
+  max-inline-size: calc(100% - (var(--fano-margin, 0px) * 2));
+  max-block-size: calc(100% - (var(--fano-margin, 0px) * 2));
+}
+
+
+/* === primitives/thann/thann.css === */
+/**
+ * Thann Layout (Icon)
+ * 
+ * Aligns an SVG icon with accompanying text.
+ * Uses relative units for automatic scaling.
+ * 
+ * Attributes:
+ * - echuiol: "active" state styling
+ * - dhoren: "hidden" state (visually hidden but accessible)
+ */
+
+i-thann {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--thann-space, 0);
+}
+
+i-thann svg {
+  /* Match uppercase letter height */
+  block-size: 0.75em;
+  block-size: 1cap; /* Where supported */
+  
+  inline-size: 0.75em;
+  inline-size: 1cap; /* Where supported */
+  
+  /* Inherit text color */
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* When using natural word spacing (no explicit space) */
+i-thann:not([space]) {
+  display: inline;
+}
+
+i-thann:not([space]) svg {
+  display: inline;
+  vertical-align: -0.125em; /* Fine-tune baseline alignment */
+}
+
+/* Echuiol = Active state */
+i-thann[echuiol] {
+  color: var(--color-accent, currentColor);
+}
+
+/* Dhoren = Hidden (visually hidden but accessible) */
+i-thann[dhoren] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* === primitives/adleithian/adleithian.css === */
+/**
+ * Adleithian Layout
+ * 
+ * Establishes a container query context.
+ * The escape hatch for when intrinsic layouts need manual intervention.
+ */
+
+i-adleithian {
+  display: block;
+  adleithian-type: inline-size;
+}
+
+/* Named containers use the name attribute */
+i-adleithian[name] {
+  adleithian-name: attr(name);
+}
+
+
+/* === primitives/him/him.css === */
+/**
+ * Him Layout (NEW)
+ * 
+ * Creates sticky positioning with configurable offset.
+ * Solves the common pattern of sticky headers/sidebars.
+ * 
+ * IMPORTANT: The parent must have defined height or be
+ * in a scroll context for sticky to work properly.
+ */
+
+i-him {
+  display: block;
+  position: sticky;
+  
+  /* Default: stick to top */
+  inset-block-start: var(--him-offset, 0);
+  
+  /* Ensure it stays above sibling content when stuck */
+  z-index: var(--him-z, 1);
+}
+
+/* Stick to bottom instead */
+i-him[to="bottom"] {
+  inset-block-start: auto;
+  inset-block-end: var(--him-offset, 0);
+}
+
+/* Stick to left (in horizontal scroll context) */
+i-him[to="left"] {
+  inset-block-start: auto;
+  inset-inline-start: var(--him-offset, 0);
+}
+
+/* Stick to right (in horizontal scroll context) */
+i-him[to="right"] {
+  inset-block-start: auto;
+  inset-inline-end: var(--him-offset, 0);
+}
+
+/* Sentinel for detecting stuck state (JavaScript enhancement) */
+i-him[data-stuck="true"] {
+  /* Add styles here or use this selector in your own CSS */
+}
+
+
+/* === primitives/miriant/miriant.css === */
+/**
+ * Grid-Placed Layout (NEW)
+ * 
+ * A CSS Grid with explicit control over columns, rows, and item placement.
+ * For when the auto-flow Grid primitive isn't enough.
+ * 
+ * This is the "escape hatch" for complex grid layouts like:
+ * - Magazine-style layouts with spanning items
+ * - Dashboard widgets of varying sizes
+ * - Bento box layouts
+ */
+
+i-miriant {
+  display: grid;
+  gap: var(--miriant-space, var(--s1));
+  
+  /* Default: 12-column grid (common baseline) */
+  grid-template-columns: repeat(var(--miriant-columns, 12), 1fr);
+  
+  /* Rows auto-size by default */
+  grid-auto-rows: var(--miriant-row-height, minmax(0, auto));
+}
+
+/* Child placement utilities using data attributes */
+/* Columns */
+i-miriant > [data-col-span="1"] { grid-column: span 1; }
+i-miriant > [data-col-span="2"] { grid-column: span 2; }
+i-miriant > [data-col-span="3"] { grid-column: span 3; }
+i-miriant > [data-col-span="4"] { grid-column: span 4; }
+i-miriant > [data-col-span="5"] { grid-column: span 5; }
+i-miriant > [data-col-span="6"] { grid-column: span 6; }
+i-miriant > [data-col-span="7"] { grid-column: span 7; }
+i-miriant > [data-col-span="8"] { grid-column: span 8; }
+i-miriant > [data-col-span="9"] { grid-column: span 9; }
+i-miriant > [data-col-span="10"] { grid-column: span 10; }
+i-miriant > [data-col-span="11"] { grid-column: span 11; }
+i-miriant > [data-col-span="12"] { grid-column: span 12; }
+i-miriant > [data-col-span="full"] { grid-column: 1 / -1; }
+
+/* Rows */
+i-miriant > [data-row-span="1"] { grid-row: span 1; }
+i-miriant > [data-row-span="2"] { grid-row: span 2; }
+i-miriant > [data-row-span="3"] { grid-row: span 3; }
+i-miriant > [data-row-span="4"] { grid-row: span 4; }
+i-miriant > [data-row-span="5"] { grid-row: span 5; }
+i-miriant > [data-row-span="6"] { grid-row: span 6; }
+
+/* Dense packing - fill holes */
+i-miriant[dense] {
+  grid-auto-flow: dense;
+}
+
+/* Responsive: collapse to single column below threshold */
+@container (width < 600px) {
+  i-miriant {
+    grid-template-columns: 1fr;
+  }
+  
+  i-miriant > [data-col-span] {
+    grid-column: span 1;
+  }
+}
+
+/* Alternative: use media query fallback for browsers without container queries */
+@supports not (container-type: inline-size) {
+  @media (max-width: 600px) {
+    i-miriant {
+      grid-template-columns: 1fr;
+    }
+    
+    i-miriant > [data-col-span] {
+      grid-column: span 1;
+    }
+  }
+}
+
+
+/* === primitives/gonath/gonath.css === */
+/**
+ * Gonath Layout (NEW)
+ * 
+ * Pinterest-style layout where items pack efficiently into columns.
+ * Uses CSS columns as the primary method (widely supported).
+ * Progressively enhances to CSS Grid masonry where supported.
+ * 
+ * CAVEATS:
+ * - CSS columns: items flow top-to-bottom, then left-to-right
+ *   (not strictly "visual order" like true masonry)
+ * - CSS Grid masonry: experimental, limited browser support
+ */
+
+i-gonath {
+  display: block;
+  
+  /* CSS Columns approach (fallback) */
+  column-count: var(--gonath-columns, 3);
+  column-gap: var(--gonath-space, var(--s1));
+}
+
+i-gonath > * {
+  /* Prevent items from breaking across columns */
+  break-inside: avoid;
+  
+  /* Add vertical spacing between items */
+  margin-block-end: var(--gonath-space, var(--s1));
+}
+
+/* Progressive enhancement: CSS Grid masonry where supported */
+@supports (grid-template-rows: masonry) {
+  i-gonath {
+    display: grid;
+    column-count: unset;
+    grid-template-columns: repeat(var(--gonath-columns, 3), 1fr);
+    grid-template-rows: masonry;
+    gap: var(--gonath-space, var(--s1));
+  }
+  
+  i-gonath > * {
+    margin-block-end: 0;
+    break-inside: unset;
+  }
+}
+
+/* Responsive column counts */
+@media (max-width: 800px) {
+  i-gonath {
+    --gonath-columns: 2;
+  }
+}
+
+@media (max-width: 500px) {
+  i-gonath {
+    --gonath-columns: 1;
+  }
+}
+
+
+/* === primitives/thir/thir.css === */
 /**
  * Elvish - Visual Effects (i-thîr)
  * 
@@ -3267,7 +4033,7 @@ i-thir[custom="shape"] {
 }
 
 
-/* === global/typography.css === */
+/* === primitives/tew/tew.css === */
 /**
  * Elvish - Typography (i-têw)
  * 
@@ -3823,19 +4589,6 @@ i-tew[shadow="crisp"] {
   text-shadow: 1px 1px 0 oklch(0% 0 0 / 0.3); 
 }
 
-/* Glow effect */
-i-tew[shadow="glow"] { 
-  text-shadow: 
-    0 0 4px currentColor,
-    0 0 8px currentColor; 
-}
-i-tew[shadow="glow-lg"] { 
-  text-shadow: 
-    0 0 8px currentColor,
-    0 0 16px currentColor,
-    0 0 32px currentColor; 
-}
-
 /* Outline/stroke effect via shadow */
 i-tew[shadow="outline"] {
   text-shadow:
@@ -3862,6 +4615,569 @@ i-tew[shadow="long"] {
     3px 3px 0 oklch(0% 0 0 / 0.09),
     4px 4px 0 oklch(0% 0 0 / 0.06),
     5px 5px 0 oklch(0% 0 0 / 0.03);
+}
+
+
+/* ==========================================================================
+   NEON GLOW SYSTEM
+   
+   True neon text effect with stacked shadows for authentic glow.
+   Compatible with all modern browsers (no relative color syntax).
+   
+   Attributes:
+     shadow="glow"           - Activates neon glow
+     glow-color="brand|..."  - Sets glow color (default: cyan)
+     animation="pulse|..."   - Animation mode (default: steady)
+     speed="slow|normal|fast"- Animation speed
+     min-brightness="0-100"  - Minimum glow brightness (for animations)
+     max-brightness="0-100"  - Maximum glow brightness (for animations)
+     motion="ease-in-out|..." - Easing function for animations
+   
+   Examples:
+     <i-tew shadow="glow">Default cyan glow</i-tew>
+     <i-tew shadow="glow" glow-color="magenta" animation="pulse">Pulsing magenta</i-tew>
+     <i-tew shadow="glow" glow-color="red" animation="flicker-off">Flickering neon sign</i-tew>
+   ========================================================================== */
+
+/* --- Neon Glow Base --- */
+i-tew[shadow="glow"],
+i-tew[shadow="glow-lg"],
+i-tew[shadow="neon"],
+i-tew[shadow="neon-lg"] {
+  /* Brightness control (0-1 scale) */
+  --glow-brightness: 1;
+  --glow-min-brightness: 0.3;
+  --glow-max-brightness: 1;
+  
+  /* Animation timing */
+  --glow-speed: 1.5s;
+  --glow-motion: ease-in-out;
+}
+
+/* --- CYAN (Default) --- */
+i-tew[shadow="glow"],
+i-tew[shadow="neon"],
+i-tew[glow-color="cyan"] {
+  color: oklch(98% 0.05 195);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 195),
+    0 0 4px oklch(95% 0.1 195),
+    0 0 8px oklch(90% 0.15 195),
+    0 0 12px oklch(85% 0.2 195),
+    0 0 20px oklch(85% 0.2 195),
+    0 0 30px oklch(80% 0.2 195),
+    0 0 40px oklch(75% 0.18 195 / 0.8),
+    0 0 55px oklch(70% 0.15 195 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="cyan"],
+i-tew[shadow="neon-lg"][glow-color="cyan"],
+i-tew[shadow="glow-lg"]:not([glow-color]),
+i-tew[shadow="neon-lg"]:not([glow-color]) {
+  color: oklch(98% 0.05 195);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 195),
+    0 0 5px oklch(95% 0.1 195),
+    0 0 10px oklch(90% 0.15 195),
+    0 0 20px oklch(85% 0.2 195),
+    0 0 35px oklch(85% 0.2 195),
+    0 0 50px oklch(80% 0.2 195),
+    0 0 70px oklch(75% 0.18 195 / 0.7),
+    0 0 100px oklch(70% 0.15 195 / 0.5),
+    0 0 130px oklch(65% 0.12 195 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- MAGENTA / PINK --- */
+i-tew[glow-color="magenta"],
+i-tew[glow-color="pink"] {
+  color: oklch(95% 0.1 330);
+  text-shadow:
+    0 0 2px oklch(95% 0.1 330),
+    0 0 4px oklch(90% 0.15 330),
+    0 0 8px oklch(80% 0.2 330),
+    0 0 12px oklch(70% 0.25 330),
+    0 0 20px oklch(70% 0.25 330),
+    0 0 30px oklch(65% 0.22 330),
+    0 0 40px oklch(60% 0.2 330 / 0.8),
+    0 0 55px oklch(55% 0.18 330 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="magenta"],
+i-tew[shadow="glow-lg"][glow-color="pink"],
+i-tew[shadow="neon-lg"][glow-color="magenta"],
+i-tew[shadow="neon-lg"][glow-color="pink"] {
+  color: oklch(95% 0.1 330);
+  text-shadow:
+    0 0 2px oklch(95% 0.1 330),
+    0 0 5px oklch(90% 0.15 330),
+    0 0 10px oklch(80% 0.2 330),
+    0 0 20px oklch(70% 0.25 330),
+    0 0 35px oklch(70% 0.25 330),
+    0 0 50px oklch(65% 0.22 330),
+    0 0 70px oklch(60% 0.2 330 / 0.7),
+    0 0 100px oklch(55% 0.18 330 / 0.5),
+    0 0 130px oklch(50% 0.15 330 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- RED --- */
+i-tew[glow-color="red"] {
+  color: oklch(90% 0.1 25);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 25),
+    0 0 4px oklch(85% 0.15 25),
+    0 0 8px oklch(75% 0.22 25),
+    0 0 12px oklch(65% 0.28 25),
+    0 0 20px oklch(65% 0.28 25),
+    0 0 30px oklch(60% 0.25 25),
+    0 0 40px oklch(55% 0.22 25 / 0.8),
+    0 0 55px oklch(50% 0.2 25 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="red"],
+i-tew[shadow="neon-lg"][glow-color="red"] {
+  color: oklch(90% 0.1 25);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 25),
+    0 0 5px oklch(85% 0.15 25),
+    0 0 10px oklch(75% 0.22 25),
+    0 0 20px oklch(65% 0.28 25),
+    0 0 35px oklch(65% 0.28 25),
+    0 0 50px oklch(60% 0.25 25),
+    0 0 70px oklch(55% 0.22 25 / 0.7),
+    0 0 100px oklch(50% 0.2 25 / 0.5),
+    0 0 130px oklch(45% 0.18 25 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- ORANGE --- */
+i-tew[glow-color="orange"] {
+  color: oklch(95% 0.08 55);
+  text-shadow:
+    0 0 2px oklch(95% 0.08 55),
+    0 0 4px oklch(90% 0.12 55),
+    0 0 8px oklch(82% 0.18 55),
+    0 0 12px oklch(75% 0.2 55),
+    0 0 20px oklch(75% 0.2 55),
+    0 0 30px oklch(70% 0.18 55),
+    0 0 40px oklch(65% 0.16 55 / 0.8),
+    0 0 55px oklch(60% 0.14 55 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- YELLOW --- */
+i-tew[glow-color="yellow"] {
+  color: oklch(98% 0.05 95);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 95),
+    0 0 4px oklch(95% 0.1 95),
+    0 0 8px oklch(92% 0.15 95),
+    0 0 12px oklch(90% 0.18 95),
+    0 0 20px oklch(90% 0.18 95),
+    0 0 30px oklch(85% 0.16 95),
+    0 0 40px oklch(80% 0.14 95 / 0.8),
+    0 0 55px oklch(75% 0.12 95 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- GREEN / LIME --- */
+i-tew[glow-color="green"],
+i-tew[glow-color="lime"] {
+  color: oklch(97% 0.08 145);
+  text-shadow:
+    0 0 2px oklch(97% 0.08 145),
+    0 0 4px oklch(93% 0.12 145),
+    0 0 8px oklch(88% 0.2 145),
+    0 0 12px oklch(85% 0.25 145),
+    0 0 20px oklch(85% 0.25 145),
+    0 0 30px oklch(80% 0.22 145),
+    0 0 40px oklch(75% 0.2 145 / 0.8),
+    0 0 55px oklch(70% 0.18 145 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="green"],
+i-tew[shadow="glow-lg"][glow-color="lime"],
+i-tew[shadow="neon-lg"][glow-color="green"],
+i-tew[shadow="neon-lg"][glow-color="lime"] {
+  color: oklch(97% 0.08 145);
+  text-shadow:
+    0 0 2px oklch(97% 0.08 145),
+    0 0 5px oklch(93% 0.12 145),
+    0 0 10px oklch(88% 0.2 145),
+    0 0 20px oklch(85% 0.25 145),
+    0 0 35px oklch(85% 0.25 145),
+    0 0 50px oklch(80% 0.22 145),
+    0 0 70px oklch(75% 0.2 145 / 0.7),
+    0 0 100px oklch(70% 0.18 145 / 0.5),
+    0 0 130px oklch(65% 0.15 145 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- BLUE --- */
+i-tew[glow-color="blue"] {
+  color: oklch(92% 0.08 260);
+  text-shadow:
+    0 0 2px oklch(92% 0.08 260),
+    0 0 4px oklch(85% 0.12 260),
+    0 0 8px oklch(75% 0.2 260),
+    0 0 12px oklch(65% 0.25 260),
+    0 0 20px oklch(65% 0.25 260),
+    0 0 30px oklch(60% 0.22 260),
+    0 0 40px oklch(55% 0.2 260 / 0.8),
+    0 0 55px oklch(50% 0.18 260 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- PURPLE / VIOLET --- */
+i-tew[glow-color="purple"],
+i-tew[glow-color="violet"] {
+  color: oklch(90% 0.1 295);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 295),
+    0 0 4px oklch(82% 0.15 295),
+    0 0 8px oklch(72% 0.22 295),
+    0 0 12px oklch(60% 0.28 295),
+    0 0 20px oklch(60% 0.28 295),
+    0 0 30px oklch(55% 0.25 295),
+    0 0 40px oklch(50% 0.22 295 / 0.8),
+    0 0 55px oklch(45% 0.2 295 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="purple"],
+i-tew[shadow="glow-lg"][glow-color="violet"],
+i-tew[shadow="neon-lg"][glow-color="purple"],
+i-tew[shadow="neon-lg"][glow-color="violet"] {
+  color: oklch(90% 0.1 295);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 295),
+    0 0 5px oklch(82% 0.15 295),
+    0 0 10px oklch(72% 0.22 295),
+    0 0 20px oklch(60% 0.28 295),
+    0 0 35px oklch(60% 0.28 295),
+    0 0 50px oklch(55% 0.25 295),
+    0 0 70px oklch(50% 0.22 295 / 0.7),
+    0 0 100px oklch(45% 0.2 295 / 0.5),
+    0 0 130px oklch(40% 0.18 295 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- WHITE --- */
+i-tew[glow-color="white"] {
+  color: oklch(100% 0 0);
+  text-shadow:
+    0 0 2px oklch(100% 0 0),
+    0 0 4px oklch(98% 0 0),
+    0 0 8px oklch(95% 0 0),
+    0 0 12px oklch(92% 0 0),
+    0 0 20px oklch(90% 0 0),
+    0 0 30px oklch(85% 0 0),
+    0 0 40px oklch(80% 0 0 / 0.8),
+    0 0 55px oklch(75% 0 0 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- GOLD --- */
+i-tew[glow-color="gold"] {
+  color: oklch(95% 0.06 85);
+  text-shadow:
+    0 0 2px oklch(95% 0.06 85),
+    0 0 4px oklch(90% 0.1 85),
+    0 0 8px oklch(85% 0.14 85),
+    0 0 12px oklch(82% 0.16 85),
+    0 0 20px oklch(82% 0.16 85),
+    0 0 30px oklch(78% 0.14 85),
+    0 0 40px oklch(74% 0.12 85 / 0.8),
+    0 0 55px oklch(70% 0.1 85 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- BRAND (uses CSS variable with fallback) --- */
+i-tew[glow-color="brand"] {
+  color: oklch(95% 0.05 168);
+  text-shadow:
+    0 0 2px oklch(95% 0.05 168),
+    0 0 4px oklch(90% 0.1 168),
+    0 0 8px oklch(86% 0.14 168),
+    0 0 12px oklch(83% 0.17 168),
+    0 0 20px oklch(83% 0.17 168),
+    0 0 30px oklch(78% 0.15 168),
+    0 0 40px oklch(73% 0.13 168 / 0.8),
+    0 0 55px oklch(68% 0.11 168 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- Animation Speed Presets --- */
+i-tew[speed="slower"] { --glow-speed: 4s; }
+i-tew[speed="slow"] { --glow-speed: 2.5s; }
+i-tew[speed="normal"] { --glow-speed: 1.5s; }
+i-tew[speed="fast"] { --glow-speed: 0.8s; }
+i-tew[speed="faster"] { --glow-speed: 0.4s; }
+
+/* --- Motion/Easing Presets --- */
+i-tew[motion="linear"] { --glow-motion: linear; }
+i-tew[motion="ease"] { --glow-motion: ease; }
+i-tew[motion="ease-in"] { --glow-motion: ease-in; }
+i-tew[motion="ease-out"] { --glow-motion: ease-out; }
+i-tew[motion="ease-in-out"] { --glow-motion: ease-in-out; }
+i-tew[motion="bounce"] { --glow-motion: cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+i-tew[motion="snap"] { --glow-motion: cubic-bezier(0.7, 0, 0.3, 1); }
+
+/* --- Brightness Presets --- */
+i-tew[min-brightness="0"] { --glow-min-brightness: 0; }
+i-tew[min-brightness="10"] { --glow-min-brightness: 0.1; }
+i-tew[min-brightness="20"] { --glow-min-brightness: 0.2; }
+i-tew[min-brightness="30"] { --glow-min-brightness: 0.3; }
+i-tew[min-brightness="40"] { --glow-min-brightness: 0.4; }
+i-tew[min-brightness="50"] { --glow-min-brightness: 0.5; }
+i-tew[min-brightness="60"] { --glow-min-brightness: 0.6; }
+i-tew[min-brightness="70"] { --glow-min-brightness: 0.7; }
+i-tew[min-brightness="80"] { --glow-min-brightness: 0.8; }
+i-tew[min-brightness="90"] { --glow-min-brightness: 0.9; }
+
+i-tew[max-brightness="50"] { --glow-max-brightness: 0.5; }
+i-tew[max-brightness="60"] { --glow-max-brightness: 0.6; }
+i-tew[max-brightness="70"] { --glow-max-brightness: 0.7; }
+i-tew[max-brightness="80"] { --glow-max-brightness: 0.8; }
+i-tew[max-brightness="90"] { --glow-max-brightness: 0.9; }
+i-tew[max-brightness="100"] { --glow-max-brightness: 1; }
+i-tew[max-brightness="110"] { --glow-max-brightness: 1.1; }
+i-tew[max-brightness="120"] { --glow-max-brightness: 1.2; }
+i-tew[max-brightness="130"] { --glow-max-brightness: 1.3; }
+i-tew[max-brightness="150"] { --glow-max-brightness: 1.5; }
+
+/* --- Animation: Steady (default, no animation) --- */
+i-tew[animation="steady"] {
+  animation: none;
+}
+
+/* --- Animation: Pulse (smooth breathing) --- */
+@keyframes tew-glow-pulse {
+  0%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  50% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.85;
+  }
+}
+
+i-tew[shadow="glow"][animation="pulse"],
+i-tew[shadow="glow-lg"][animation="pulse"],
+i-tew[shadow="neon"][animation="pulse"],
+i-tew[shadow="neon-lg"][animation="pulse"] {
+  animation: tew-glow-pulse var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+/* --- Animation: Dim-Bright (more dramatic) --- */
+@keyframes tew-glow-dim-bright {
+  0%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.7;
+  }
+  50% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+}
+
+i-tew[shadow="glow"][animation="dim-bright"],
+i-tew[shadow="glow-lg"][animation="dim-bright"],
+i-tew[shadow="neon"][animation="dim-bright"],
+i-tew[shadow="neon-lg"][animation="dim-bright"] {
+  animation: tew-glow-dim-bright var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+/* --- Animation: Flicker-On (mostly off, occasional flickers on) --- */
+@keyframes tew-glow-flicker-on {
+  0%, 10%, 12%, 20%, 22%, 50%, 52%, 80%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.4;
+  }
+  11%, 21%, 51% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  81%, 85%, 87%, 90%, 95%, 98% {
+    filter: brightness(0.7);
+    opacity: 0.8;
+  }
+}
+
+i-tew[shadow="glow"][animation="flicker-on"],
+i-tew[shadow="glow-lg"][animation="flicker-on"],
+i-tew[shadow="neon"][animation="flicker-on"],
+i-tew[shadow="neon-lg"][animation="flicker-on"] {
+  animation: tew-glow-flicker-on calc(var(--glow-speed, 1.5s) * 2) steps(1) infinite;
+}
+
+/* --- Animation: Flicker-Off (mostly on, occasional flickers off) --- */
+@keyframes tew-glow-flicker-off {
+  0%, 8%, 10%, 18%, 20%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  9%, 19% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.5;
+  }
+  50%, 52% {
+    filter: brightness(0.8);
+    opacity: 0.9;
+  }
+}
+
+i-tew[shadow="glow"][animation="flicker-off"],
+i-tew[shadow="glow-lg"][animation="flicker-off"],
+i-tew[shadow="neon"][animation="flicker-off"],
+i-tew[shadow="neon-lg"][animation="flicker-off"] {
+  animation: tew-glow-flicker-off calc(var(--glow-speed, 1.5s) * 2) steps(1) infinite;
+}
+
+/* --- Animation: Mostly-On (stable with occasional subtle dips) --- */
+@keyframes tew-glow-mostly-on {
+  0%, 15%, 17%, 45%, 47%, 75%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  16%, 46% {
+    filter: brightness(0.85);
+    opacity: 0.95;
+  }
+}
+
+i-tew[shadow="glow"][animation="mostly-on"],
+i-tew[shadow="glow-lg"][animation="mostly-on"],
+i-tew[shadow="neon"][animation="mostly-on"],
+i-tew[shadow="neon-lg"][animation="mostly-on"] {
+  animation: tew-glow-mostly-on var(--glow-speed, 1.5s) linear infinite;
+}
+
+/* --- Animation: Mostly-Off (dim with occasional bright flashes) --- */
+@keyframes tew-glow-mostly-off {
+  0%, 25%, 27%, 60%, 62%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.5;
+  }
+  26%, 61% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+}
+
+i-tew[shadow="glow"][animation="mostly-off"],
+i-tew[shadow="glow-lg"][animation="mostly-off"],
+i-tew[shadow="neon"][animation="mostly-off"],
+i-tew[shadow="neon-lg"][animation="mostly-off"] {
+  animation: tew-glow-mostly-off calc(var(--glow-speed, 1.5s) * 1.5) linear infinite;
+}
+
+/* --- Animation: LTR/RTL (brightness sweep) --- */
+@keyframes tew-glow-sweep {
+  0%, 15% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+  }
+  30% {
+    filter: brightness(0.6);
+  }
+  50%, 70% {
+    filter: brightness(var(--glow-max-brightness, 1));
+  }
+  85%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+  }
+}
+
+i-tew[shadow="glow"][animation="ltr"],
+i-tew[shadow="glow-lg"][animation="ltr"],
+i-tew[shadow="neon"][animation="ltr"],
+i-tew[shadow="neon-lg"][animation="ltr"] {
+  animation: tew-glow-sweep var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+i-tew[shadow="glow"][animation="rtl"],
+i-tew[shadow="glow-lg"][animation="rtl"],
+i-tew[shadow="neon"][animation="rtl"],
+i-tew[shadow="neon-lg"][animation="rtl"] {
+  animation: tew-glow-sweep var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite reverse;
+}
+
+/* --- Animation: Buzz (rapid subtle flicker like real neon) --- */
+@keyframes tew-glow-buzz {
+  0%, 100% { filter: brightness(1); }
+  10% { filter: brightness(0.97); }
+  20% { filter: brightness(1); }
+  30% { filter: brightness(0.95); }
+  35% { filter: brightness(1); }
+  50% { filter: brightness(0.98); }
+  65% { filter: brightness(1); }
+  70% { filter: brightness(0.96); }
+  80% { filter: brightness(1); }
+  90% { filter: brightness(0.97); }
+}
+
+i-tew[shadow="glow"][animation="buzz"],
+i-tew[shadow="glow-lg"][animation="buzz"],
+i-tew[shadow="neon"][animation="buzz"],
+i-tew[shadow="neon-lg"][animation="buzz"] {
+  animation: tew-glow-buzz calc(var(--glow-speed, 1.5s) * 0.3) linear infinite;
+}
+
+/* --- Animation: Warm-Up (like a neon tube warming up) --- */
+@keyframes tew-glow-warmup {
+  0%, 5% { filter: brightness(0); opacity: 0; }
+  6%, 8% { filter: brightness(0.3); opacity: 0.5; }
+  9%, 15% { filter: brightness(0); opacity: 0; }
+  16%, 20% { filter: brightness(0.5); opacity: 0.7; }
+  21%, 30% { filter: brightness(0.2); opacity: 0.3; }
+  31%, 40% { filter: brightness(0.7); opacity: 0.85; }
+  41%, 45% { filter: brightness(0.4); opacity: 0.6; }
+  46%, 60% { filter: brightness(0.9); opacity: 0.95; }
+  61%, 65% { filter: brightness(0.7); opacity: 0.85; }
+  66%, 100% { filter: brightness(1); opacity: 1; }
+}
+
+i-tew[shadow="glow"][animation="warm-up"],
+i-tew[shadow="glow-lg"][animation="warm-up"],
+i-tew[shadow="neon"][animation="warm-up"],
+i-tew[shadow="neon-lg"][animation="warm-up"] {
+  animation: tew-glow-warmup calc(var(--glow-speed, 1.5s) * 3) ease-out forwards;
+}
+
+/* --- Animation: Dying (like a failing neon tube) --- */
+@keyframes tew-glow-dying {
+  0%, 20% { filter: brightness(1); opacity: 1; }
+  25%, 27% { filter: brightness(0.3); opacity: 0.4; }
+  30%, 50% { filter: brightness(0.8); opacity: 0.9; }
+  55%, 58% { filter: brightness(0.3); opacity: 0.3; }
+  60%, 65% { filter: brightness(0.6); opacity: 0.7; }
+  70%, 75% { filter: brightness(0.2); opacity: 0.2; }
+  80%, 82% { filter: brightness(0.4); opacity: 0.5; }
+  85%, 100% { filter: brightness(0); opacity: 0; }
+}
+
+i-tew[shadow="glow"][animation="dying"],
+i-tew[shadow="glow-lg"][animation="dying"],
+i-tew[shadow="neon"][animation="dying"],
+i-tew[shadow="neon-lg"][animation="dying"] {
+  animation: tew-glow-dying calc(var(--glow-speed, 1.5s) * 4) ease-in forwards;
+}
+
+/* --- Reduced Motion: Disable animations --- */
+@media (prefers-reduced-motion: reduce) {
+  i-tew[shadow="glow"][animation],
+  i-tew[shadow="glow-lg"][animation],
+  i-tew[shadow="neon"][animation],
+  i-tew[shadow="neon-lg"][animation] {
+    animation: none !important;
+    filter: brightness(1) !important;
+  }
 }
 
 /* ==========================================================================
@@ -3991,7 +5307,7 @@ i-tew[preset="code"] {
   font-family: var(--font-code);
   font-size: 0.9em;
   font-variant-ligatures: none;
-  background: oklch(from var(--color-surface) calc(l - 0.05) c h);
+  background: oklch(0% 0 0 / 0.08);
   padding: 0.1em 0.3em;
   border-radius: 0.25em;
 }
@@ -4128,772 +5444,6 @@ i-tew[measure="full"]    { max-width: none; }
 @media (prefers-reduced-motion: reduce) {
   i-tew {
     transition: none !important;
-  }
-}
-
-
-/* === primitives/hath/hath.css === */
-/**
- * Stack Layout
- * 
- * Injects vertical margin between successive child elements.
- * The foundation of vertical rhythm.
- */
-
-i-hath {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-i-hath > * {
-  /* Remove any existing vertical margins */
-  margin-block: 0;
-}
-
-i-hath > * + * {
-  /* Apply margin only between successive elements */
-  margin-block-start: var(--hath-space, var(--s1));
-}
-
-/* Recursive variant - applies to all descendants */
-i-hath[recursive] * + * {
-  margin-block-start: var(--hath-space, var(--s1));
-}
-
-/* Split variant - pushes element and siblings after it to the bottom */
-i-hath[split-after="1"] > :nth-child(1) { margin-block-end: auto; }
-i-hath[split-after="2"] > :nth-child(2) { margin-block-end: auto; }
-i-hath[split-after="3"] > :nth-child(3) { margin-block-end: auto; }
-i-hath[split-after="4"] > :nth-child(4) { margin-block-end: auto; }
-i-hath[split-after="5"] > :nth-child(5) { margin-block-end: auto; }
-
-/* When Stack needs to fill its parent */
-i-hath:only-child {
-  block-size: 100%;
-}
-
-
-/* === primitives/bau/bau.css === */
-/**
- * Box Layout (i-bau)
- * 
- * A container primitive focused on padding/structure.
- * Visual styling (borders, backgrounds) is opt-in via attributes.
- * 
- * Layout-first philosophy: invisible by default, styled explicitly.
- * 
- * Attributes:
- *   padding="..."     - Override padding (default: var(--s1))
- *   border            - Add border
- *   border-width="..."- Custom border width
- *   bg                - Add background color
- *   invert            - Invert colors (dark bg, light text)
- *   compact           - Remove padding
- *   borderless        - Explicitly remove border (for overriding)
- */
-
-i-bau {
-  display: block;
-  padding: var(--bau-padding, var(--s1));
-  
-  /* Color tokens - can be overridden per-instance */
-  --bau-color-light: var(--color-surface-raised, var(--color-light));
-  --bau-color-dark: var(--color-text, var(--color-dark));
-  --bau-border-color: var(--color-border, currentColor);
-  
-  /* Layout-first: no visual styling by default */
-  /* Border width and background are 0/transparent from reset.css */
-}
-
-/* ===== VISUAL STYLING (Opt-in) ===== */
-
-/* Add border - use [border] attribute */
-i-bau[border] {
-  border-width: var(--bau-border-width, var(--border-thin, 1px));
-  border-color: var(--bau-border-color);
-}
-
-/* Custom border width */
-i-bau[border-width] {
-  border-width: var(--bau-border-width, var(--border-thin, 1px));
-  border-color: var(--bau-border-color);
-}
-
-/* Add background - use [bg] attribute */
-i-bau[bg] {
-  background-color: var(--bau-color-light);
-  color: var(--bau-color-dark);
-}
-
-/* Inverted color scheme (implies bg) */
-i-bau[invert] {
-  background-color: var(--bau-color-dark);
-  color: var(--bau-color-light);
-}
-
-/* Combined: border + background */
-i-bau[border][bg],
-i-bau[border][invert] {
-  border-width: var(--bau-border-width, var(--border-thin, 1px));
-  border-color: var(--bau-border-color);
-}
-
-/* ===== LAYOUT VARIANTS ===== */
-
-/* No padding */
-i-bau[compact] {
-  padding: 0;
-}
-
-/* Explicitly no border (for overriding inherited styles) */
-i-bau[borderless] {
-  border-width: 0;
-}
-
-/* ===== HIGH CONTRAST MODE ===== */
-/* Transparent outline for Windows High Contrast Mode */
-@media (forced-colors: active) {
-  i-bau[border],
-  i-bau[bg],
-  i-bau[invert] {
-    outline: var(--bau-border-width, 1px) solid transparent;
-    outline-offset: calc(var(--bau-border-width, 1px) * -1);
-  }
-}
-
-
-/* === primitives/enedh/enedh.css === */
-/**
- * Center Layout
- * 
- * Horizontally centers content with a maximum width.
- * Preserves gutters (minimum space on sides) in narrow contexts.
- */
-
-i-enedh {
-  display: block;
-  
-  /* Use content-box so padding adds to the max-width, not subtracts */
-  box-sizing: content-box;
-  
-  /* Center with auto margins */
-  margin-inline: auto;
-  
-  /* 
-   * Maximum width - JS sets --enedh-max from the max attribute.
-   * Fallback chain: attribute value → 100% (full width until JS runs)
-   * This ensures layouts work even if JS fails to load.
-   */
-  max-inline-size: var(--enedh-max, 100%);
-  
-  /* Gutters - minimum space on either side */
-  padding-inline: var(--enedh-gutters, 0);
-}
-
-/* Intrinsic centering - center children based on their content width */
-i-enedh[intrinsic] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Also center the text */
-i-enedh[and-text] {
-  text-align: center;
-}
-
-
-/* === primitives/tiniath/tiniath.css === */
-/**
- * Cluster Layout
- * 
- * Groups elements that differ in length and wrap naturally.
- * Perfect for tags, buttons, navigation items.
- */
-
-i-tiniath {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--tiniath-space, var(--s1));
-  
-  /* Default justification and alignment */
-  justify-content: var(--tiniath-justify, flex-start);
-  align-items: var(--tiniath-align, center);
-}
-
-
-/* === primitives/glan-veleg/glan-veleg.css === */
-/**
- * GlanVeleg Layout
- * 
- * A two-element layout where one has a fixed width (sidebar)
- * and the other fills remaining space. Switches to vertical
- * when the non-sidebar would be less than a threshold.
- */
-
-i-glan-veleg {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--glan-veleg-space, var(--s1));
-}
-
-/* Default: sidebar is the first child (left side) */
-i-glan-veleg > * {
-  flex-grow: 1;
-}
-
-i-glan-veleg > :first-child {
-  flex-basis: var(--glan-veleg-width, 20rem);
-}
-
-i-glan-veleg > :last-child {
-  flex-basis: 0;
-  flex-grow: 999;
-  min-inline-size: var(--glan-veleg-content-min, 50%);
-}
-
-/* When sidebar is on the right */
-i-glan-veleg[side="right"] > :first-child {
-  flex-basis: 0;
-  flex-grow: 999;
-  min-inline-size: var(--glan-veleg-content-min, 50%);
-}
-
-i-glan-veleg[side="right"] > :last-child {
-  flex-basis: var(--glan-veleg-width, 20rem);
-  flex-grow: 1;
-}
-
-/* Disable equal height stretching */
-i-glan-veleg[no-stretch] {
-  align-items: flex-start;
-}
-
-
-/* === primitives/gwistindor/gwistindor.css === */
-/**
- * Switcher Layout
- * 
- * Switches directly between horizontal and vertical layouts
- * at a container-based threshold. No intermediary states.
- * 
- * Uses the "Holy Albatross" technique.
- */
-
-i-gwistindor {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gwistindor-space, var(--s1));
-}
-
-i-gwistindor > * {
-  flex-grow: 1;
-  /* 
-   * The magic: produces huge positive (vertical) or negative (horizontal) values.
-   * Default: --layout-threshold-md (45rem ≈ 720px) - switches at tablet width.
-   * NOTE: This is a *layout* threshold, not a text measure!
-   */
-  flex-basis: calc((var(--gwistindor-threshold, var(--layout-threshold-md, 45rem)) - 100%) * 999);
-}
-
-/* Quantity query: force vertical if more than threshold items */
-i-gwistindor[limit="2"] > :nth-last-child(n+3),
-i-gwistindor[limit="2"] > :nth-last-child(n+3) ~ * {
-  flex-basis: 100%;
-}
-
-i-gwistindor[limit="3"] > :nth-last-child(n+4),
-i-gwistindor[limit="3"] > :nth-last-child(n+4) ~ * {
-  flex-basis: 100%;
-}
-
-i-gwistindor:not([limit]) > :nth-last-child(n+5),
-i-gwistindor:not([limit]) > :nth-last-child(n+5) ~ *,
-i-gwistindor[limit="4"] > :nth-last-child(n+5),
-i-gwistindor[limit="4"] > :nth-last-child(n+5) ~ * {
-  flex-basis: 100%;
-}
-
-i-gwistindor[limit="5"] > :nth-last-child(n+6),
-i-gwistindor[limit="5"] > :nth-last-child(n+6) ~ * {
-  flex-basis: 100%;
-}
-
-i-gwistindor[limit="6"] > :nth-last-child(n+7),
-i-gwistindor[limit="6"] > :nth-last-child(n+7) ~ * {
-  flex-basis: 100%;
-}
-
-
-/* === primitives/esgal/esgal.css === */
-/**
- * Cover Layout
- * 
- * Vertically centers a principal element with optional
- * header and footer elements. Perfect for hero sections.
- */
-
-i-esgal {
-  display: flex;
-  flex-direction: column;
-  min-block-size: var(--esgal-min-height, 100vh);
-  padding: var(--esgal-space, var(--s1));
-}
-
-i-esgal > * {
-  margin-block: var(--esgal-space, var(--s1));
-}
-
-/* The centered element - default is h1 */
-i-esgal > :first-child:not(h1, h2, h3, [data-centered]) {
-  margin-block-start: 0;
-}
-
-i-esgal > :last-child:not(h1, h2, h3, [data-centered]) {
-  margin-block-end: 0;
-}
-
-/* Elements that should be centered */
-i-esgal > h1,
-i-esgal > h2,
-i-esgal > h3,
-i-esgal > [data-centered] {
-  margin-block: auto;
-}
-
-/* No padding variant */
-i-esgal[no-pad] {
-  padding: 0;
-}
-
-
-/* === primitives/vircantie/vircantie.css === */
-/**
- * Vircantie Layout (Grid)
- * 
- * Auto-flowing grid with responsive columns based on minimum width.
- * Uses CSS Grid's auto-fit with min() for robust responsiveness.
- */
-
-i-vircantie {
-  display: grid;
-  gap: var(--vircantie-space, var(--s1));
-}
-
-/* 
- * Using min() prevents overflow when container is narrower than minimum.
- * The 100% value kicks in when min would cause overflow.
- */
-@supports (width: min(var(--vircantie-min, 250px), 100%)) {
-  i-vircantie {
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(min(var(--vircantie-min, 250px), 100%), 1fr)
-    );
-  }
-}
-
-
-/* === primitives/gant-thala/gant-thala.css === */
-/**
- * Frame Layout
- * 
- * Constrains content to a specific aspect ratio.
- * Perfect for images, videos, and embedded content.
- */
-
-i-gant-thala {
-  display: block;
-  overflow: hidden;
-  
-  /* Default 16:9 ratio */
-  gant-thala-ratio: var(--gant-thala-n, 16) / var(--gant-thala-d, 9);
-}
-
-/* For images and videos, cover the frame */
-i-gant-thala > img,
-i-gant-thala > video {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  /* Default: center the crop */
-  object-position: center;
-}
-
-/* Non-media content gets centered */
-i-gant-thala > :not(img):not(video) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  block-size: 100%;
-}
-
-
-/* === primitives/glan-tholl/glan-tholl.css === */
-/**
- * Reel Layout
- * 
- * Horizontal scrolling container for overflow content.
- * A robust alternative to JavaScript carousels.
- */
-
-i-glan-tholl {
-  display: flex;
-  block-size: var(--glan-tholl-height, auto);
-  
-  overflow-x: auto;
-  overflow-y: hidden;
-  
-  /* Smooth scrolling where supported and preferred */
-  scroll-behavior: smooth;
-  
-  /* Scroll snap for better UX */
-  scroll-snap-type: x mandatory;
-  
-  /* Firefox scrollbar styling */
-  scrollbar-color: var(--color-dark) var(--color-light);
-}
-
-i-glan-tholl > * {
-  flex: 0 0 var(--glan-tholl-item-width, auto);
-  scroll-snap-align: start;
-}
-
-i-glan-tholl > * + * {
-  margin-inline-start: var(--glan-tholl-space, var(--s1));
-}
-
-/* Images should maintain aspect ratio */
-i-glan-tholl > img {
-  block-size: 100%;
-  inline-size: auto;
-  flex-basis: auto;
-}
-
-/* Webkit scrollbar styling */
-i-glan-tholl::-webkit-scrollbar {
-  block-size: 0.75rem;
-}
-
-i-glan-tholl::-webkit-scrollbar-track {
-  background-color: var(--color-light);
-}
-
-i-glan-tholl::-webkit-scrollbar-thumb {
-  background-color: var(--color-mid);
-  border-radius: var(--s-2);
-}
-
-/* Hide scrollbar variant */
-i-glan-tholl[no-bar] {
-  scrollbar-width: none;
-}
-
-i-glan-tholl[no-bar]::-webkit-scrollbar {
-  display: none;
-}
-
-/* Overflowing state (added via JS) */
-i-glan-tholl.overflowing {
-  padding-block-end: var(--glan-tholl-space, var(--s1));
-}
-
-i-glan-tholl.overflowing.no-bar {
-  padding-block-end: 0;
-}
-
-
-/* === primitives/fano/fano.css === */
-/**
- * Imposter Layout
- * 
- * Positions an element over content, centered within a
- * positioning container. Perfect for modals and overlays.
- */
-
-i-fano {
-  /* Default: absolute positioning relative to nearest positioned ancestor */
-  position: var(--fano-position, absolute);
-  
-  /* Center the element */
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* Fixed positioning variant (relative to viewport) */
-i-fano[fixed] {
-  --fano-position: fixed;
-}
-
-/* Contain within positioning container */
-i-fano[contain] {
-  overflow: auto;
-  max-inline-size: calc(100% - (var(--fano-margin, 0px) * 2));
-  max-block-size: calc(100% - (var(--fano-margin, 0px) * 2));
-}
-
-
-/* === primitives/thann/thann.css === */
-/**
- * Thann Layout (Icon)
- * 
- * Aligns an SVG icon with accompanying text.
- * Uses relative units for automatic scaling.
- * 
- * Attributes:
- * - echuiol: "active" state styling
- * - dhoren: "hidden" state (visually hidden but accessible)
- */
-
-i-thann {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--thann-space, 0);
-}
-
-i-thann svg {
-  /* Match uppercase letter height */
-  block-size: 0.75em;
-  block-size: 1cap; /* Where supported */
-  
-  inline-size: 0.75em;
-  inline-size: 1cap; /* Where supported */
-  
-  /* Inherit text color */
-  fill: currentColor;
-  stroke: currentColor;
-}
-
-/* When using natural word spacing (no explicit space) */
-i-thann:not([space]) {
-  display: inline;
-}
-
-i-thann:not([space]) svg {
-  display: inline;
-  vertical-align: -0.125em; /* Fine-tune baseline alignment */
-}
-
-/* Echuiol = Active state */
-i-thann[echuiol] {
-  color: var(--color-accent, currentColor);
-}
-
-/* Dhoren = Hidden (visually hidden but accessible) */
-i-thann[dhoren] {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-
-/* === primitives/adleithian/adleithian.css === */
-/**
- * Adleithian Layout
- * 
- * Establishes a container query context.
- * The escape hatch for when intrinsic layouts need manual intervention.
- */
-
-i-adleithian {
-  display: block;
-  adleithian-type: inline-size;
-}
-
-/* Named containers use the name attribute */
-i-adleithian[name] {
-  adleithian-name: attr(name);
-}
-
-
-/* === primitives/him/him.css === */
-/**
- * Him Layout (NEW)
- * 
- * Creates sticky positioning with configurable offset.
- * Solves the common pattern of sticky headers/sidebars.
- * 
- * IMPORTANT: The parent must have defined height or be
- * in a scroll context for sticky to work properly.
- */
-
-i-him {
-  display: block;
-  position: sticky;
-  
-  /* Default: stick to top */
-  inset-block-start: var(--him-offset, 0);
-  
-  /* Ensure it stays above sibling content when stuck */
-  z-index: var(--him-z, 1);
-}
-
-/* Stick to bottom instead */
-i-him[to="bottom"] {
-  inset-block-start: auto;
-  inset-block-end: var(--him-offset, 0);
-}
-
-/* Stick to left (in horizontal scroll context) */
-i-him[to="left"] {
-  inset-block-start: auto;
-  inset-inline-start: var(--him-offset, 0);
-}
-
-/* Stick to right (in horizontal scroll context) */
-i-him[to="right"] {
-  inset-block-start: auto;
-  inset-inline-end: var(--him-offset, 0);
-}
-
-/* Sentinel for detecting stuck state (JavaScript enhancement) */
-i-him[data-stuck="true"] {
-  /* Add styles here or use this selector in your own CSS */
-}
-
-
-/* === primitives/miriant/miriant.css === */
-/**
- * Grid-Placed Layout (NEW)
- * 
- * A CSS Grid with explicit control over columns, rows, and item placement.
- * For when the auto-flow Grid primitive isn't enough.
- * 
- * This is the "escape hatch" for complex grid layouts like:
- * - Magazine-style layouts with spanning items
- * - Dashboard widgets of varying sizes
- * - Bento box layouts
- */
-
-i-miriant {
-  display: grid;
-  gap: var(--miriant-space, var(--s1));
-  
-  /* Default: 12-column grid (common baseline) */
-  grid-template-columns: repeat(var(--miriant-columns, 12), 1fr);
-  
-  /* Rows auto-size by default */
-  grid-auto-rows: var(--miriant-row-height, minmax(0, auto));
-}
-
-/* Child placement utilities using data attributes */
-/* Columns */
-i-miriant > [data-col-span="1"] { grid-column: span 1; }
-i-miriant > [data-col-span="2"] { grid-column: span 2; }
-i-miriant > [data-col-span="3"] { grid-column: span 3; }
-i-miriant > [data-col-span="4"] { grid-column: span 4; }
-i-miriant > [data-col-span="5"] { grid-column: span 5; }
-i-miriant > [data-col-span="6"] { grid-column: span 6; }
-i-miriant > [data-col-span="7"] { grid-column: span 7; }
-i-miriant > [data-col-span="8"] { grid-column: span 8; }
-i-miriant > [data-col-span="9"] { grid-column: span 9; }
-i-miriant > [data-col-span="10"] { grid-column: span 10; }
-i-miriant > [data-col-span="11"] { grid-column: span 11; }
-i-miriant > [data-col-span="12"] { grid-column: span 12; }
-i-miriant > [data-col-span="full"] { grid-column: 1 / -1; }
-
-/* Rows */
-i-miriant > [data-row-span="1"] { grid-row: span 1; }
-i-miriant > [data-row-span="2"] { grid-row: span 2; }
-i-miriant > [data-row-span="3"] { grid-row: span 3; }
-i-miriant > [data-row-span="4"] { grid-row: span 4; }
-i-miriant > [data-row-span="5"] { grid-row: span 5; }
-i-miriant > [data-row-span="6"] { grid-row: span 6; }
-
-/* Dense packing - fill holes */
-i-miriant[dense] {
-  grid-auto-flow: dense;
-}
-
-/* Responsive: collapse to single column below threshold */
-@container (width < 600px) {
-  i-miriant {
-    grid-template-columns: 1fr;
-  }
-  
-  i-miriant > [data-col-span] {
-    grid-column: span 1;
-  }
-}
-
-/* Alternative: use media query fallback for browsers without container queries */
-@supports not (container-type: inline-size) {
-  @media (max-width: 600px) {
-    i-miriant {
-      grid-template-columns: 1fr;
-    }
-    
-    i-miriant > [data-col-span] {
-      grid-column: span 1;
-    }
-  }
-}
-
-
-/* === primitives/gonath/gonath.css === */
-/**
- * Gonath Layout (NEW)
- * 
- * Pinterest-style layout where items pack efficiently into columns.
- * Uses CSS columns as the primary method (widely supported).
- * Progressively enhances to CSS Grid masonry where supported.
- * 
- * CAVEATS:
- * - CSS columns: items flow top-to-bottom, then left-to-right
- *   (not strictly "visual order" like true masonry)
- * - CSS Grid masonry: experimental, limited browser support
- */
-
-i-gonath {
-  display: block;
-  
-  /* CSS Columns approach (fallback) */
-  column-count: var(--gonath-columns, 3);
-  column-gap: var(--gonath-space, var(--s1));
-}
-
-i-gonath > * {
-  /* Prevent items from breaking across columns */
-  break-inside: avoid;
-  
-  /* Add vertical spacing between items */
-  margin-block-end: var(--gonath-space, var(--s1));
-}
-
-/* Progressive enhancement: CSS Grid masonry where supported */
-@supports (grid-template-rows: masonry) {
-  i-gonath {
-    display: grid;
-    column-count: unset;
-    grid-template-columns: repeat(var(--gonath-columns, 3), 1fr);
-    grid-template-rows: masonry;
-    gap: var(--gonath-space, var(--s1));
-  }
-  
-  i-gonath > * {
-    margin-block-end: 0;
-    break-inside: unset;
-  }
-}
-
-/* Responsive column counts */
-@media (max-width: 800px) {
-  i-gonath {
-    --gonath-columns: 2;
-  }
-}
-
-@media (max-width: 500px) {
-  i-gonath {
-    --gonath-columns: 1;
   }
 }
 
