@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elvish - Typography (i-têw) Demo</title>
   <link rel="stylesheet" href="../global/global.css">
-  <link rel="stylesheet" href="../global/typography.css">
+  <link rel="stylesheet" href="../primitives/tew/tew.css">
+  <link rel="stylesheet" href="../primitives/thir/thir.css">
   <style>
     body {
       font-family: var(--font-plain);
@@ -328,10 +329,6 @@
         <span class="attr" style="color: oklch(70% 0 0);">shadow="lg"</span>
       </div>
       <div class="demo-box" style="background: transparent;">
-        <i-tew shadow="glow" size="xl" style="color: oklch(80% 0.2 200);">Glowing text</i-tew>
-        <span class="attr" style="color: oklch(70% 0 0);">shadow="glow"</span>
-      </div>
-      <div class="demo-box" style="background: transparent;">
         <i-tew shadow="3d" size="xl">3D/Emboss</i-tew>
         <span class="attr" style="color: oklch(70% 0 0);">shadow="3d"</span>
       </div>
@@ -339,6 +336,126 @@
         <i-tew shadow="long" size="xl">Long shadow</i-tew>
         <span class="attr" style="color: oklch(70% 0 0);">shadow="long"</span>
       </div>
+    </div>
+    
+    <h2>🌟 Neon Glow System</h2>
+    <p style="color: oklch(70% 0 0); margin-bottom: var(--s1);">
+      True neon effects with stacked text-shadows. Works best on dark backgrounds.
+    </p>
+    
+    <h3 style="color: oklch(80% 0 0);">Glow Colors</h3>
+    <div class="demo-row" style="flex-wrap: wrap; gap: var(--s1);">
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="brand" size="xl">BRAND</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="brand"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="cyan" size="xl">CYAN</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="cyan"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="magenta" size="xl">MAGENTA</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="magenta"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="red" size="xl">RED</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="red"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="green" size="xl">GREEN</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="green"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="purple" size="xl">PURPLE</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="purple"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="gold" size="xl">GOLD</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="gold"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 150px;">
+        <i-tew shadow="glow" glow-color="white" size="xl">WHITE</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">glow-color="white"</span>
+      </div>
+    </div>
+    
+    <h3 style="color: oklch(80% 0 0); margin-top: var(--s2);">Glow Intensity</h3>
+    <div class="demo-row" style="gap: var(--s2);">
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow" glow-color="cyan" size="2xl">STANDARD</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">shadow="glow"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow-lg" glow-color="cyan" size="2xl">INTENSE</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">shadow="glow-lg"</span>
+      </div>
+    </div>
+    
+    <h3 style="color: oklch(80% 0 0); margin-top: var(--s2);">Animated Neon</h3>
+    <div class="demo-row" style="flex-wrap: wrap; gap: var(--s1);">
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="magenta" animation="pulse" size="xl">PULSE</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="pulse"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="cyan" animation="dim-bright" size="xl">DIM-BRIGHT</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="dim-bright"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="red" animation="flicker-off" size="xl">FLICKER-OFF</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="flicker-off"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="green" animation="flicker-on" size="xl">FLICKER-ON</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="flicker-on"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="purple" animation="mostly-on" size="xl">MOSTLY-ON</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="mostly-on"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1; min-width: 180px;">
+        <i-tew shadow="glow" glow-color="gold" animation="buzz" size="xl">BUZZ</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="buzz"</span>
+      </div>
+    </div>
+    
+    <h3 style="color: oklch(80% 0 0); margin-top: var(--s2);">Speed & Motion</h3>
+    <div class="demo-row" style="gap: var(--s1);">
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow" glow-color="cyan" animation="pulse" speed="slow" size="lg">SLOW</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">speed="slow"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow" glow-color="cyan" animation="pulse" speed="normal" size="lg">NORMAL</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">speed="normal"</span>
+      </div>
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow" glow-color="cyan" animation="pulse" speed="fast" size="lg">FAST</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">speed="fast"</span>
+      </div>
+    </div>
+    
+    <h3 style="color: oklch(80% 0 0); margin-top: var(--s2);">Startup Effects</h3>
+    <p style="color: oklch(60% 0 0); margin-bottom: var(--s1);">
+      Refresh the page to see warm-up effect. Hover to trigger dying effect.
+    </p>
+    <div class="demo-row" style="gap: var(--s2);">
+      <div class="demo-box" style="background: transparent; flex: 1;">
+        <i-tew shadow="glow-lg" glow-color="magenta" animation="warm-up" size="2xl">WARM UP</i-tew>
+        <span class="attr" style="color: oklch(60% 0 0);">animation="warm-up"</span>
+      </div>
+    </div>
+    
+    <h3 style="color: oklch(80% 0 0); margin-top: var(--s2);">Neon Sign Example</h3>
+    <div style="text-align: center; padding: var(--s2) 0;">
+      <i-tew shadow="glow-lg" glow-color="magenta" animation="buzz" size="6" weight="bold" family="title" style="letter-spacing: 0.1em;">
+        OPEN 24 HRS
+      </i-tew>
+    </div>
+    <div style="text-align: center; padding: var(--s1) 0;">
+      <i-tew shadow="glow" glow-color="cyan" animation="flicker-off" speed="slow" size="4" family="serif" style="font-style: italic;">
+        Cocktails & Dreams
+      </i-tew>
     </div>
   </div>
 
@@ -551,6 +668,59 @@
       <tr><td><code>data-cite</code></td><td>—</td><td>Attribution shown below quote</td></tr>
     </tbody>
   </table>
+  
+  <h2>🌟 Neon Glow Reference</h2>
+  <p>Use <code>shadow="glow"</code> or <code>shadow="glow-lg"</code> to activate true neon effects:</p>
+  
+  <h3>Glow Attributes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Values</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>shadow</code></td><td>glow, glow-lg, neon, neon-lg</td><td>Activates neon glow effect</td></tr>
+      <tr><td><code>glow-color</code></td><td>brand, complement, cyan, magenta, red, orange, yellow, green, blue, purple, white, gold</td><td>Sets the glow color</td></tr>
+      <tr><td><code>animation</code></td><td>steady, pulse, dim-bright, flicker-on, flicker-off, mostly-on, mostly-off, ltr, rtl, buzz, warm-up, dying</td><td>Animation mode</td></tr>
+      <tr><td><code>speed</code></td><td>slower, slow, normal, fast, faster</td><td>Animation speed</td></tr>
+      <tr><td><code>motion</code></td><td>linear, ease, ease-in, ease-out, ease-in-out, bounce, snap</td><td>Animation easing</td></tr>
+      <tr><td><code>min-brightness</code></td><td>0, 10, 20, 30, 40, 50, 60, 70, 80, 90</td><td>Minimum glow brightness %</td></tr>
+      <tr><td><code>max-brightness</code></td><td>50, 60, 70, 80, 90, 100, 110, 120, 130, 150</td><td>Maximum glow brightness %</td></tr>
+    </tbody>
+  </table>
+  
+  <h3>Animation Modes Explained</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>steady</code></td><td>No animation (default)</td></tr>
+      <tr><td><code>pulse</code></td><td>Smooth breathing effect, dims and brightens</td></tr>
+      <tr><td><code>dim-bright</code></td><td>More dramatic pulse with glow spread change</td></tr>
+      <tr><td><code>flicker-on</code></td><td>Mostly off, occasional bright flickers</td></tr>
+      <tr><td><code>flicker-off</code></td><td>Mostly on, occasional brief offs</td></tr>
+      <tr><td><code>mostly-on</code></td><td>Stable with subtle occasional dips</td></tr>
+      <tr><td><code>mostly-off</code></td><td>Dim with occasional bright flashes</td></tr>
+      <tr><td><code>ltr</code></td><td>Brightness sweep left-to-right</td></tr>
+      <tr><td><code>rtl</code></td><td>Brightness sweep right-to-left</td></tr>
+      <tr><td><code>buzz</code></td><td>Rapid subtle flicker (realistic neon hum)</td></tr>
+      <tr><td><code>warm-up</code></td><td>Neon tube startup effect (plays once)</td></tr>
+      <tr><td><code>dying</code></td><td>Failing neon tube effect (plays once)</td></tr>
+    </tbody>
+  </table>
+  
+  <h3>Custom Glow Color via CSS Variable</h3>
+  <p>For colors not in presets, use inline style:</p>
+  <pre><code>&lt;i-tew shadow="glow" style="--glow-color: oklch(75% 0.2 290);"&gt;Custom Purple&lt;/i-tew&gt;</code></pre>
 
+  <script type="module" src="../primitives/tew/tew.js"></script>
+  <script type="module" src="../primitives/thir/thir.js"></script>
 </body>
 </html>

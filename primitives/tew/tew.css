@@ -553,19 +553,6 @@ i-tew[shadow="crisp"] {
   text-shadow: 1px 1px 0 oklch(0% 0 0 / 0.3); 
 }
 
-/* Glow effect */
-i-tew[shadow="glow"] { 
-  text-shadow: 
-    0 0 4px currentColor,
-    0 0 8px currentColor; 
-}
-i-tew[shadow="glow-lg"] { 
-  text-shadow: 
-    0 0 8px currentColor,
-    0 0 16px currentColor,
-    0 0 32px currentColor; 
-}
-
 /* Outline/stroke effect via shadow */
 i-tew[shadow="outline"] {
   text-shadow:
@@ -592,6 +579,569 @@ i-tew[shadow="long"] {
     3px 3px 0 oklch(0% 0 0 / 0.09),
     4px 4px 0 oklch(0% 0 0 / 0.06),
     5px 5px 0 oklch(0% 0 0 / 0.03);
+}
+
+
+/* ==========================================================================
+   NEON GLOW SYSTEM
+   
+   True neon text effect with stacked shadows for authentic glow.
+   Compatible with all modern browsers (no relative color syntax).
+   
+   Attributes:
+     shadow="glow"           - Activates neon glow
+     glow-color="brand|..."  - Sets glow color (default: cyan)
+     animation="pulse|..."   - Animation mode (default: steady)
+     speed="slow|normal|fast"- Animation speed
+     min-brightness="0-100"  - Minimum glow brightness (for animations)
+     max-brightness="0-100"  - Maximum glow brightness (for animations)
+     motion="ease-in-out|..." - Easing function for animations
+   
+   Examples:
+     <i-tew shadow="glow">Default cyan glow</i-tew>
+     <i-tew shadow="glow" glow-color="magenta" animation="pulse">Pulsing magenta</i-tew>
+     <i-tew shadow="glow" glow-color="red" animation="flicker-off">Flickering neon sign</i-tew>
+   ========================================================================== */
+
+/* --- Neon Glow Base --- */
+i-tew[shadow="glow"],
+i-tew[shadow="glow-lg"],
+i-tew[shadow="neon"],
+i-tew[shadow="neon-lg"] {
+  /* Brightness control (0-1 scale) */
+  --glow-brightness: 1;
+  --glow-min-brightness: 0.3;
+  --glow-max-brightness: 1;
+  
+  /* Animation timing */
+  --glow-speed: 1.5s;
+  --glow-motion: ease-in-out;
+}
+
+/* --- CYAN (Default) --- */
+i-tew[shadow="glow"],
+i-tew[shadow="neon"],
+i-tew[glow-color="cyan"] {
+  color: oklch(98% 0.05 195);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 195),
+    0 0 4px oklch(95% 0.1 195),
+    0 0 8px oklch(90% 0.15 195),
+    0 0 12px oklch(85% 0.2 195),
+    0 0 20px oklch(85% 0.2 195),
+    0 0 30px oklch(80% 0.2 195),
+    0 0 40px oklch(75% 0.18 195 / 0.8),
+    0 0 55px oklch(70% 0.15 195 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="cyan"],
+i-tew[shadow="neon-lg"][glow-color="cyan"],
+i-tew[shadow="glow-lg"]:not([glow-color]),
+i-tew[shadow="neon-lg"]:not([glow-color]) {
+  color: oklch(98% 0.05 195);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 195),
+    0 0 5px oklch(95% 0.1 195),
+    0 0 10px oklch(90% 0.15 195),
+    0 0 20px oklch(85% 0.2 195),
+    0 0 35px oklch(85% 0.2 195),
+    0 0 50px oklch(80% 0.2 195),
+    0 0 70px oklch(75% 0.18 195 / 0.7),
+    0 0 100px oklch(70% 0.15 195 / 0.5),
+    0 0 130px oklch(65% 0.12 195 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- MAGENTA / PINK --- */
+i-tew[glow-color="magenta"],
+i-tew[glow-color="pink"] {
+  color: oklch(95% 0.1 330);
+  text-shadow:
+    0 0 2px oklch(95% 0.1 330),
+    0 0 4px oklch(90% 0.15 330),
+    0 0 8px oklch(80% 0.2 330),
+    0 0 12px oklch(70% 0.25 330),
+    0 0 20px oklch(70% 0.25 330),
+    0 0 30px oklch(65% 0.22 330),
+    0 0 40px oklch(60% 0.2 330 / 0.8),
+    0 0 55px oklch(55% 0.18 330 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="magenta"],
+i-tew[shadow="glow-lg"][glow-color="pink"],
+i-tew[shadow="neon-lg"][glow-color="magenta"],
+i-tew[shadow="neon-lg"][glow-color="pink"] {
+  color: oklch(95% 0.1 330);
+  text-shadow:
+    0 0 2px oklch(95% 0.1 330),
+    0 0 5px oklch(90% 0.15 330),
+    0 0 10px oklch(80% 0.2 330),
+    0 0 20px oklch(70% 0.25 330),
+    0 0 35px oklch(70% 0.25 330),
+    0 0 50px oklch(65% 0.22 330),
+    0 0 70px oklch(60% 0.2 330 / 0.7),
+    0 0 100px oklch(55% 0.18 330 / 0.5),
+    0 0 130px oklch(50% 0.15 330 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- RED --- */
+i-tew[glow-color="red"] {
+  color: oklch(90% 0.1 25);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 25),
+    0 0 4px oklch(85% 0.15 25),
+    0 0 8px oklch(75% 0.22 25),
+    0 0 12px oklch(65% 0.28 25),
+    0 0 20px oklch(65% 0.28 25),
+    0 0 30px oklch(60% 0.25 25),
+    0 0 40px oklch(55% 0.22 25 / 0.8),
+    0 0 55px oklch(50% 0.2 25 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="red"],
+i-tew[shadow="neon-lg"][glow-color="red"] {
+  color: oklch(90% 0.1 25);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 25),
+    0 0 5px oklch(85% 0.15 25),
+    0 0 10px oklch(75% 0.22 25),
+    0 0 20px oklch(65% 0.28 25),
+    0 0 35px oklch(65% 0.28 25),
+    0 0 50px oklch(60% 0.25 25),
+    0 0 70px oklch(55% 0.22 25 / 0.7),
+    0 0 100px oklch(50% 0.2 25 / 0.5),
+    0 0 130px oklch(45% 0.18 25 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- ORANGE --- */
+i-tew[glow-color="orange"] {
+  color: oklch(95% 0.08 55);
+  text-shadow:
+    0 0 2px oklch(95% 0.08 55),
+    0 0 4px oklch(90% 0.12 55),
+    0 0 8px oklch(82% 0.18 55),
+    0 0 12px oklch(75% 0.2 55),
+    0 0 20px oklch(75% 0.2 55),
+    0 0 30px oklch(70% 0.18 55),
+    0 0 40px oklch(65% 0.16 55 / 0.8),
+    0 0 55px oklch(60% 0.14 55 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- YELLOW --- */
+i-tew[glow-color="yellow"] {
+  color: oklch(98% 0.05 95);
+  text-shadow:
+    0 0 2px oklch(98% 0.05 95),
+    0 0 4px oklch(95% 0.1 95),
+    0 0 8px oklch(92% 0.15 95),
+    0 0 12px oklch(90% 0.18 95),
+    0 0 20px oklch(90% 0.18 95),
+    0 0 30px oklch(85% 0.16 95),
+    0 0 40px oklch(80% 0.14 95 / 0.8),
+    0 0 55px oklch(75% 0.12 95 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- GREEN / LIME --- */
+i-tew[glow-color="green"],
+i-tew[glow-color="lime"] {
+  color: oklch(97% 0.08 145);
+  text-shadow:
+    0 0 2px oklch(97% 0.08 145),
+    0 0 4px oklch(93% 0.12 145),
+    0 0 8px oklch(88% 0.2 145),
+    0 0 12px oklch(85% 0.25 145),
+    0 0 20px oklch(85% 0.25 145),
+    0 0 30px oklch(80% 0.22 145),
+    0 0 40px oklch(75% 0.2 145 / 0.8),
+    0 0 55px oklch(70% 0.18 145 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="green"],
+i-tew[shadow="glow-lg"][glow-color="lime"],
+i-tew[shadow="neon-lg"][glow-color="green"],
+i-tew[shadow="neon-lg"][glow-color="lime"] {
+  color: oklch(97% 0.08 145);
+  text-shadow:
+    0 0 2px oklch(97% 0.08 145),
+    0 0 5px oklch(93% 0.12 145),
+    0 0 10px oklch(88% 0.2 145),
+    0 0 20px oklch(85% 0.25 145),
+    0 0 35px oklch(85% 0.25 145),
+    0 0 50px oklch(80% 0.22 145),
+    0 0 70px oklch(75% 0.2 145 / 0.7),
+    0 0 100px oklch(70% 0.18 145 / 0.5),
+    0 0 130px oklch(65% 0.15 145 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- BLUE --- */
+i-tew[glow-color="blue"] {
+  color: oklch(92% 0.08 260);
+  text-shadow:
+    0 0 2px oklch(92% 0.08 260),
+    0 0 4px oklch(85% 0.12 260),
+    0 0 8px oklch(75% 0.2 260),
+    0 0 12px oklch(65% 0.25 260),
+    0 0 20px oklch(65% 0.25 260),
+    0 0 30px oklch(60% 0.22 260),
+    0 0 40px oklch(55% 0.2 260 / 0.8),
+    0 0 55px oklch(50% 0.18 260 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- PURPLE / VIOLET --- */
+i-tew[glow-color="purple"],
+i-tew[glow-color="violet"] {
+  color: oklch(90% 0.1 295);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 295),
+    0 0 4px oklch(82% 0.15 295),
+    0 0 8px oklch(72% 0.22 295),
+    0 0 12px oklch(60% 0.28 295),
+    0 0 20px oklch(60% 0.28 295),
+    0 0 30px oklch(55% 0.25 295),
+    0 0 40px oklch(50% 0.22 295 / 0.8),
+    0 0 55px oklch(45% 0.2 295 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+i-tew[shadow="glow-lg"][glow-color="purple"],
+i-tew[shadow="glow-lg"][glow-color="violet"],
+i-tew[shadow="neon-lg"][glow-color="purple"],
+i-tew[shadow="neon-lg"][glow-color="violet"] {
+  color: oklch(90% 0.1 295);
+  text-shadow:
+    0 0 2px oklch(90% 0.1 295),
+    0 0 5px oklch(82% 0.15 295),
+    0 0 10px oklch(72% 0.22 295),
+    0 0 20px oklch(60% 0.28 295),
+    0 0 35px oklch(60% 0.28 295),
+    0 0 50px oklch(55% 0.25 295),
+    0 0 70px oklch(50% 0.22 295 / 0.7),
+    0 0 100px oklch(45% 0.2 295 / 0.5),
+    0 0 130px oklch(40% 0.18 295 / 0.3);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- WHITE --- */
+i-tew[glow-color="white"] {
+  color: oklch(100% 0 0);
+  text-shadow:
+    0 0 2px oklch(100% 0 0),
+    0 0 4px oklch(98% 0 0),
+    0 0 8px oklch(95% 0 0),
+    0 0 12px oklch(92% 0 0),
+    0 0 20px oklch(90% 0 0),
+    0 0 30px oklch(85% 0 0),
+    0 0 40px oklch(80% 0 0 / 0.8),
+    0 0 55px oklch(75% 0 0 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- GOLD --- */
+i-tew[glow-color="gold"] {
+  color: oklch(95% 0.06 85);
+  text-shadow:
+    0 0 2px oklch(95% 0.06 85),
+    0 0 4px oklch(90% 0.1 85),
+    0 0 8px oklch(85% 0.14 85),
+    0 0 12px oklch(82% 0.16 85),
+    0 0 20px oklch(82% 0.16 85),
+    0 0 30px oklch(78% 0.14 85),
+    0 0 40px oklch(74% 0.12 85 / 0.8),
+    0 0 55px oklch(70% 0.1 85 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- BRAND (uses CSS variable with fallback) --- */
+i-tew[glow-color="brand"] {
+  color: oklch(95% 0.05 168);
+  text-shadow:
+    0 0 2px oklch(95% 0.05 168),
+    0 0 4px oklch(90% 0.1 168),
+    0 0 8px oklch(86% 0.14 168),
+    0 0 12px oklch(83% 0.17 168),
+    0 0 20px oklch(83% 0.17 168),
+    0 0 30px oklch(78% 0.15 168),
+    0 0 40px oklch(73% 0.13 168 / 0.8),
+    0 0 55px oklch(68% 0.11 168 / 0.6);
+  filter: brightness(var(--glow-brightness));
+}
+
+/* --- Animation Speed Presets --- */
+i-tew[speed="slower"] { --glow-speed: 4s; }
+i-tew[speed="slow"] { --glow-speed: 2.5s; }
+i-tew[speed="normal"] { --glow-speed: 1.5s; }
+i-tew[speed="fast"] { --glow-speed: 0.8s; }
+i-tew[speed="faster"] { --glow-speed: 0.4s; }
+
+/* --- Motion/Easing Presets --- */
+i-tew[motion="linear"] { --glow-motion: linear; }
+i-tew[motion="ease"] { --glow-motion: ease; }
+i-tew[motion="ease-in"] { --glow-motion: ease-in; }
+i-tew[motion="ease-out"] { --glow-motion: ease-out; }
+i-tew[motion="ease-in-out"] { --glow-motion: ease-in-out; }
+i-tew[motion="bounce"] { --glow-motion: cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+i-tew[motion="snap"] { --glow-motion: cubic-bezier(0.7, 0, 0.3, 1); }
+
+/* --- Brightness Presets --- */
+i-tew[min-brightness="0"] { --glow-min-brightness: 0; }
+i-tew[min-brightness="10"] { --glow-min-brightness: 0.1; }
+i-tew[min-brightness="20"] { --glow-min-brightness: 0.2; }
+i-tew[min-brightness="30"] { --glow-min-brightness: 0.3; }
+i-tew[min-brightness="40"] { --glow-min-brightness: 0.4; }
+i-tew[min-brightness="50"] { --glow-min-brightness: 0.5; }
+i-tew[min-brightness="60"] { --glow-min-brightness: 0.6; }
+i-tew[min-brightness="70"] { --glow-min-brightness: 0.7; }
+i-tew[min-brightness="80"] { --glow-min-brightness: 0.8; }
+i-tew[min-brightness="90"] { --glow-min-brightness: 0.9; }
+
+i-tew[max-brightness="50"] { --glow-max-brightness: 0.5; }
+i-tew[max-brightness="60"] { --glow-max-brightness: 0.6; }
+i-tew[max-brightness="70"] { --glow-max-brightness: 0.7; }
+i-tew[max-brightness="80"] { --glow-max-brightness: 0.8; }
+i-tew[max-brightness="90"] { --glow-max-brightness: 0.9; }
+i-tew[max-brightness="100"] { --glow-max-brightness: 1; }
+i-tew[max-brightness="110"] { --glow-max-brightness: 1.1; }
+i-tew[max-brightness="120"] { --glow-max-brightness: 1.2; }
+i-tew[max-brightness="130"] { --glow-max-brightness: 1.3; }
+i-tew[max-brightness="150"] { --glow-max-brightness: 1.5; }
+
+/* --- Animation: Steady (default, no animation) --- */
+i-tew[animation="steady"] {
+  animation: none;
+}
+
+/* --- Animation: Pulse (smooth breathing) --- */
+@keyframes tew-glow-pulse {
+  0%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  50% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.85;
+  }
+}
+
+i-tew[shadow="glow"][animation="pulse"],
+i-tew[shadow="glow-lg"][animation="pulse"],
+i-tew[shadow="neon"][animation="pulse"],
+i-tew[shadow="neon-lg"][animation="pulse"] {
+  animation: tew-glow-pulse var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+/* --- Animation: Dim-Bright (more dramatic) --- */
+@keyframes tew-glow-dim-bright {
+  0%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.7;
+  }
+  50% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+}
+
+i-tew[shadow="glow"][animation="dim-bright"],
+i-tew[shadow="glow-lg"][animation="dim-bright"],
+i-tew[shadow="neon"][animation="dim-bright"],
+i-tew[shadow="neon-lg"][animation="dim-bright"] {
+  animation: tew-glow-dim-bright var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+/* --- Animation: Flicker-On (mostly off, occasional flickers on) --- */
+@keyframes tew-glow-flicker-on {
+  0%, 10%, 12%, 20%, 22%, 50%, 52%, 80%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.4;
+  }
+  11%, 21%, 51% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  81%, 85%, 87%, 90%, 95%, 98% {
+    filter: brightness(0.7);
+    opacity: 0.8;
+  }
+}
+
+i-tew[shadow="glow"][animation="flicker-on"],
+i-tew[shadow="glow-lg"][animation="flicker-on"],
+i-tew[shadow="neon"][animation="flicker-on"],
+i-tew[shadow="neon-lg"][animation="flicker-on"] {
+  animation: tew-glow-flicker-on calc(var(--glow-speed, 1.5s) * 2) steps(1) infinite;
+}
+
+/* --- Animation: Flicker-Off (mostly on, occasional flickers off) --- */
+@keyframes tew-glow-flicker-off {
+  0%, 8%, 10%, 18%, 20%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  9%, 19% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.5;
+  }
+  50%, 52% {
+    filter: brightness(0.8);
+    opacity: 0.9;
+  }
+}
+
+i-tew[shadow="glow"][animation="flicker-off"],
+i-tew[shadow="glow-lg"][animation="flicker-off"],
+i-tew[shadow="neon"][animation="flicker-off"],
+i-tew[shadow="neon-lg"][animation="flicker-off"] {
+  animation: tew-glow-flicker-off calc(var(--glow-speed, 1.5s) * 2) steps(1) infinite;
+}
+
+/* --- Animation: Mostly-On (stable with occasional subtle dips) --- */
+@keyframes tew-glow-mostly-on {
+  0%, 15%, 17%, 45%, 47%, 75%, 100% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+  16%, 46% {
+    filter: brightness(0.85);
+    opacity: 0.95;
+  }
+}
+
+i-tew[shadow="glow"][animation="mostly-on"],
+i-tew[shadow="glow-lg"][animation="mostly-on"],
+i-tew[shadow="neon"][animation="mostly-on"],
+i-tew[shadow="neon-lg"][animation="mostly-on"] {
+  animation: tew-glow-mostly-on var(--glow-speed, 1.5s) linear infinite;
+}
+
+/* --- Animation: Mostly-Off (dim with occasional bright flashes) --- */
+@keyframes tew-glow-mostly-off {
+  0%, 25%, 27%, 60%, 62%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+    opacity: 0.5;
+  }
+  26%, 61% {
+    filter: brightness(var(--glow-max-brightness, 1));
+    opacity: 1;
+  }
+}
+
+i-tew[shadow="glow"][animation="mostly-off"],
+i-tew[shadow="glow-lg"][animation="mostly-off"],
+i-tew[shadow="neon"][animation="mostly-off"],
+i-tew[shadow="neon-lg"][animation="mostly-off"] {
+  animation: tew-glow-mostly-off calc(var(--glow-speed, 1.5s) * 1.5) linear infinite;
+}
+
+/* --- Animation: LTR/RTL (brightness sweep) --- */
+@keyframes tew-glow-sweep {
+  0%, 15% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+  }
+  30% {
+    filter: brightness(0.6);
+  }
+  50%, 70% {
+    filter: brightness(var(--glow-max-brightness, 1));
+  }
+  85%, 100% {
+    filter: brightness(var(--glow-min-brightness, 0.3));
+  }
+}
+
+i-tew[shadow="glow"][animation="ltr"],
+i-tew[shadow="glow-lg"][animation="ltr"],
+i-tew[shadow="neon"][animation="ltr"],
+i-tew[shadow="neon-lg"][animation="ltr"] {
+  animation: tew-glow-sweep var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite;
+}
+
+i-tew[shadow="glow"][animation="rtl"],
+i-tew[shadow="glow-lg"][animation="rtl"],
+i-tew[shadow="neon"][animation="rtl"],
+i-tew[shadow="neon-lg"][animation="rtl"] {
+  animation: tew-glow-sweep var(--glow-speed, 1.5s) var(--glow-motion, ease-in-out) infinite reverse;
+}
+
+/* --- Animation: Buzz (rapid subtle flicker like real neon) --- */
+@keyframes tew-glow-buzz {
+  0%, 100% { filter: brightness(1); }
+  10% { filter: brightness(0.97); }
+  20% { filter: brightness(1); }
+  30% { filter: brightness(0.95); }
+  35% { filter: brightness(1); }
+  50% { filter: brightness(0.98); }
+  65% { filter: brightness(1); }
+  70% { filter: brightness(0.96); }
+  80% { filter: brightness(1); }
+  90% { filter: brightness(0.97); }
+}
+
+i-tew[shadow="glow"][animation="buzz"],
+i-tew[shadow="glow-lg"][animation="buzz"],
+i-tew[shadow="neon"][animation="buzz"],
+i-tew[shadow="neon-lg"][animation="buzz"] {
+  animation: tew-glow-buzz calc(var(--glow-speed, 1.5s) * 0.3) linear infinite;
+}
+
+/* --- Animation: Warm-Up (like a neon tube warming up) --- */
+@keyframes tew-glow-warmup {
+  0%, 5% { filter: brightness(0); opacity: 0; }
+  6%, 8% { filter: brightness(0.3); opacity: 0.5; }
+  9%, 15% { filter: brightness(0); opacity: 0; }
+  16%, 20% { filter: brightness(0.5); opacity: 0.7; }
+  21%, 30% { filter: brightness(0.2); opacity: 0.3; }
+  31%, 40% { filter: brightness(0.7); opacity: 0.85; }
+  41%, 45% { filter: brightness(0.4); opacity: 0.6; }
+  46%, 60% { filter: brightness(0.9); opacity: 0.95; }
+  61%, 65% { filter: brightness(0.7); opacity: 0.85; }
+  66%, 100% { filter: brightness(1); opacity: 1; }
+}
+
+i-tew[shadow="glow"][animation="warm-up"],
+i-tew[shadow="glow-lg"][animation="warm-up"],
+i-tew[shadow="neon"][animation="warm-up"],
+i-tew[shadow="neon-lg"][animation="warm-up"] {
+  animation: tew-glow-warmup calc(var(--glow-speed, 1.5s) * 3) ease-out forwards;
+}
+
+/* --- Animation: Dying (like a failing neon tube) --- */
+@keyframes tew-glow-dying {
+  0%, 20% { filter: brightness(1); opacity: 1; }
+  25%, 27% { filter: brightness(0.3); opacity: 0.4; }
+  30%, 50% { filter: brightness(0.8); opacity: 0.9; }
+  55%, 58% { filter: brightness(0.3); opacity: 0.3; }
+  60%, 65% { filter: brightness(0.6); opacity: 0.7; }
+  70%, 75% { filter: brightness(0.2); opacity: 0.2; }
+  80%, 82% { filter: brightness(0.4); opacity: 0.5; }
+  85%, 100% { filter: brightness(0); opacity: 0; }
+}
+
+i-tew[shadow="glow"][animation="dying"],
+i-tew[shadow="glow-lg"][animation="dying"],
+i-tew[shadow="neon"][animation="dying"],
+i-tew[shadow="neon-lg"][animation="dying"] {
+  animation: tew-glow-dying calc(var(--glow-speed, 1.5s) * 4) ease-in forwards;
+}
+
+/* --- Reduced Motion: Disable animations --- */
+@media (prefers-reduced-motion: reduce) {
+  i-tew[shadow="glow"][animation],
+  i-tew[shadow="glow-lg"][animation],
+  i-tew[shadow="neon"][animation],
+  i-tew[shadow="neon-lg"][animation] {
+    animation: none !important;
+    filter: brightness(1) !important;
+  }
 }
 
 /* ==========================================================================
@@ -721,7 +1271,7 @@ i-tew[preset="code"] {
   font-family: var(--font-code);
   font-size: 0.9em;
   font-variant-ligatures: none;
-  background: oklch(from var(--color-surface) calc(l - 0.05) c h);
+  background: oklch(0% 0 0 / 0.08);
   padding: 0.1em 0.3em;
   border-radius: 0.25em;
 }

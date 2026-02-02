@@ -1,8 +1,8 @@
 /**
- * Elvish CSS Layout-first System v1.0.0
+ * Elvish Layout System v2.0.0
  * Intrinsic CSS layout primitives with Sindarin names
- *
- * https://github.com/star-this/elvish-css
+ * 
+ * https://github.com/yourusername/elvish-layout
  * License: MIT
  */
 
@@ -135,9 +135,28 @@
   --border-thin: 1px;
   --border-thick: 3px;
   
-  /* ===== FONTS ===== */
-  --font-plain: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+  /* ===== FONT STACKS ===== */
+  /*
+   * Five font variables for flexible typography:
+   * - --font-serif   : Traditional, elegant text (body, quotes)
+   * - --font-sans    : Clean, modern text (UI, body)
+   * - --font-title   : Display/heading font (can be same as sans)
+   * - --font-code    : Monospace for code
+   * - --font-alt     : Escape hatch / accent font
+   *
+   * Override at any scope to change fonts locally:
+   *   <section style="--font-serif: 'Playfair Display', serif;">
+   */
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-title: var(--font-sans);
+  --font-code: ui-monospace, 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  --font-alt: var(--font-serif);
+  
+  /* Legacy aliases (backwards compatibility) */
+  --font-plain: var(--font-sans);
+  --font-mono: var(--font-code);
+  --font-display: var(--font-title);
   
   /* ===== LINE HEIGHT ===== */
   --line-height: 1.5;
@@ -166,15 +185,15 @@
 /* === global/reset.css === */
 /**
  * Elvish - Modern Reset & Axioms
- *
+ * 
  * A synthesis of Andy Bell's "More Modern CSS Reset" and Elvish's original reset.
  * Optimized for Chrome/Edge with graceful degradation for Safari/Firefox.
- *
+ * 
  * Sources:
  * - [AB] Andy Bell's "A (More) Modern CSS Reset"
  * - [EL] Elvish original reset
  * - [NEW] New additions for modern browsers
- *
+ * 
  * Debug Mode:
  *   Add .mellon or .debug to <body> or any element to reveal layout structure.
  *   "Mellon" is Sindarin for "friend" - the password to enter Moria.
@@ -188,12 +207,12 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
    BORDER & BACKGROUND DEFAULTS [EL + NEW]
-
+   
    Layout-focused philosophy: visual styling is opt-in, not opt-out.
    - Borders: style is solid (for easy `border-width: 1px`), but width is 0
    - Backgrounds: transparent by default
@@ -203,58 +222,52 @@
 *,
 *::before,
 *::after {
-    /* Border: ready to use, but invisible by default */
-    border-style: solid;
-    border-width: 0;
-
-    /* Background: transparent until explicitly set */
-    background-color: transparent;
+  /* Border: ready to use, but invisible by default */
+  border-style: solid;
+  border-width: 0;
+  
+  /* Background: transparent until explicitly set */
+  background-color: transparent;
 }
 
 /* Root elements get the actual background */
 html {
-    background-color: var(--color-surface);
+  background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    MARGIN RESET [AB - expanded]
-
+   
    DISCARDED from Elvish: `* { margin: 0 }` is too aggressive.
    It breaks nested lists, fieldset legends, and third-party components.
-
+   
    Andy Bell's surgical approach is safer - only reset elements that commonly
    have problematic default margins. Expanded to include pre, h5, h6.
    ========================================================================== */
 
 body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+h1, h2, h3, h4, h5, h6,
 p,
 figure,
 blockquote,
-dl,
-dd,
+dl, dd,
 pre,
 fieldset {
-    margin: 0;
+  margin: 0;
 }
 
 /* ==========================================================================
    MEASURE AXIOM [EL]
-
+   
    Not in Andy Bell's reset - this is Elvish's core philosophy.
-
+   
    No line of text should exceed a comfortable reading length.
    Exception-based: everything gets the constraint, then we remove it
    from elements that need to contain multiple adjacent boxes.
    ========================================================================== */
 
 * {
-    max-inline-size: var(--measure);
+  max-inline-size: var(--measure);
 }
 
 html,
@@ -281,25 +294,24 @@ dialog,
 menu,
 hgroup,
 address,
-/* Custom elements - Elvish css primitives (Sindarin names) */
-i-hath,          /* Stacked */
-i-bau,           /* Quad */
-i-enedh,         /* Centered (horizontal) */
-i-tiniath,       /* Clustered */
+/* Custom elements - Elvish layout primitives (Sindarin names) */
+i-hath,          /* Stack */
+i-bau,           /* Box */
+i-enedh,         /* Center (horizontal) */
+i-tiniath,       /* Cluster */
 i-glan-veleg,    /* Sidebar */
-i-gwistindor,    /* Switching */
-i-esgal,         /* Covering (vertical center) */
+i-gwistindor,    /* Switcher */
+i-esgal,         /* Cover (vertical center) */
 i-vircantie,     /* Grid */
-i-gant-thala,    /* Aspect (ratio) */
-i-glan-tholl,    /* Side-Scrolling */
-i-fano,          /* Overcast */
+i-gant-thala,    /* Frame (aspect) */
+i-glan-tholl,    /* Reel (side-scrolling) */
+i-fano,          /* Imposter (overlay) */
 i-thann,         /* Icon */
 i-adleithian,    /* Container */
 i-him,           /* Sticky */
 i-miriant,       /* Grid-placed */
-i-gonath {
-    /* Masonry */
-    max-inline-size: none;
+i-gonath {       /* Masonry */
+  max-inline-size: none;
 }
 
 /* ==========================================================================
@@ -307,30 +319,30 @@ i-gonath {
    ========================================================================== */
 
 html {
-    /* [EL] Font settings via design tokens */
-    font-family: var(--font-plain);
-    font-size: 100%; /* Respects user preferences */
-    line-height: var(--line-height);
-
-    /* [EL] Colors */
-    color: var(--color-text);
-    /* background-color set above in BORDER & BACKGROUND DEFAULTS */
-
-    /* [NEW] Text rendering - prioritize legibility */
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    /* [NEW] Prevent text size inflation on mobile */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
+  /* [EL] Font settings via design tokens */
+  font-family: var(--font-plain);
+  font-size: 100%; /* Respects user preferences */
+  line-height: var(--line-height);
+  
+  /* [EL] Colors */
+  color: var(--color-text);
+  /* background-color set above in BORDER & BACKGROUND DEFAULTS */
+  
+  /* [NEW] Text rendering - prioritize legibility */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* [NEW] Prevent text size inflation on mobile */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* [AB] Smooth scrolling ONLY when using keyboard navigation */
 @media (prefers-reduced-motion: no-preference) {
-    html:focus-within {
-        scroll-behavior: smooth;
-    }
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
 }
 
 /* ==========================================================================
@@ -338,57 +350,40 @@ html {
    ========================================================================== */
 
 body {
-    /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
-    min-block-size: 100vh;
-    min-block-size: 100dvh;
-
-    /* [NEW] Prevent horizontal overflow from animations, etc. */
-    overflow-x: clip;
-
-    /* Body gets the surface background */
-    background-color: var(--color-surface);
+  /* [EL] Full viewport height - dvh accounts for mobile browser chrome */
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  
+  /* [NEW] Prevent horizontal overflow from animations, etc. */
+  overflow-x: clip;
+  
+  /* Body gets the surface background */
+  background-color: var(--color-surface);
 }
 
 /* ==========================================================================
    TYPOGRAPHY [EL + NEW]
    ========================================================================== */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    /* [EL] Tighter line height for headings */
-    line-height: var(--line-height-tight);
-
-    /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
-    text-wrap: balance;
+h1, h2, h3, h4, h5, h6 {
+  /* [EL] Tighter line height for headings */
+  line-height: var(--line-height-tight);
+  
+  /* [NEW] Balanced wrapping for headings (Chrome 114+, Safari 17.5+) */
+  text-wrap: balance;
 }
 
 /* [EL] Modular scale sizing */
-h1 {
-    font-size: var(--s4);
-}
-h2 {
-    font-size: var(--s3);
-}
-h3 {
-    font-size: var(--s2);
-}
-h4 {
-    font-size: var(--s1);
-}
-h5 {
-    font-size: var(--s0);
-}
-h6 {
-    font-size: var(--s-1);
-}
+h1 { font-size: var(--s4); }
+h2 { font-size: var(--s3); }
+h3 { font-size: var(--s2); }
+h4 { font-size: var(--s1); }
+h5 { font-size: var(--s0); }
+h6 { font-size: var(--s-1); }
 
 /* [NEW] Pretty wrapping for prose (Chrome 117+) */
 p {
-    text-wrap: pretty;
+  text-wrap: pretty;
 }
 
 /* ==========================================================================
@@ -396,25 +391,25 @@ p {
    ========================================================================== */
 
 a {
-    /* [EL] Inherit color - style via classes or context */
-    color: currentColor;
-
-    /* [AB] Better underline rendering - skips descenders (g, y, p) */
-    text-decoration-skip-ink: auto;
-
-    /* [NEW] Modern underline offset for readability */
-    text-underline-offset: 0.2em;
+  /* [EL] Inherit color - style via classes or context */
+  color: currentColor;
+  
+  /* [AB] Better underline rendering - skips descenders (g, y, p) */
+  text-decoration-skip-ink: auto;
+  
+  /* [NEW] Modern underline offset for readability */
+  text-underline-offset: 0.2em;
 }
 
 /* [EL] Remove underline on hover */
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /* [NEW] Focus styles for keyboard navigation */
 a:focus-visible {
-    outline: 2px solid var(--color-accent, currentColor);
-    outline-offset: 2px;
+  outline: 2px solid var(--color-accent, currentColor);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -426,21 +421,21 @@ picture,
 video,
 canvas,
 svg {
-    display: block;
-    max-inline-size: 100%;
+  display: block;
+  max-inline-size: 100%;
 }
 
 img,
 picture,
 video {
-    /* [EL] Maintain aspect ratio */
-    block-size: auto;
+  /* [EL] Maintain aspect ratio */
+  block-size: auto;
 }
 
 /* [NEW] Style for alt text when image fails to load */
 img {
-    font-style: italic;
-    vertical-align: middle;
+  font-style: italic;
+  vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -451,21 +446,21 @@ input,
 button,
 textarea,
 select {
-    /* [AB + EL] Inherit font from parent */
-    font: inherit;
-    /* [EL] Inherit color too */
-    color: inherit;
+  /* [AB + EL] Inherit font from parent */
+  font: inherit;
+  /* [EL] Inherit color too */
+  color: inherit;
 }
 
 /* [EL] Indicate buttons are clickable */
 button,
 [role="button"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* [NEW] Textarea should not resize horizontally */
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 /* ==========================================================================
@@ -474,9 +469,9 @@ textarea {
 
 ul,
 ol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* [NEW] Restore list styles when explicitly marked for semantics */
@@ -484,8 +479,8 @@ ul[role="list"],
 ol[role="list"],
 ul.list,
 ol.list {
-    list-style: revert;
-    padding-inline-start: 1em;
+  list-style: revert;
+  padding-inline-start: 1em;
 }
 
 /* ==========================================================================
@@ -493,14 +488,14 @@ ol.list {
    ========================================================================== */
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 /* [NEW] Inherit text alignment */
 th {
-    text-align: inherit;
-    font-weight: inherit;
+  text-align: inherit;
+  font-weight: inherit;
 }
 
 /* ==========================================================================
@@ -511,12 +506,12 @@ pre,
 code,
 kbd,
 samp {
-    font-family: var(--font-mono);
+  font-family: var(--font-mono);
 }
 
 pre {
-    overflow-x: auto;
-    white-space: pre;
+  overflow-x: auto;
+  white-space: pre;
 }
 
 /* ==========================================================================
@@ -525,20 +520,20 @@ pre {
 
 /* [EL] Horizontal rule */
 hr {
-    border-width: var(--border-thin, 1px) 0 0 0;
-    color: inherit;
-    block-size: 0;
+  border-width: var(--border-thin, 1px) 0 0 0;
+  color: inherit;
+  block-size: 0;
 }
 
 /* [NEW] Abbreviations with title should indicate expandability */
 abbr[title] {
-    text-decoration: underline dotted;
-    cursor: help;
+  text-decoration: underline dotted;
+  cursor: help;
 }
 
 /* [NEW] Summary cursor */
 summary {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -546,8 +541,8 @@ summary {
    ========================================================================== */
 
 ::selection {
-    background-color: var(--color-accent, highlight);
-    color: var(--color-accent-text, highlighttext);
+  background-color: var(--color-accent, highlight);
+  color: var(--color-accent-text, highlighttext);
 }
 
 /* ==========================================================================
@@ -556,13 +551,13 @@ summary {
 
 /* Remove default focus outline */
 :focus {
-    outline: none;
+  outline: none;
 }
 
 /* Visible focus for keyboard navigation only */
 :focus-visible {
-    outline: 2px solid var(--color-accent, currentColor);
-    outline-offset: 2px;
+  outline: 2px solid var(--color-accent, currentColor);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -570,40 +565,40 @@ summary {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        /* [AB] Kill all animations */
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-
-        /* [AB] Kill all transitions */
-        transition-duration: 0.01ms !important;
-
-        /* [AB] Kill smooth scrolling */
-        scroll-behavior: auto !important;
-    }
-
-    /* [NEW] Also target View Transitions */
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
-    }
+  *,
+  *::before,
+  *::after {
+    /* [AB] Kill all animations */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    
+    /* [AB] Kill all transitions */
+    transition-duration: 0.01ms !important;
+    
+    /* [AB] Kill smooth scrolling */
+    scroll-behavior: auto !important;
+  }
+  
+  /* [NEW] Also target View Transitions */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 /* ==========================================================================
    DEBUG MODE - "MELLON" [NEW]
-
+   
    Add .mellon or .debug to <body> or any element to reveal layout structure.
    "Mellon" is Sindarin for "friend" - the password to enter Moria.
-
+   
    Features:
    - Dashed outlines show element boundaries (uses outline, not border)
    - Each nesting level gets a different hue (rainbow effect)
    - Optional .tint modifier adds subtle background colors
    - Zero specificity via :where() - easily overridden by real styles
-
+   
    Usage:
      <body class="mellon">         - Debug entire page
      <body class="mellon tint">    - Debug with background tints
@@ -612,90 +607,53 @@ summary {
 
 /* Debug color tokens */
 :root {
-    --debug-stroke: 1px;
-    --debug-style: dashed;
-    --debug-saturation: 0.25;
-    --debug-lightness: 55%;
+  --debug-stroke: 1px;
+  --debug-style: dashed;
+  --debug-saturation: 0.25;
+  --debug-lightness: 55%;
 }
 
 /* Calculate hue based on depth (golden angle ≈ 137.5° for optimal distribution) */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-    --debug-hue: 0;
+  --debug-hue: 0;
 }
 
-:where(.mellon, .debug) > :where(*) {
-    --debug-hue: 137;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) {
-    --debug-hue: 275;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) {
-    --debug-hue: 52;
-}
-:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) {
-    --debug-hue: 190;
-}
-:where(.mellon, .debug)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*) {
-    --debug-hue: 327;
-}
-:where(.mellon, .debug)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*)
-    > :where(*) {
-    --debug-hue: 105;
-}
+:where(.mellon, .debug) > :where(*) { --debug-hue: 137; }
+:where(.mellon, .debug) > :where(*) > :where(*) { --debug-hue: 275; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) { --debug-hue: 52; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 190; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 327; }
+:where(.mellon, .debug) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) > :where(*) { --debug-hue: 105; }
 
 /* Show outlines in debug mode */
 :where(.mellon, .debug),
 :where(.mellon, .debug) :where(*) {
-    outline: var(--debug-stroke) var(--debug-style)
-        oklch(
-            var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)
-        ) !important;
-    outline-offset: -1px;
+  outline: var(--debug-stroke) var(--debug-style) 
+    oklch(var(--debug-lightness) var(--debug-saturation) var(--debug-hue, 0)) !important;
+  outline-offset: -1px;
 }
 
 /* Highlight Elvish primitives more prominently */
-:where(.mellon, .debug)
-    :where(
-        i-hath,
-        i-bau,
-        i-enedh,
-        i-tiniath,
-        i-glan-veleg,
-        i-gwistindor,
-        i-esgal,
-        i-vircantie,
-        i-gant-thala,
-        i-glan-tholl,
-        i-fano,
-        i-thann,
-        i-adleithian,
-        i-him,
-        i-miriant,
-        i-gonath
-    ) {
-    --debug-stroke: 2px;
-    --debug-style: solid;
-    --debug-saturation: 0.4;
+:where(.mellon, .debug) :where(
+  i-hath, i-bau, i-enedh, i-tiniath, i-glan-veleg, i-gwistindor,
+  i-esgal, i-vircantie, i-gant-thala, i-glan-tholl, i-fano, i-thann,
+  i-adleithian, i-him, i-miriant, i-gonath
+) {
+  --debug-stroke: 2px;
+  --debug-style: solid;
+  --debug-saturation: 0.4;
 }
 
 /* Optional: Background tint mode */
 :where(.mellon.tint, .debug.tint),
 :where(.mellon.tint, .debug.tint) :where(*) {
-    background-color: oklch(
-        var(--debug-lightness) calc(var(--debug-saturation) * 0.4)
-            var(--debug-hue, 0) / 0.1
-    ) !important;
+  background-color: oklch(
+    var(--debug-lightness) 
+    calc(var(--debug-saturation) * 0.4) 
+    var(--debug-hue, 0) 
+    / 0.1
+  ) !important;
 }
 
 /* ==========================================================================
@@ -705,427 +663,199 @@ summary {
 /* [EL] Hidden but accessible to screen readers */
 .visually-hidden,
 .sr-only {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* [NEW] Skip link pattern for accessibility */
 .skip-link {
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0;
-    padding: var(--s-1, 0.5rem) var(--s0, 1rem);
-    background: var(--color-accent, highlight);
-    color: var(--color-accent-text, highlighttext);
-    transform: translateY(-100%);
-    z-index: 9999;
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  padding: var(--s-1, 0.5rem) var(--s0, 1rem);
+  background: var(--color-accent, highlight);
+  color: var(--color-accent-text, highlighttext);
+  transform: translateY(-100%);
+  z-index: 9999;
 }
 
 .skip-link:focus {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 
 /* === global/utilities.css === */
 /**
  * Elvish - Utilities
- *
+ * 
  * Final adjustments. Use sparingly.
  * Naming convention: property\:value
- *
+ * 
  * !important is intentional - utilities are for overrides.
  */
 
 /* ===== TEXT ALIGNMENT ===== */
-.text-align\:start {
-    text-align: start !important;
-}
-.text-align\:center {
-    text-align: center !important;
-}
-.text-align\:end {
-    text-align: end !important;
-}
+.text-align\:start { text-align: start !important; }
+.text-align\:center { text-align: center !important; }
+.text-align\:end { text-align: end !important; }
 
 /* ===== FONT SIZES ===== */
-.font-size\:s-2 {
-    font-size: var(--s-2) !important;
-}
-.font-size\:s-1 {
-    font-size: var(--s-1) !important;
-}
-.font-size\:s0 {
-    font-size: var(--s0) !important;
-}
-.font-size\:s1 {
-    font-size: var(--s1) !important;
-}
-.font-size\:s2 {
-    font-size: var(--s2) !important;
-}
-.font-size\:s3 {
-    font-size: var(--s3) !important;
-}
-.font-size\:s4 {
-    font-size: var(--s4) !important;
-}
+.font-size\:s-2 { font-size: var(--s-2) !important; }
+.font-size\:s-1 { font-size: var(--s-1) !important; }
+.font-size\:s0 { font-size: var(--s0) !important; }
+.font-size\:s1 { font-size: var(--s1) !important; }
+.font-size\:s2 { font-size: var(--s2) !important; }
+.font-size\:s3 { font-size: var(--s3) !important; }
+.font-size\:s4 { font-size: var(--s4) !important; }
 
 /* ===== FONT WEIGHT ===== */
-.font-weight\:normal {
-    font-weight: normal !important;
-}
-.font-weight\:bold {
-    font-weight: bold !important;
-}
+.font-weight\:normal { font-weight: normal !important; }
+.font-weight\:bold { font-weight: bold !important; }
 
 /* ===== COLORS ===== */
-.color\:dark {
-    color: var(--color-dark) !important;
-}
-.color\:light {
-    color: var(--color-light) !important;
-}
-.color\:accent {
-    color: var(--color-accent) !important;
-}
+.color\:dark { color: var(--color-dark) !important; }
+.color\:light { color: var(--color-light) !important; }
+.color\:accent { color: var(--color-accent) !important; }
 
-.bg\:dark {
-    background-color: var(--color-dark) !important;
-}
-.bg\:light {
-    background-color: var(--color-light) !important;
-}
-.bg\:accent {
-    background-color: var(--color-accent) !important;
-}
+.bg\:dark { background-color: var(--color-dark) !important; }
+.bg\:light { background-color: var(--color-light) !important; }
+.bg\:accent { background-color: var(--color-accent) !important; }
 
 /* ===== MEASURE ===== */
-.max-inline-size\:measure {
-    max-inline-size: var(--measure) !important;
-}
-.max-inline-size\:measure\/2 {
-    max-inline-size: calc(var(--measure) / 2) !important;
-}
-.max-inline-size\:measure\/3 {
-    max-inline-size: calc(var(--measure) / 3) !important;
-}
-.max-inline-size\:none {
-    max-inline-size: none !important;
-}
+.max-inline-size\:measure { max-inline-size: var(--measure) !important; }
+.max-inline-size\:measure\/2 { max-inline-size: calc(var(--measure) / 2) !important; }
+.max-inline-size\:measure\/3 { max-inline-size: calc(var(--measure) / 3) !important; }
+.max-inline-size\:none { max-inline-size: none !important; }
 
 /* ===== WIDTH ===== */
-.inline-size\:100 {
-    inline-size: 100% !important;
-}
-.inline-size\:auto {
-    inline-size: auto !important;
-}
+.inline-size\:100 { inline-size: 100% !important; }
+.inline-size\:auto { inline-size: auto !important; }
 
 /* ===== HEIGHT ===== */
-.block-size\:100 {
-    block-size: 100% !important;
-}
-.block-size\:100vh {
-    block-size: 100vh !important;
-}
-.block-size\:auto {
-    block-size: auto !important;
-}
+.block-size\:100 { block-size: 100% !important; }
+.block-size\:100vh { block-size: 100vh !important; }
+.block-size\:auto { block-size: auto !important; }
 
 /* ===== MARGIN ===== */
-.margin\:0 {
-    margin: 0 !important;
-}
-.margin-block\:0 {
-    margin-block: 0 !important;
-}
-.margin-inline\:0 {
-    margin-inline: 0 !important;
-}
-.margin-inline\:auto {
-    margin-inline: auto !important;
-}
+.margin\:0 { margin: 0 !important; }
+.margin-block\:0 { margin-block: 0 !important; }
+.margin-inline\:0 { margin-inline: 0 !important; }
+.margin-inline\:auto { margin-inline: auto !important; }
 
 /* ===== PADDING ===== */
-.padding\:s-1 {
-    padding: var(--s-1) !important;
-}
-.padding\:s0 {
-    padding: var(--s0) !important;
-}
-.padding\:s1 {
-    padding: var(--s1) !important;
-}
-.padding\:s2 {
-    padding: var(--s2) !important;
-}
+.padding\:s-1 { padding: var(--s-1) !important; }
+.padding\:s0 { padding: var(--s0) !important; }
+.padding\:s1 { padding: var(--s1) !important; }
+.padding\:s2 { padding: var(--s2) !important; }
 
 /* ===== GAP ===== */
-.gap\:s-1 {
-    gap: var(--s-1) !important;
-}
-.gap\:s0 {
-    gap: var(--s0) !important;
-}
-.gap\:s1 {
-    gap: var(--s1) !important;
-}
-.gap\:s2 {
-    gap: var(--s2) !important;
-}
+.gap\:s-1 { gap: var(--s-1) !important; }
+.gap\:s0 { gap: var(--s0) !important; }
+.gap\:s1 { gap: var(--s1) !important; }
+.gap\:s2 { gap: var(--s2) !important; }
 
 /* ===== FLEX ===== */
-.flex-grow\:1 {
-    flex-grow: 1 !important;
-}
-.flex-shrink\:0 {
-    flex-shrink: 0 !important;
-}
+.flex-grow\:1 { flex-grow: 1 !important; }
+.flex-shrink\:0 { flex-shrink: 0 !important; }
 
 /* ===== OVERFLOW ===== */
-.overflow\:hidden {
-    overflow: hidden !important;
-}
-.overflow\:auto {
-    overflow: auto !important;
-}
+.overflow\:hidden { overflow: hidden !important; }
+.overflow\:auto { overflow: auto !important; }
 
 /* ===== POSITION ===== */
-.position\:relative {
-    position: relative !important;
-}
-.position\:absolute {
-    position: absolute !important;
-}
-.position\:fixed {
-    position: fixed !important;
-}
-.position\:sticky {
-    position: sticky !important;
-}
+.position\:relative { position: relative !important; }
+.position\:absolute { position: absolute !important; }
+.position\:fixed { position: fixed !important; }
+.position\:sticky { position: sticky !important; }
 
 /* ===== DISPLAY ===== */
-.display\:none {
-    display: none !important;
-}
-.display\:block {
-    display: block !important;
-}
-.display\:inline {
-    display: inline !important;
-}
-.display\:inline-block {
-    display: inline-block !important;
-}
-.display\:flex {
-    display: flex !important;
-}
-.display\:grid {
-    display: grid !important;
-}
+.display\:none { display: none !important; }
+.display\:block { display: block !important; }
+.display\:inline { display: inline !important; }
+.display\:inline-block { display: inline-block !important; }
+.display\:flex { display: flex !important; }
+.display\:grid { display: grid !important; }
 
 /* ===== BORDERS ===== */
-.border\:thin {
-    border-width: var(--border-thin) !important;
-}
-.border\:thick {
-    border-width: var(--border-thick) !important;
-}
-.border-radius\:s-2 {
-    border-radius: var(--s-2) !important;
-}
-.border-radius\:s-1 {
-    border-radius: var(--s-1) !important;
-}
-.border-radius\:s0 {
-    border-radius: var(--s0) !important;
-}
+.border\:thin { border-width: var(--border-thin) !important; }
+.border\:thick { border-width: var(--border-thick) !important; }
+.border-radius\:s-2 { border-radius: var(--s-2) !important; }
+.border-radius\:s-1 { border-radius: var(--s-1) !important; }
+.border-radius\:s0 { border-radius: var(--s0) !important; }
 
 /* ===== SHADOWS ===== */
 .shadow\:small {
-    box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.12),
-        0 1px 2px rgba(0, 0, 0, 0.24) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
 }
 .shadow\:medium {
-    box-shadow:
-        0 3px 6px rgba(0, 0, 0, 0.15),
-        0 2px 4px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12) !important;
 }
 .shadow\:large {
-    box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.15),
-        0 3px 6px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10) !important;
 }
 
 /* ===== Z-INDEX ===== */
 /* Use sparingly! Prefer source order. */
-.z\:0 {
-    z-index: 0 !important;
-}
-.z\:1 {
-    z-index: 1 !important;
-}
-.z\:2 {
-    z-index: 2 !important;
-}
-.z\:3 {
-    z-index: 3 !important;
-}
-.z\:5 {
-    z-index: 5 !important;
-}
-.z\:8 {
-    z-index: 8 !important;
-}
-.z\:13 {
-    z-index: 13 !important;
-}
-.z\:21 {
-    z-index: 21 !important;
-}
-.z\:34 {
-    z-index: 34 !important;
-}
-.z\:55 {
-    z-index: 55 !important;
-}
-.z\:89 {
-    z-index: 89 !important;
-}
-.z\:100 {
-    z-index: 100 !important;
-}
-.z\:101 {
-    z-index: 101 !important;
-}
-.z\:102 {
-    z-index: 102 !important;
-}
-.z\:103 {
-    z-index: 103 !important;
-}
-.z\:105 {
-    z-index: 105 !important;
-}
-.z\:108 {
-    z-index: 108 !important;
-}
-.z\:113 {
-    z-index: 113 !important;
-}
-.z\:121 {
-    z-index: 121 !important;
-}
-.z\:134 {
-    z-index: 134 !important;
-}
-.z\:155 {
-    z-index: 155 !important;
-}
-.z\:189 {
-    z-index: 189 !important;
-}
-.z\:200 {
-    z-index: 200 !important;
-}
+.z\:0 { z-index: 0 !important; }
+.z\:1 { z-index: 1 !important; }
+.z\:10 { z-index: 10 !important; }
+.z\:100 { z-index: 100 !important; }
 
 /* ===== LISTS ===== */
-.list-style\:disc {
-    list-style: disc !important;
-    padding-inline-start: 1em !important;
-}
-.list-style\:decimal {
-    list-style: decimal !important;
-    padding-inline-start: 1em !important;
-}
+.list-style\:disc { list-style: disc !important; padding-inline-start: 1em !important; }
+.list-style\:decimal { list-style: decimal !important; padding-inline-start: 1em !important; }
 
 /* ===== CURSOR ===== */
-.cursor\:pointer {
-    cursor: pointer !important;
-}
-.cursor\:not-allowed {
-    cursor: not-allowed !important;
-}
+.cursor\:pointer { cursor: pointer !important; }
+.cursor\:not-allowed { cursor: not-allowed !important; }
 
 /* ===== USER SELECT ===== */
-.user-select\:none {
-    user-select: none !important;
-}
-.user-select\:all {
-    user-select: all !important;
-}
+.user-select\:none { user-select: none !important; }
+.user-select\:all { user-select: all !important; }
 
 /* ===== RATIO MODES ===== */
-/*
+/* 
  * Switch the modular scale ratio for a container and all descendants.
  * Golden (φ): Dramatic, high-impact - ideal for marketing, CTAs
  * Silver (√2): Subtle, refined - ideal for documentation, dense content
  * Fifth (1.5): Balanced middle-ground
- *
+ * 
  * Also adjusts --measure (line length) to complement each ratio:
  * Golden: 60ch (tighter), Fifth: 70ch (balanced), Silver: 80ch (looser)
  */
-.ratio\:golden {
-    --ratio: var(--ratio-golden) !important;
-    --measure: 60ch !important;
-}
-.ratio\:silver {
-    --ratio: var(--ratio-silver) !important;
-    --measure: 80ch !important;
-}
-.ratio\:fifth {
-    --ratio: var(--ratio-fifth) !important;
-    --measure: 70ch !important;
-}
+.ratio\:golden { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
+.ratio\:silver { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
+.ratio\:fifth { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
 
 /* Aliases for convenience */
-.ratio\:dramatic {
-    --ratio: var(--ratio-golden) !important;
-    --measure: 60ch !important;
-}
-.ratio\:subtle {
-    --ratio: var(--ratio-silver) !important;
-    --measure: 80ch !important;
-}
-.ratio\:balanced {
-    --ratio: var(--ratio-fifth) !important;
-    --measure: 70ch !important;
-}
+.ratio\:dramatic { --ratio: var(--ratio-golden) !important; --measure: 60ch !important; }
+.ratio\:subtle { --ratio: var(--ratio-silver) !important; --measure: 80ch !important; }
+.ratio\:balanced { --ratio: var(--ratio-fifth) !important; --measure: 70ch !important; }
 
 /* Data attribute alternative (for JS toggling) */
-[data-ratio="golden"] {
-    --ratio: var(--ratio-golden);
-    --measure: 60ch;
-}
-[data-ratio="silver"] {
-    --ratio: var(--ratio-silver);
-    --measure: 80ch;
-}
-[data-ratio="fifth"] {
-    --ratio: var(--ratio-fifth);
-    --measure: 70ch;
-}
+[data-ratio="golden"] { --ratio: var(--ratio-golden); --measure: 60ch; }
+[data-ratio="silver"] { --ratio: var(--ratio-silver); --measure: 80ch; }
+[data-ratio="fifth"] { --ratio: var(--ratio-fifth); --measure: 70ch; }
 
 
 /* === global/modern.css === */
 /**
  * Elvish Modern - CSS Functions & Advanced Features
- *
+ * 
  * Features requiring Chrome 133+ / Edge 133+ (progressive enhancement)
  * Firefox and Safari fallbacks provided where possible.
- *
+ * 
  * BROWSER SUPPORT (as of Jan 2026):
  * - if()                 : Chrome 137+, Edge 137+
- * - @function            : Chrome 139+, Edge 139+
+ * - @function            : Chrome 139+, Edge 139+  
  * - sibling-index/count  : Chrome 138+, Edge 138+
  * - typed attr()         : Chrome 133+, Edge 133+
  * - light-dark()         : All modern browsers ✓
@@ -1140,52 +870,50 @@ summary {
  */
 
 /* Negate a value */
-@function --neg(--value) {
-    result: calc(-1 * var(--value));
+@function --negate(--value) {
+  result: calc(-1 * var(--value));
 }
 
 /* Linear interpolation between two values */
 @function --lerp(--a, --b, --t) {
-    result: calc(var(--a) + (var(--b) - var(--a)) * var(--t));
+  result: calc(var(--a) + (var(--b) - var(--a)) * var(--t));
 }
 
 /* Fluid value between min and max based on viewport */
 @function --fluid(--min, --max, --min-vw: 20rem, --max-vw: 75rem) {
-    result: clamp(
-        var(--min),
-        calc(
-            var(--min) + (var(--max) - var(--min)) *
-                ((100vw - var(--min-vw)) / (var(--max-vw) - var(--min-vw)))
-        ),
-        var(--max)
-    );
+  result: clamp(
+    var(--min),
+    calc(var(--min) + (var(--max) - var(--min)) * ((100vw - var(--min-vw)) / (var(--max-vw) - var(--min-vw)))),
+    var(--max)
+  );
 }
 
 /* Add transparency to a color */
 @function --alpha(--color, --opacity) {
-    result: oklch(from var(--color) l c h / var(--opacity));
+  result: oklch(from var(--color) l c h / var(--opacity));
 }
 
 /* Lighten a color */
 @function --lighten(--color, --amount: 0.1) {
-    result: oklch(from var(--color) calc(l + var(--amount)) c h);
+  result: oklch(from var(--color) calc(l + var(--amount)) c h);
 }
 
 /* Darken a color */
 @function --darken(--color, --amount: 0.1) {
-    result: oklch(from var(--color) calc(l - var(--amount)) c h);
+  result: oklch(from var(--color) calc(l - var(--amount)) c h);
 }
 
 /* Spacing multiplier */
 @function --space(--multiplier: 1) {
-    result: calc(var(--s0) * var(--multiplier));
+  result: calc(var(--s0) * var(--multiplier));
 }
 
 /* Conditional border-radius (0 when near edge, normal otherwise) */
 @function --safe-radius(--radius, --threshold: 8px) {
-    /* Use container query units if available */
-    result: clamp(0px, calc((100cqi - var(--threshold)) * 999), var(--radius));
+  /* Use container query units if available */
+  result: clamp(0px, calc((100cqi - var(--threshold)) * 999), var(--radius));
 }
+
 
 /* ============================================================================
  * STAGGER ANIMATIONS (sibling-index)
@@ -1196,45 +924,45 @@ summary {
 
 /* Stagger children entrance animations */
 .stagger-enter > * {
-    animation: elvish-fade-in-up var(--duration-normal, 300ms)
-        var(--ease-out, ease-out) both;
-    animation-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+  animation: elvish-fade-in-up var(--duration-normal, 300ms) var(--ease-out, ease-out) both;
+  animation-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
 }
 
 /* Stagger with @starting-style for appear animations */
 .stagger-appear > * {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity var(--duration-normal, 300ms) var(--ease-out, ease-out),
-        transform var(--duration-normal, 300ms) var(--ease-out, ease-out);
-    transition-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
-
-    @starting-style {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  opacity: 1;
+  transform: translateY(0);
+  transition: 
+    opacity var(--duration-normal, 300ms) var(--ease-out, ease-out),
+    transform var(--duration-normal, 300ms) var(--ease-out, ease-out);
+  transition-delay: calc((sibling-index() - 1) * var(--stagger-delay, 50ms));
+  
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 /* Cascade opacity based on position */
 .fade-cascade > * {
-    opacity: calc(1 - (sibling-index() - 1) * 0.08);
+  opacity: calc(1 - (sibling-index() - 1) * 0.08);
 }
 
 /* Rainbow children using sibling-index for hue */
 .rainbow > * {
-    --hue: calc(sibling-index() * (360 / sibling-count()));
-    background: oklch(85% 0.2 var(--hue));
+  --hue: calc(sibling-index() * (360 / sibling-count()));
+  background: oklch(85% 0.2 var(--hue));
 }
 
 /* Auto-numbered list items */
 .auto-number > *::before {
-    content: counter(sibling-index) ". ";
-    counter-increment: none; /* We don't need CSS counters anymore! */
+  content: counter(sibling-index) ". ";
+  counter-increment: none; /* We don't need CSS counters anymore! */
 }
 
+
 /* ============================================================================
- * CONDITIONAL STYLES (if() function)
+ * CONDITIONAL STYLES (if() function)  
  * ============================================================================
  * Inline conditionals in CSS values.
  * Chrome 137+ / Edge 137+
@@ -1242,40 +970,46 @@ summary {
 
 /* Theme-aware component using if() */
 .theme-aware {
-    --is-dark: false;
-
-    background: if(
-        style(--is-dark: true): var(--color-surface-dark, #1a1a2e) ;
-            else: var(--color-surface-light, #ffffff)
-    );
-
-    color: if(
-        style(--is-dark: true): var(--color-text-dark, #f0f0f5) ;
-            else: var(--color-text-light, #1a1a2e)
-    );
+  --is-dark: false;
+  
+  background: if(
+    style(--is-dark: true): var(--color-surface-dark, #1a1a2e);
+    else: var(--color-surface-light, #ffffff)
+  );
+  
+  color: if(
+    style(--is-dark: true): var(--color-text-dark, #f0f0f5);
+    else: var(--color-text-light, #1a1a2e)
+  );
 }
 
 /* Responsive without media queries using if() */
 .responsive-grid {
-    display: grid;
-    grid-template-columns: if(
-        media(width >= 900px): repeat(4, 1fr) ;
-            media(width >= 600px): repeat(3, 1fr) ;
-            media(width >= 400px): repeat(2, 1fr) ; else: 1fr
-    );
+  display: grid;
+  grid-template-columns: if(
+    media(width >= 900px): repeat(4, 1fr);
+    media(width >= 600px): repeat(3, 1fr);
+    media(width >= 400px): repeat(2, 1fr);
+    else: 1fr
+  );
 }
 
 /* Compact variant using style query in if() */
 .adaptive-card {
-    --variant: default;
-
-    padding: if(
-        style(--variant: compact): var(--s-1) ;
-            style(--variant: spacious): var(--s2) ; else: var(--s1)
-    );
-
-    font-size: if(style(--variant: compact): var(--s-1) ; else: var(--s0));
+  --variant: default;
+  
+  padding: if(
+    style(--variant: compact): var(--s-1);
+    style(--variant: spacious): var(--s2);
+    else: var(--s1)
+  );
+  
+  font-size: if(
+    style(--variant: compact): var(--s-1);
+    else: var(--s0)
+  );
 }
+
 
 /* ============================================================================
  * TYPED ATTR() - HTML to CSS Bridge
@@ -1286,47 +1020,48 @@ summary {
 
 /* Grid columns from data attribute */
 [data-columns] {
-    --columns: attr(data-columns type(<number>), 1);
-    display: grid;
-    grid-template-columns: repeat(var(--columns), 1fr);
+  --columns: attr(data-columns type(<number>), 1);
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
 }
 
 /* Color from data attribute */
 [data-color] {
-    color: attr(data-color type(<color>), currentColor);
+  color: attr(data-color type(<color>), currentColor);
 }
 
 /* Background color from data attribute */
 [data-bg] {
-    background-color: attr(data-bg type(<color>), transparent);
+  background-color: attr(data-bg type(<color>), transparent);
 }
 
 /* Spacing from data attribute */
 [data-space] {
-    --space-value: attr(data-space type(<length>), var(--s1));
-    gap: var(--space-value);
-    padding: var(--space-value);
+  --space-value: attr(data-space type(<length>), var(--s1));
+  gap: var(--space-value);
+  padding: var(--space-value);
 }
 
 /* Progress bar using attr() */
 [data-progress] {
-    --progress: attr(data-progress type(<percentage>), 0%);
-    background: linear-gradient(
-        to right,
-        var(--color-accent) var(--progress),
-        var(--color-surface-sunken) var(--progress)
-    );
+  --progress: attr(data-progress type(<percentage>), 0%);
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--progress),
+    var(--color-surface-sunken) var(--progress)
+  );
 }
 
 /* Aspect ratio from attribute */
 [data-ratio] {
-    aspect-ratio: attr(data-ratio type(<ratio>), 1);
+  aspect-ratio: attr(data-ratio type(<ratio>), 1);
 }
 
 /* Dynamic view-transition-name from id */
 [data-transition] {
-    view-transition-name: attr(data-transition type(<custom-ident>), none);
+  view-transition-name: attr(data-transition type(<custom-ident>), none);
 }
+
 
 /* ============================================================================
  * KEYFRAMES
@@ -1334,43 +1069,42 @@ summary {
  */
 
 @keyframes elvish-fade-in {
-    from {
-        opacity: 0;
-    }
+  from { opacity: 0; }
 }
 
 @keyframes elvish-fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(var(--distance, 20px));
-    }
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance, 20px));
+  }
 }
 
 @keyframes elvish-fade-in-down {
-    from {
-        opacity: 0;
-        transform: translateY(calc(var(--distance, 20px) * -1));
-    }
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--distance, 20px) * -1));
+  }
 }
 
 @keyframes elvish-scale-in {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 @keyframes elvish-slide-in-right {
-    from {
-        transform: translateX(100%);
-    }
+  from {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes elvish-slide-in-left {
-    from {
-        transform: translateX(-100%);
-    }
+  from {
+    transform: translateX(-100%);
+  }
 }
+
 
 /* ============================================================================
  * FEATURE DETECTION
@@ -1380,73 +1114,43 @@ summary {
 
 /* Fallback for sibling-index() - requires JS to set --i custom property */
 @supports not (animation-delay: calc(sibling-index() * 1ms)) {
-    .stagger-enter > * {
-        /* Fallback: use nth-child or JS-set custom property */
-        animation-delay: calc(var(--i, 0) * var(--stagger-delay, 50ms));
-    }
-
-    .stagger-enter > :nth-child(1) {
-        --i: 0;
-    }
-    .stagger-enter > :nth-child(2) {
-        --i: 1;
-    }
-    .stagger-enter > :nth-child(3) {
-        --i: 2;
-    }
-    .stagger-enter > :nth-child(4) {
-        --i: 3;
-    }
-    .stagger-enter > :nth-child(5) {
-        --i: 4;
-    }
-    .stagger-enter > :nth-child(6) {
-        --i: 5;
-    }
-    .stagger-enter > :nth-child(7) {
-        --i: 6;
-    }
-    .stagger-enter > :nth-child(8) {
-        --i: 7;
-    }
-    .stagger-enter > :nth-child(9) {
-        --i: 8;
-    }
-    .stagger-enter > :nth-child(10) {
-        --i: 9;
-    }
+  .stagger-enter > * {
+    /* Fallback: use nth-child or JS-set custom property */
+    animation-delay: calc(var(--i, 0) * var(--stagger-delay, 50ms));
+  }
+  
+  .stagger-enter > :nth-child(1) { --i: 0; }
+  .stagger-enter > :nth-child(2) { --i: 1; }
+  .stagger-enter > :nth-child(3) { --i: 2; }
+  .stagger-enter > :nth-child(4) { --i: 3; }
+  .stagger-enter > :nth-child(5) { --i: 4; }
+  .stagger-enter > :nth-child(6) { --i: 5; }
+  .stagger-enter > :nth-child(7) { --i: 6; }
+  .stagger-enter > :nth-child(8) { --i: 7; }
+  .stagger-enter > :nth-child(9) { --i: 8; }
+  .stagger-enter > :nth-child(10) { --i: 9; }
 }
 
 /* Fallback for if() - use custom properties toggled by classes */
 @supports not (color: if(style(--x: y): red; else: blue)) {
-    .theme-aware {
-        background: var(--color-surface-light, #ffffff);
-        color: var(--color-text-light, #1a1a2e);
-    }
-
-    .theme-aware.is-dark {
-        background: var(--color-surface-dark, #1a1a2e);
-        color: var(--color-text-dark, #f0f0f5);
-    }
+  .theme-aware {
+    background: var(--color-surface-light, #ffffff);
+    color: var(--color-text-light, #1a1a2e);
+  }
+  
+  .theme-aware.is-dark {
+    background: var(--color-surface-dark, #1a1a2e);
+    color: var(--color-text-dark, #f0f0f5);
+  }
 }
 
 /* Fallback for typed attr() */
 @supports not (color: attr(data-x type(<color>), red)) {
-    [data-columns="2"] {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    [data-columns="3"] {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    [data-columns="4"] {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    [data-columns="5"] {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    [data-columns="6"] {
-        grid-template-columns: repeat(6, 1fr);
-    }
+  [data-columns="2"] { grid-template-columns: repeat(2, 1fr); }
+  [data-columns="3"] { grid-template-columns: repeat(3, 1fr); }
+  [data-columns="4"] { grid-template-columns: repeat(4, 1fr); }
+  [data-columns="5"] { grid-template-columns: repeat(5, 1fr); }
+  [data-columns="6"] { grid-template-columns: repeat(6, 1fr); }
 }
 
 
@@ -1737,6 +1441,2693 @@ summary {
   
   i-gant-thala {
     transition: aspect-ratio var(--transition-duration, 300ms) var(--transition-ease, ease);
+  }
+}
+
+
+/* === global/inverted-radius.css === */
+/**
+ * Elvish - Inverted Border Radius (Scalloped Corners)
+ * 
+ * Creates inward-curving corners using CSS masks. Since border-radius
+ * only supports outward curves, we use radial-gradient masks to "bite"
+ * into the corners.
+ * 
+ * Browser Support:
+ * - Chrome/Edge: ✅ Full support
+ * - Safari: ✅ Full support (needs -webkit- prefix for older versions)
+ * - Firefox: ✅ Full support
+ * 
+ * Techniques:
+ * 1. Simple: Single radial-gradient per corner (circular cut)
+ * 2. Smooth: Multiple gradients with curvature (Temani Afif technique)
+ * 
+ * Usage:
+ *   .element {
+ *     --invert-radius: 20px;  // Size of the inward curve
+ *     @apply inverted-corners; // Or use utility class
+ *   }
+ * 
+ * Based on work by Temani Afif (css-tip.com)
+ */
+
+/* ==========================================================================
+   CONFIGURATION
+   ========================================================================== */
+
+:root {
+  /* Default invert radius size */
+  --invert-radius: 1rem;
+  
+  /* For smooth curves: outer corner radius (optional) */
+  --invert-outer-radius: 0px;
+}
+
+/* ==========================================================================
+   SIMPLE INVERTED CORNERS (Circular Cut)
+   
+   Uses radial-gradient to create circular "bites" at corners.
+   Simple but effective for most use cases.
+   ========================================================================== */
+
+/**
+ * All corners inverted
+ * 
+ * How it works:
+ * - Four radial gradients, one per corner
+ * - Each gradient is transparent in a circle, black outside
+ * - mask-size: 50% 50% ensures gradients don't overlap
+ * - mask-composite (implicit intersect) combines them
+ */
+.inverted-corners,
+[data-corners="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%; /* Slight overlap to prevent seams */
+  mask-repeat: no-repeat;
+}
+
+/* Individual corner utilities */
+.inverted-corner-tl,
+[data-corner-tl="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-tr,
+[data-corner-tr="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-bl,
+[data-corner-bl="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+.inverted-corner-br,
+[data-corner-br="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+/* Horizontal pairs */
+.inverted-corners-top,
+[data-corners-top="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, top right, bottom;
+  mask-size: 51% 51%, 51% 51%, 100% 50%;
+  mask-repeat: no-repeat;
+}
+
+.inverted-corners-bottom,
+[data-corners-bottom="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% 50%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* Vertical pairs */
+.inverted-corners-left,
+[data-corners-left="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, bottom left, right;
+  mask-size: 51% 51%, 51% 51%, 50% 100%;
+  mask-repeat: no-repeat;
+}
+
+.inverted-corners-right,
+[data-corners-right="inverted"] {
+  --_r: var(--invert-radius, 1rem);
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left, top right, bottom right;
+  mask-size: 50% 100%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   SMOOTH INVERTED CORNERS (With Curvature)
+   
+   Temani Afif's technique: Uses multiple gradients to create smooth
+   transitions between the inverted corner and the element edges.
+   
+   Variables:
+   --invert-radius (--r): Size of the inward curve
+   --invert-outer-radius (--s): Curvature smoothness (outer radius)
+   ========================================================================== */
+
+.inverted-corners-smooth,
+[data-corners="inverted-smooth"] {
+  --_r: var(--invert-outer-radius, 0.5rem); /* Outer corner radius */
+  --_s: var(--invert-radius, 1.5rem);       /* Size of inner curve */
+  
+  border-radius: var(--_r);
+  
+  /* Reusable gradient components */
+  --_m: / calc(2 * var(--_r)) calc(2 * var(--_r)) 
+        radial-gradient(#000 70%, #0000 72%) no-repeat;
+  
+  /* Top-right corner mask (can be extended for all corners) */
+  mask:
+    right calc(var(--_s) + var(--_r)) top 0 var(--_m),
+    right calc(var(--_s) + var(--_r)) var(--_m),
+    radial-gradient(var(--_s) at 100% 0, #0000 99%, #000 calc(100% + 1px)) 
+      calc(-1 * var(--_r)) var(--_r) no-repeat,
+    conic-gradient(
+      at calc(100% - var(--_s) - 2 * var(--_r)) calc(var(--_s) + 2 * var(--_r)),
+      #0000 25%, #000 0
+    );
+}
+
+/* ==========================================================================
+   NOTCH VARIANTS
+   
+   Single-edge notches (like browser tabs or card connectors)
+   ========================================================================== */
+
+/* Top notch (like a browser tab connection) */
+.notch-top,
+[data-notch="top"] {
+  --_r: var(--invert-radius, 1rem);
+  --_x: var(--notch-offset, 50%); /* Horizontal position */
+  --_w: var(--notch-width, 4rem); /* Width of the notch */
+  
+  mask-image: 
+    /* Left side of notch */
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Right side of notch */
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Fill the rest */
+    linear-gradient(black, black);
+  mask-position: 
+    calc(var(--_x) - var(--_w) / 2 - var(--_r)) 0,
+    calc(var(--_x) + var(--_w) / 2) 0,
+    0 var(--_r);
+  mask-size: 
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    100% calc(100% - var(--_r));
+  mask-repeat: no-repeat;
+}
+
+/* Bottom notch */
+.notch-bottom,
+[data-notch="bottom"] {
+  --_r: var(--invert-radius, 1rem);
+  --_x: var(--notch-offset, 50%);
+  --_w: var(--notch-width, 4rem);
+  
+  mask-image: 
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    calc(var(--_x) - var(--_w) / 2 - var(--_r)) 0,
+    calc(var(--_x) + var(--_w) / 2) 0,
+    0 0;
+  mask-size: 
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    calc(var(--_w) / 2 + var(--_r)) 100%,
+    100% calc(100% - var(--_r));
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   SCALLOPED EDGES
+   
+   Repeating inverted curves along an edge (decorative)
+   ========================================================================== */
+
+.scalloped-top,
+[data-scalloped="top"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    center top,
+    0 var(--_r);
+  mask-size: 
+    var(--_size) var(--_size),
+    100% calc(100% - var(--_r));
+  mask-repeat: 
+    repeat-x,
+    no-repeat;
+}
+
+.scalloped-bottom,
+[data-scalloped="bottom"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 
+    0 0,
+    center bottom;
+  mask-size: 
+    100% calc(100% - var(--_r)),
+    var(--_size) var(--_size);
+  mask-repeat: 
+    no-repeat,
+    repeat-x;
+}
+
+.scalloped-left,
+[data-scalloped="left"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    left center,
+    var(--_r) 0;
+  mask-size: 
+    var(--_size) var(--_size),
+    calc(100% - var(--_r)) 100%;
+  mask-repeat: 
+    repeat-y,
+    no-repeat;
+}
+
+.scalloped-right,
+[data-scalloped="right"] {
+  --_r: var(--invert-radius, 0.75rem);
+  --_size: calc(var(--_r) * 2);
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 
+    0 0,
+    right center;
+  mask-size: 
+    calc(100% - var(--_r)) 100%,
+    var(--_size) var(--_size);
+  mask-repeat: 
+    no-repeat,
+    repeat-y;
+}
+
+/* ==========================================================================
+   TICKET/COUPON STYLE
+   
+   Semi-circles cut from sides (like a tear-off ticket)
+   ========================================================================== */
+
+.ticket,
+[data-shape="ticket"] {
+  --_r: var(--invert-radius, 0.75rem);
+  
+  mask-image: 
+    /* Left cutout */
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Right cutout */
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+  mask-repeat: no-repeat;
+}
+
+.ticket-vertical,
+[data-shape="ticket-vertical"] {
+  --_r: var(--invert-radius, 0.75rem);
+  
+  mask-image: 
+    /* Top cutout */
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    /* Bottom cutout */
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom;
+  mask-size: 100% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   COMBINING WITH REGULAR BORDER-RADIUS
+   
+   Mix inverted and regular corners
+   ========================================================================== */
+
+/* Regular top corners, inverted bottom corners */
+.rounded-top-inverted-bottom {
+  --_r: var(--invert-radius, 1rem);
+  --_br: var(--border-radius, 1rem);
+  
+  border-radius: var(--_br) var(--_br) 0 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% calc(100% - var(--_r)), 51% calc(var(--_r) + 1px), 51% calc(var(--_r) + 1px);
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   CSS FUNCTIONS FOR CALCULATIONS (Chrome 139+)
+   
+   Helper functions for dynamic inverted radius calculations.
+   Note: CSS @function can't return gradient values, but can help with
+   the numeric calculations used in positioning.
+   ========================================================================== */
+
+/* Safe invert radius: clamps to 0 when container is too small */
+@function --safe-invert-radius(--radius, --min-container: 0px) {
+  /* Only apply inversion if container is large enough */
+  result: clamp(0px, calc((100cqi - var(--min-container)) * 999), var(--radius));
+}
+
+/* Calculate mask position offset based on radius */
+@function --invert-offset(--radius, --outer-radius: 0px) {
+  result: calc(var(--radius) + var(--outer-radius));
+}
+
+/* Calculate the combined dimension for smooth corners */
+@function --invert-dimension(--radius, --outer-radius) {
+  result: calc(var(--radius) + var(--outer-radius));
+}
+
+/* ==========================================================================
+   ELVISH PRIMITIVE: i-nelu (inverted/scalloped)
+   
+   DEPRECATED: Use <i-thir shape="..."> instead for better composability.
+   
+   <i-thir shape="inverted">  replaces  <i-nelu>
+   <i-thir shape="ticket">    replaces  <i-nelu shape="ticket">
+   <i-thir shape="scalloped"> replaces  <i-nelu shape="scalloped">
+   
+   i-nelu is kept for backwards compatibility.
+   ========================================================================== */
+
+i-nelu {
+  display: block;
+  
+  /* Apply inverted corners by default */
+  --_r: var(--nelu-radius, var(--invert-radius, 1rem));
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* Attribute variants */
+i-nelu[corners="top"] {
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, top right, bottom;
+  mask-size: 51% 51%, 51% 51%, 100% 50%;
+}
+
+i-nelu[corners="bottom"] {
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% 50%, 51% 51%, 51% 51%;
+}
+
+i-nelu[shape="ticket"] {
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+}
+
+i-nelu[shape="scalloped"] {
+  --_size: calc(var(--_r) * 2);
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom, left center, right center;
+  mask-size: var(--_size) var(--_size);
+  mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+}
+
+
+/* === global/effects.css === */
+/**
+ * Elvish - Visual Effects (i-thîr)
+ * 
+ * "Thîr" (Sindarin) = face, expression, countenance
+ * The visual appearance/effect applied to content.
+ * 
+ * Philosophy:
+ * - Effects ARE surfaces, not decorations on surfaces
+ * - Layout primitives position effect containers
+ * - Effects provide background, borders, shadows as needed
+ * - Shapes define the outline/mask of the element
+ * 
+ * Two orthogonal axes:
+ * - effect="..." — what it LOOKS like (neon, frosted, shadow, etc.)
+ * - shape="..."  — what it's SHAPED like (inverted, ticket, scalloped, etc.)
+ * 
+ * Usage:
+ *   <i-thir effect="neon" padding="var(--s1)">Glowing card</i-thir>
+ *   <i-thir effect="frosted" shape="inverted">Scalloped glass panel</i-thir>
+ *   <i-thir shape="ticket">Ticket shape, no effect</i-thir>
+ *   <p>Text with <i-thir effect="neon" inline>glowing words</i-thir></p>
+ * 
+ * Browser Support:
+ * - Chrome/Edge: ✅ Full support
+ * - Safari: ✅ Full support (backdrop-filter needs -webkit-)
+ * - Firefox: ✅ Full support (backdrop-filter since v103)
+ */
+
+/* ==========================================================================
+   BASE ELEMENT
+   ========================================================================== */
+
+i-thir {
+  /* Block by default, can be made inline */
+  display: block;
+  
+  /* Default padding (can be overridden) */
+  padding: var(--thir-padding, var(--s1));
+  
+  /* Border-radius for shaped effects (shapes may override) */
+  border-radius: var(--thir-radius, var(--s-1));
+  
+  /* Positioning context for pseudo-elements */
+  position: relative;
+  
+  /* Prevent content overflow */
+  overflow: hidden;
+  
+  /* Default colors (effects override these) */
+  --thir-color-primary: var(--color-accent);
+  --thir-color-secondary: var(--brand-complement);
+  --thir-color-bg: var(--color-surface);
+  --thir-color-text: var(--color-text);
+  
+  /* Shape radius (for inverted/scalloped shapes) */
+  --thir-shape-radius: var(--invert-radius, 1rem);
+  
+  /* Transition for interactive effects */
+  transition: 
+    box-shadow 0.3s ease,
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+/* Inline variant for text decoration */
+i-thir[inline] {
+  display: inline;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+}
+
+/* No padding variant */
+i-thir[compact] {
+  padding: 0;
+}
+
+/* ==========================================================================
+   SHAPES (mask-based outlines)
+   
+   These define the element's silhouette using mask-image.
+   Can be combined with any effect.
+   
+   Two attribute names for clarity:
+   - corners="..." for corner modifications (inverted, top, bottom, etc.)
+   - shape="..."   for overall shapes (ticket, scalloped, pill, etc.)
+   ========================================================================== */
+
+/* --- Inverted Corners (all four) --- */
+i-thir[shape="inverted"],
+i-thir[corners="inverted"],
+i-thir[corners="all"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Inverted Top Corners --- */
+i-thir[shape="inverted-top"],
+i-thir[corners="top"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, top right, bottom;
+  mask-size: 51% 51%, 51% 51%, 100% 50%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Inverted Bottom Corners --- */
+i-thir[shape="inverted-bottom"],
+i-thir[corners="bottom"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: top, bottom left, bottom right;
+  mask-size: 100% 50%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Inverted Left Corners --- */
+i-thir[shape="inverted-left"],
+i-thir[corners="left"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: top left, bottom left, right;
+  mask-size: 51% 51%, 51% 51%, 50% 100%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Inverted Right Corners --- */
+i-thir[shape="inverted-right"],
+i-thir[corners="right"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left, top right, bottom right;
+  mask-size: 50% 100%, 51% 51%, 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Individual Corners --- */
+i-thir[corners="tl"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  mask-image: radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+i-thir[corners="tr"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  mask-image: radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+i-thir[corners="bl"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  mask-image: radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+i-thir[corners="br"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  mask-image: radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-repeat: no-repeat;
+}
+
+/* --- Ticket (horizontal side cutouts) --- */
+i-thir[shape="ticket"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: left center, right center;
+  mask-size: 51% 100%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Ticket Vertical (top/bottom cutouts) --- */
+i-thir[shape="ticket-vertical"] {
+  --_r: var(--thir-shape-radius);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom;
+  mask-size: 100% 51%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Scalloped Top --- */
+i-thir[shape="scalloped-top"] {
+  --_r: var(--thir-shape-radius);
+  --_size: calc(var(--_r) * 2);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: center top, 0 var(--_r);
+  mask-size: var(--_size) var(--_size), 100% calc(100% - var(--_r));
+  mask-repeat: repeat-x, no-repeat;
+}
+
+/* --- Scalloped Bottom --- */
+i-thir[shape="scalloped-bottom"] {
+  --_r: var(--thir-shape-radius);
+  --_size: calc(var(--_r) * 2);
+  border-radius: 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 0 0, center bottom;
+  mask-size: 100% calc(100% - var(--_r)), var(--_size) var(--_size);
+  mask-repeat: no-repeat, repeat-x;
+}
+
+/* --- Scalloped Left --- */
+i-thir[shape="scalloped-left"] {
+  --_r: var(--thir-shape-radius);
+  --_size: calc(var(--_r) * 2);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: left center, var(--_r) 0;
+  mask-size: var(--_size) var(--_size), calc(100% - var(--_r)) 100%;
+  mask-repeat: repeat-y, no-repeat;
+}
+
+/* --- Scalloped Right --- */
+i-thir[shape="scalloped-right"] {
+  --_r: var(--thir-shape-radius);
+  --_size: calc(var(--_r) * 2);
+  border-radius: 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 0 0, right center;
+  mask-size: calc(100% - var(--_r)) 100%, var(--_size) var(--_size);
+  mask-repeat: no-repeat, repeat-y;
+}
+
+/* --- Scalloped All Edges --- */
+i-thir[shape="scalloped"] {
+  --_r: var(--thir-shape-radius);
+  --_size: calc(var(--_r) * 2);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 50% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 50% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: center top, center bottom, left center, right center;
+  mask-size: var(--_size) var(--_size);
+  mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+}
+
+/* --- Notch Top (single centered notch) --- */
+i-thir[shape="notch-top"] {
+  --_r: var(--thir-shape-radius);
+  --_notch-width: var(--thir-notch-width, 4rem);
+  border-radius: 0;
+  
+  mask-image: 
+    radial-gradient(circle at 100% 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 0, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    linear-gradient(black, black);
+  mask-position: 
+    calc(50% - var(--_notch-width) / 2 - var(--_r)) 0,
+    calc(50% + var(--_notch-width) / 2) 0,
+    0 var(--_r);
+  mask-size: 
+    calc(50% - var(--_notch-width) / 2 + var(--_r)) 100%,
+    calc(50% - var(--_notch-width) / 2 + var(--_r)) 100%,
+    100% calc(100% - var(--_r));
+  mask-repeat: no-repeat;
+}
+
+/* --- Notch Bottom --- */
+i-thir[shape="notch-bottom"] {
+  --_r: var(--thir-shape-radius);
+  --_notch-width: var(--thir-notch-width, 4rem);
+  border-radius: 0;
+  
+  mask-image: 
+    linear-gradient(black, black),
+    radial-gradient(circle at 100% 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px)),
+    radial-gradient(circle at 0 100%, transparent 0, transparent var(--_r), black calc(var(--_r) + 1px));
+  mask-position: 
+    0 0,
+    calc(50% - var(--_notch-width) / 2 - var(--_r)) 0,
+    calc(50% + var(--_notch-width) / 2) 0;
+  mask-size: 
+    100% calc(100% - var(--_r)),
+    calc(50% - var(--_notch-width) / 2 + var(--_r)) 100%,
+    calc(50% - var(--_notch-width) / 2 + var(--_r)) 100%;
+  mask-repeat: no-repeat;
+}
+
+/* --- Rounded (explicit, uses border-radius) --- */
+i-thir[shape="rounded"] {
+  border-radius: var(--thir-shape-radius);
+}
+
+/* --- Pill (fully rounded ends) --- */
+i-thir[shape="pill"] {
+  border-radius: 9999px;
+}
+
+/* --- Square (no radius) --- */
+i-thir[shape="square"] {
+  border-radius: 0;
+}
+
+/* ==========================================================================
+   EFFECT: NEON
+   
+   Glowing outline effect, like neon signs.
+   Uses multiple box-shadows for the glow layers.
+   ========================================================================== */
+
+i-thir[effect="neon"] {
+  --neon-color: var(--thir-color-primary, oklch(70% 0.25 200));
+  --neon-intensity: 1;
+  --neon-spread: 2px;
+  
+  background: oklch(15% 0.02 var(--neon-hue, 200));
+  color: var(--neon-color);
+  border: 2px solid var(--neon-color);
+  
+  box-shadow:
+    /* Inner glow */
+    inset 0 0 calc(10px * var(--neon-intensity)) oklch(from var(--neon-color) l c h / 0.3),
+    /* Core glow */
+    0 0 calc(5px * var(--neon-intensity)) var(--neon-color),
+    /* Mid glow */
+    0 0 calc(20px * var(--neon-intensity)) var(--neon-color),
+    /* Outer glow */
+    0 0 calc(40px * var(--neon-intensity)) oklch(from var(--neon-color) l c h / 0.5),
+    /* Spread glow */
+    0 0 calc(80px * var(--neon-intensity)) oklch(from var(--neon-color) l c h / 0.2);
+}
+
+i-thir[effect="neon"]:hover {
+  --neon-intensity: 1.3;
+}
+
+/* Neon color variants */
+i-thir[effect="neon"][color="pink"] {
+  --neon-color: oklch(70% 0.25 350);
+  --neon-hue: 350;
+}
+
+i-thir[effect="neon"][color="cyan"] {
+  --neon-color: oklch(75% 0.2 200);
+  --neon-hue: 200;
+}
+
+i-thir[effect="neon"][color="green"] {
+  --neon-color: oklch(75% 0.25 145);
+  --neon-hue: 145;
+}
+
+i-thir[effect="neon"][color="orange"] {
+  --neon-color: oklch(75% 0.2 60);
+  --neon-hue: 60;
+}
+
+i-thir[effect="neon"][color="purple"] {
+  --neon-color: oklch(65% 0.25 300);
+  --neon-hue: 300;
+}
+
+/* Neon text (inline) */
+i-thir[effect="neon"][inline] {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  text-shadow:
+    0 0 5px var(--neon-color),
+    0 0 10px var(--neon-color),
+    0 0 20px var(--neon-color),
+    0 0 40px oklch(from var(--neon-color) l c h / 0.5);
+}
+
+/* ==========================================================================
+   EFFECT: FROSTED / GLASS
+   
+   Blurred background effect, like frosted glass.
+   Uses backdrop-filter.
+   ========================================================================== */
+
+i-thir[effect="frosted"],
+i-thir[effect="glass"] {
+  --frost-blur: 10px;
+  --frost-opacity: 0.7;
+  --frost-saturation: 1.2;
+  
+  background: oklch(from var(--thir-color-bg) l c h / var(--frost-opacity));
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(var(--frost-saturation));
+  backdrop-filter: blur(var(--frost-blur)) saturate(var(--frost-saturation));
+  border: 1px solid oklch(from var(--thir-color-bg) calc(l + 0.1) c h / 0.3);
+}
+
+/* Light frosted variant */
+i-thir[effect="frosted"][variant="light"],
+i-thir[effect="glass"][variant="light"] {
+  background: oklch(98% 0 0 / 0.6);
+  border-color: oklch(100% 0 0 / 0.3);
+}
+
+/* Dark frosted variant */
+i-thir[effect="frosted"][variant="dark"],
+i-thir[effect="glass"][variant="dark"] {
+  background: oklch(15% 0 0 / 0.7);
+  border-color: oklch(30% 0 0 / 0.3);
+  color: oklch(95% 0 0);
+}
+
+/* ==========================================================================
+   EFFECT: GLASSMORPHISM
+   
+   Modern glass card effect with subtle gradient and border.
+   Popular in UI design since ~2020.
+   ========================================================================== */
+
+i-thir[effect="glassmorphism"] {
+  --glass-blur: 16px;
+  --glass-opacity: 0.25;
+  
+  background: linear-gradient(
+    135deg,
+    oklch(100% 0 0 / var(--glass-opacity)),
+    oklch(100% 0 0 / calc(var(--glass-opacity) * 0.5))
+  );
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid oklch(100% 0 0 / 0.2);
+  box-shadow: 
+    0 8px 32px oklch(0% 0 0 / 0.1),
+    inset 0 0 0 1px oklch(100% 0 0 / 0.1);
+}
+
+/* Dark glassmorphism */
+i-thir[effect="glassmorphism"][variant="dark"] {
+  background: linear-gradient(
+    135deg,
+    oklch(20% 0 0 / 0.6),
+    oklch(10% 0 0 / 0.4)
+  );
+  border-color: oklch(40% 0 0 / 0.3);
+  color: oklch(95% 0 0);
+}
+
+/* ==========================================================================
+   EFFECT: NEUMORPHISM
+   
+   Soft UI with extruded/pressed appearance.
+   Uses dual shadows (light and dark) to create depth.
+   ========================================================================== */
+
+i-thir[effect="neumorphism"],
+i-thir[effect="soft"] {
+  --neu-bg: var(--thir-color-bg, oklch(92% 0 0));
+  --neu-distance: 6px;
+  --neu-blur: 12px;
+  --neu-intensity: 0.15;
+  
+  background: var(--neu-bg);
+  border: none;
+  box-shadow:
+    /* Light shadow (top-left) */
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1) var(--neu-blur) 
+      oklch(from var(--neu-bg) calc(l + 0.08) c h),
+    /* Dark shadow (bottom-right) */
+    var(--neu-distance) var(--neu-distance) var(--neu-blur)
+      oklch(from var(--neu-bg) calc(l - var(--neu-intensity)) c h);
+}
+
+/* Pressed/inset variant */
+i-thir[effect="neumorphism"][variant="inset"],
+i-thir[effect="soft"][variant="inset"],
+i-thir[effect="neumorphism"]:active {
+  box-shadow:
+    /* Inset light shadow */
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1) var(--neu-blur) 
+      oklch(from var(--neu-bg) calc(l + 0.08) c h),
+    /* Inset dark shadow */
+    inset var(--neu-distance) var(--neu-distance) var(--neu-blur)
+      oklch(from var(--neu-bg) calc(l - var(--neu-intensity)) c h);
+}
+
+/* Dark neumorphism */
+i-thir[effect="neumorphism"][variant="dark"],
+i-thir[effect="soft"][variant="dark"] {
+  --neu-bg: oklch(25% 0 0);
+  color: oklch(85% 0 0);
+}
+
+/* ==========================================================================
+   EFFECT: EMBOSSED / RAISED
+   
+   Appears to pop out of the surface.
+   ========================================================================== */
+
+i-thir[effect="embossed"],
+i-thir[effect="raised"] {
+  background: var(--thir-color-bg);
+  border: 1px solid oklch(from var(--thir-color-bg) calc(l - 0.1) c h);
+  box-shadow:
+    /* Bottom edge highlight */
+    inset 0 -2px 0 oklch(from var(--thir-color-bg) calc(l - 0.15) c h),
+    /* Top edge highlight */
+    inset 0 2px 0 oklch(from var(--thir-color-bg) calc(l + 0.1) c h),
+    /* Drop shadow */
+    0 4px 8px oklch(0% 0 0 / 0.15);
+}
+
+i-thir[effect="embossed"]:active,
+i-thir[effect="raised"]:active {
+  box-shadow:
+    inset 0 2px 4px oklch(0% 0 0 / 0.1);
+  transform: translateY(2px);
+}
+
+/* ==========================================================================
+   EFFECT: DEBOSSED / INSET
+   
+   Appears pressed into the surface.
+   ========================================================================== */
+
+i-thir[effect="debossed"],
+i-thir[effect="inset"] {
+  background: oklch(from var(--thir-color-bg) calc(l - 0.05) c h);
+  border: 1px solid oklch(from var(--thir-color-bg) calc(l - 0.15) c h);
+  box-shadow:
+    /* Top inner shadow */
+    inset 0 2px 4px oklch(0% 0 0 / 0.15),
+    /* Bottom highlight */
+    inset 0 -1px 0 oklch(100% 0 0 / 0.1);
+}
+
+/* ==========================================================================
+   EFFECT: GRADIENT BORDER
+   
+   Colorful animated gradient border.
+   Uses background trick (gradient on padding area).
+   ========================================================================== */
+
+i-thir[effect="gradient-border"] {
+  --gradient-size: 3px;
+  --gradient-angle: 45deg;
+  --gradient-speed: 3s;
+  
+  background: 
+    linear-gradient(var(--thir-color-bg), var(--thir-color-bg)) padding-box,
+    linear-gradient(
+      var(--gradient-angle),
+      var(--thir-color-primary),
+      var(--thir-color-secondary),
+      var(--thir-color-primary)
+    ) border-box;
+  border: var(--gradient-size) solid transparent;
+}
+
+/* Animated gradient */
+i-thir[effect="gradient-border"][animated] {
+  background: 
+    linear-gradient(var(--thir-color-bg), var(--thir-color-bg)) padding-box,
+    conic-gradient(
+      from var(--gradient-angle),
+      var(--thir-color-primary),
+      var(--thir-color-secondary),
+      oklch(70% 0.2 100),
+      var(--thir-color-primary)
+    ) border-box;
+  animation: gradient-spin var(--gradient-speed) linear infinite;
+}
+
+@keyframes gradient-spin {
+  to { --gradient-angle: 405deg; }
+}
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 45deg;
+  inherits: false;
+}
+
+/* ==========================================================================
+   EFFECT: SHIMMER / SHINE
+   
+   Animated light sweep across the element.
+   ========================================================================== */
+
+i-thir[effect="shimmer"],
+i-thir[effect="shine"] {
+  background: var(--thir-color-bg);
+  overflow: hidden;
+}
+
+i-thir[effect="shimmer"]::after,
+i-thir[effect="shine"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    oklch(100% 0 0 / 0.3) 45%,
+    oklch(100% 0 0 / 0.5) 50%,
+    oklch(100% 0 0 / 0.3) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Shimmer on hover only */
+i-thir[effect="shimmer"][on-hover]::after,
+i-thir[effect="shine"][on-hover]::after {
+  animation: none;
+  background-position: 200% 0;
+  transition: background-position 0.6s ease;
+}
+
+i-thir[effect="shimmer"][on-hover]:hover::after,
+i-thir[effect="shine"][on-hover]:hover::after {
+  background-position: -200% 0;
+}
+
+/* ==========================================================================
+   EFFECT: HOLOGRAPHIC
+   
+   Iridescent color-shifting effect.
+   Changes hue based on position/angle.
+   ========================================================================== */
+
+i-thir[effect="holographic"],
+i-thir[effect="iridescent"] {
+  --holo-angle: 135deg;
+  
+  background: linear-gradient(
+    var(--holo-angle),
+    oklch(85% 0.15 0),
+    oklch(85% 0.15 60),
+    oklch(85% 0.15 120),
+    oklch(85% 0.15 180),
+    oklch(85% 0.15 240),
+    oklch(85% 0.15 300),
+    oklch(85% 0.15 360)
+  );
+  background-size: 400% 400%;
+  animation: holographic 8s ease infinite;
+  color: oklch(20% 0 0);
+}
+
+@keyframes holographic {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Holographic with mouse tracking (requires JS) */
+i-thir[effect="holographic"][interactive] {
+  animation: none;
+  background-position: var(--mouse-x, 50%) var(--mouse-y, 50%);
+  transition: background-position 0.1s ease;
+}
+
+/* ==========================================================================
+   EFFECT: GRAIN / NOISE
+   
+   Film grain texture overlay.
+   Uses SVG filter for noise generation.
+   ========================================================================== */
+
+i-thir[effect="grain"],
+i-thir[effect="noise"] {
+  --grain-opacity: 0.15;
+  --grain-size: 100;
+  
+  background: var(--thir-color-bg);
+}
+
+i-thir[effect="grain"]::after,
+i-thir[effect="noise"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* ==========================================================================
+   EFFECT: RETRO / PIXELATED
+   
+   Retro pixel/8-bit aesthetic.
+   Uses stepped gradients.
+   ========================================================================== */
+
+i-thir[effect="retro"],
+i-thir[effect="pixel"] {
+  --pixel-size: 4px;
+  
+  background: var(--thir-color-primary);
+  border-radius: 0;
+  image-rendering: pixelated;
+  
+  /* Pixelated border using box-shadow */
+  box-shadow:
+    var(--pixel-size) 0 0 var(--thir-color-bg),
+    calc(var(--pixel-size) * -1) 0 0 var(--thir-color-bg),
+    0 var(--pixel-size) 0 var(--thir-color-bg),
+    0 calc(var(--pixel-size) * -1) 0 var(--thir-color-bg),
+    calc(var(--pixel-size) * 2) var(--pixel-size) 0 oklch(from var(--thir-color-primary) calc(l - 0.2) c h),
+    var(--pixel-size) calc(var(--pixel-size) * 2) 0 oklch(from var(--thir-color-primary) calc(l - 0.2) c h);
+}
+
+/* ==========================================================================
+   EFFECT: OUTLINE / STROKE
+   
+   Multi-layered outline effect.
+   Good for text and cards.
+   ========================================================================== */
+
+i-thir[effect="outline"],
+i-thir[effect="stroke"] {
+  --outline-width: 3px;
+  --outline-color: var(--thir-color-primary);
+  
+  background: transparent;
+  border: var(--outline-width) solid var(--outline-color);
+  color: var(--outline-color);
+}
+
+/* Double outline */
+i-thir[effect="outline"][variant="double"],
+i-thir[effect="stroke"][variant="double"] {
+  box-shadow:
+    0 0 0 calc(var(--outline-width) + 3px) var(--thir-color-bg),
+    0 0 0 calc(var(--outline-width) + 6px) var(--outline-color);
+}
+
+/* Outline text (inline) */
+i-thir[effect="outline"][inline],
+i-thir[effect="stroke"][inline] {
+  -webkit-text-stroke: var(--outline-width) var(--outline-color);
+  color: transparent;
+  border: none;
+}
+
+/* ==========================================================================
+   EFFECT: SHADOW (Utility)
+   
+   Pre-configured shadow levels.
+   ========================================================================== */
+
+i-thir[effect="shadow"] {
+  background: var(--thir-color-bg);
+  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.15);
+}
+
+i-thir[effect="shadow"][level="sm"] {
+  box-shadow: 0 2px 4px oklch(0% 0 0 / 0.1);
+}
+
+i-thir[effect="shadow"][level="md"] {
+  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.15);
+}
+
+i-thir[effect="shadow"][level="lg"] {
+  box-shadow: 
+    0 8px 24px oklch(0% 0 0 / 0.15),
+    0 2px 8px oklch(0% 0 0 / 0.1);
+}
+
+i-thir[effect="shadow"][level="xl"] {
+  box-shadow:
+    0 16px 48px oklch(0% 0 0 / 0.2),
+    0 4px 16px oklch(0% 0 0 / 0.1);
+}
+
+/* Colored shadow */
+i-thir[effect="shadow"][colored] {
+  box-shadow: 0 8px 24px oklch(from var(--thir-color-primary) l c h / 0.3);
+}
+
+/* ==========================================================================
+   EFFECT: BLUR
+   
+   Blurred element (not backdrop).
+   ========================================================================== */
+
+i-thir[effect="blur"] {
+  --blur-amount: 4px;
+  filter: blur(var(--blur-amount));
+}
+
+i-thir[effect="blur"]:hover {
+  filter: blur(0);
+}
+
+/* ==========================================================================
+   TIER 2: LOW-LEVEL SHORTCUTS
+   
+   Single-property conveniences for common visual adjustments.
+   Can be combined with effects, corners, and shapes.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   FILTER SHORTCUTS
+   
+   CSS filter property shortcuts for quick adjustments.
+   --------------------------------------------------------------------------- */
+
+/* Blur filters */
+i-thir[filter="blur-xs"]   { filter: blur(2px); }
+i-thir[filter="blur-sm"]   { filter: blur(4px); }
+i-thir[filter="blur"]      { filter: blur(8px); }
+i-thir[filter="blur-md"]   { filter: blur(12px); }
+i-thir[filter="blur-lg"]   { filter: blur(16px); }
+i-thir[filter="blur-xl"]   { filter: blur(24px); }
+i-thir[filter="blur-2xl"]  { filter: blur(40px); }
+
+/* Grayscale */
+i-thir[filter="grayscale"]      { filter: grayscale(100%); }
+i-thir[filter="grayscale-half"] { filter: grayscale(50%); }
+
+/* Sepia (vintage) */
+i-thir[filter="sepia"]      { filter: sepia(100%); }
+i-thir[filter="sepia-half"] { filter: sepia(50%); }
+
+/* Brightness */
+i-thir[filter="brightness-down"]  { filter: brightness(0.75); }
+i-thir[filter="brightness-dim"]   { filter: brightness(0.5); }
+i-thir[filter="brightness-up"]    { filter: brightness(1.25); }
+i-thir[filter="brightness-high"]  { filter: brightness(1.5); }
+
+/* Contrast */
+i-thir[filter="contrast-down"] { filter: contrast(0.75); }
+i-thir[filter="contrast-flat"] { filter: contrast(0.5); }
+i-thir[filter="contrast-up"]   { filter: contrast(1.25); }
+i-thir[filter="contrast-high"] { filter: contrast(1.5); }
+
+/* Saturation */
+i-thir[filter="saturate-down"]  { filter: saturate(0.5); }
+i-thir[filter="saturate-none"]  { filter: saturate(0); }
+i-thir[filter="saturate-up"]    { filter: saturate(1.5); }
+i-thir[filter="saturate-vivid"] { filter: saturate(2); }
+
+/* Invert */
+i-thir[filter="invert"]      { filter: invert(100%); }
+i-thir[filter="invert-half"] { filter: invert(50%); }
+
+/* Hue rotation */
+i-thir[filter="hue-30"]  { filter: hue-rotate(30deg); }
+i-thir[filter="hue-60"]  { filter: hue-rotate(60deg); }
+i-thir[filter="hue-90"]  { filter: hue-rotate(90deg); }
+i-thir[filter="hue-120"] { filter: hue-rotate(120deg); }
+i-thir[filter="hue-180"] { filter: hue-rotate(180deg); }
+i-thir[filter="hue-270"] { filter: hue-rotate(270deg); }
+
+/* Drop shadow (for transparent images/SVGs) */
+i-thir[filter="drop-shadow-sm"] { filter: drop-shadow(0 1px 2px oklch(0% 0 0 / 0.2)); }
+i-thir[filter="drop-shadow"]    { filter: drop-shadow(0 2px 4px oklch(0% 0 0 / 0.25)); }
+i-thir[filter="drop-shadow-lg"] { filter: drop-shadow(0 4px 8px oklch(0% 0 0 / 0.3)); }
+
+/* Combination presets */
+i-thir[filter="vintage"] { 
+  filter: sepia(40%) contrast(1.1) brightness(0.9) saturate(0.8); 
+}
+i-thir[filter="dramatic"] { 
+  filter: contrast(1.3) brightness(0.95) saturate(1.2); 
+}
+i-thir[filter="faded"] { 
+  filter: contrast(0.9) brightness(1.1) saturate(0.7); 
+}
+i-thir[filter="noir"] { 
+  filter: grayscale(100%) contrast(1.2) brightness(0.9); 
+}
+
+/* ---------------------------------------------------------------------------
+   BACKDROP SHORTCUTS
+   
+   CSS backdrop-filter for effects on content behind the element.
+   --------------------------------------------------------------------------- */
+
+i-thir[backdrop="blur-xs"]  { -webkit-backdrop-filter: blur(2px);  backdrop-filter: blur(2px); }
+i-thir[backdrop="blur-sm"]  { -webkit-backdrop-filter: blur(4px);  backdrop-filter: blur(4px); }
+i-thir[backdrop="blur"]     { -webkit-backdrop-filter: blur(8px);  backdrop-filter: blur(8px); }
+i-thir[backdrop="blur-md"]  { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+i-thir[backdrop="blur-lg"]  { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+i-thir[backdrop="blur-xl"]  { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+
+i-thir[backdrop="dim"] { 
+  -webkit-backdrop-filter: brightness(0.7); 
+  backdrop-filter: brightness(0.7); 
+}
+i-thir[backdrop="dim-heavy"] { 
+  -webkit-backdrop-filter: brightness(0.4); 
+  backdrop-filter: brightness(0.4); 
+}
+i-thir[backdrop="brighten"] { 
+  -webkit-backdrop-filter: brightness(1.3); 
+  backdrop-filter: brightness(1.3); 
+}
+
+i-thir[backdrop="saturate"] { 
+  -webkit-backdrop-filter: saturate(1.5); 
+  backdrop-filter: saturate(1.5); 
+}
+i-thir[backdrop="desaturate"] { 
+  -webkit-backdrop-filter: saturate(0.5); 
+  backdrop-filter: saturate(0.5); 
+}
+i-thir[backdrop="grayscale"] { 
+  -webkit-backdrop-filter: grayscale(100%); 
+  backdrop-filter: grayscale(100%); 
+}
+
+/* Combination backdrop effects */
+i-thir[backdrop="frost"] { 
+  -webkit-backdrop-filter: blur(10px) saturate(1.2); 
+  backdrop-filter: blur(10px) saturate(1.2); 
+}
+i-thir[backdrop="frost-heavy"] { 
+  -webkit-backdrop-filter: blur(20px) saturate(1.3); 
+  backdrop-filter: blur(20px) saturate(1.3); 
+}
+
+/* ---------------------------------------------------------------------------
+   BLEND MODE SHORTCUTS
+   
+   CSS mix-blend-mode for compositing with background.
+   --------------------------------------------------------------------------- */
+
+i-thir[blend="multiply"]    { mix-blend-mode: multiply; }
+i-thir[blend="screen"]      { mix-blend-mode: screen; }
+i-thir[blend="overlay"]     { mix-blend-mode: overlay; }
+i-thir[blend="darken"]      { mix-blend-mode: darken; }
+i-thir[blend="lighten"]     { mix-blend-mode: lighten; }
+i-thir[blend="color-dodge"] { mix-blend-mode: color-dodge; }
+i-thir[blend="color-burn"]  { mix-blend-mode: color-burn; }
+i-thir[blend="hard-light"]  { mix-blend-mode: hard-light; }
+i-thir[blend="soft-light"]  { mix-blend-mode: soft-light; }
+i-thir[blend="difference"]  { mix-blend-mode: difference; }
+i-thir[blend="exclusion"]   { mix-blend-mode: exclusion; }
+i-thir[blend="hue"]         { mix-blend-mode: hue; }
+i-thir[blend="saturation"]  { mix-blend-mode: saturation; }
+i-thir[blend="color"]       { mix-blend-mode: color; }
+i-thir[blend="luminosity"]  { mix-blend-mode: luminosity; }
+
+/* Isolation for blend mode containment */
+i-thir[isolate] { isolation: isolate; }
+
+/* ---------------------------------------------------------------------------
+   HOVER & TOUCH INTERACTION SHORTCUTS
+   
+   Hover effects for desktop, with optional touch support for mobile.
+   
+   Usage:
+     <i-thir hover="lift">Desktop hover only</i-thir>
+     <i-thir hover="lift" touch>Both hover AND long-press</i-thir>
+     <i-thir hover="lift" touch="pulse">Different per platform</i-thir>
+   
+   The [touch] attribute enables JS-based touch interactions.
+   When [touch] has no value, it uses the same effect as [hover].
+   --------------------------------------------------------------------------- */
+
+/* Base: ensure transitions work */
+i-thir[hover] {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Touch activation class (added by JS on long-press) */
+i-thir[touch].touch-active {
+  /* Same styles as :hover will be applied */
+}
+
+/* Lift (raises up with shadow) */
+i-thir[hover="lift"]:hover,
+i-thir[touch="lift"].touch-active,
+i-thir[hover="lift"][touch]:not([touch*="="]).touch-active {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px oklch(0% 0 0 / 0.15);
+}
+
+i-thir[hover="lift-sm"]:hover,
+i-thir[touch="lift-sm"].touch-active,
+i-thir[hover="lift-sm"][touch]:not([touch*="="]).touch-active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.1);
+}
+
+i-thir[hover="lift-lg"]:hover,
+i-thir[touch="lift-lg"].touch-active,
+i-thir[hover="lift-lg"][touch]:not([touch*="="]).touch-active {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px oklch(0% 0 0 / 0.2);
+}
+
+/* Sink (presses down) */
+i-thir[hover="sink"]:hover,
+i-thir[touch="sink"].touch-active,
+i-thir[hover="sink"][touch]:not([touch*="="]).touch-active {
+  transform: translateY(2px);
+}
+
+i-thir[hover="sink"]:active {
+  transform: translateY(4px);
+}
+
+/* Scale - Grow */
+i-thir[hover="grow"]:hover,
+i-thir[touch="grow"].touch-active,
+i-thir[hover="grow"][touch]:not([touch*="="]).touch-active {
+  transform: scale(1.05);
+}
+
+i-thir[hover="grow-sm"]:hover,
+i-thir[touch="grow-sm"].touch-active,
+i-thir[hover="grow-sm"][touch]:not([touch*="="]).touch-active {
+  transform: scale(1.02);
+}
+
+i-thir[hover="grow-lg"]:hover,
+i-thir[touch="grow-lg"].touch-active,
+i-thir[hover="grow-lg"][touch]:not([touch*="="]).touch-active {
+  transform: scale(1.1);
+}
+
+/* Scale - Shrink */
+i-thir[hover="shrink"]:hover,
+i-thir[touch="shrink"].touch-active,
+i-thir[hover="shrink"][touch]:not([touch*="="]).touch-active {
+  transform: scale(0.95);
+}
+
+i-thir[hover="shrink-sm"]:hover,
+i-thir[touch="shrink-sm"].touch-active,
+i-thir[hover="shrink-sm"][touch]:not([touch*="="]).touch-active {
+  transform: scale(0.98);
+}
+
+/* Tilt (rotation) */
+i-thir[hover="tilt"]:hover,
+i-thir[touch="tilt"].touch-active,
+i-thir[hover="tilt"][touch]:not([touch*="="]).touch-active {
+  transform: rotate(2deg);
+}
+
+i-thir[hover="tilt-left"]:hover,
+i-thir[touch="tilt-left"].touch-active,
+i-thir[hover="tilt-left"][touch]:not([touch*="="]).touch-active {
+  transform: rotate(-3deg);
+}
+
+i-thir[hover="tilt-right"]:hover,
+i-thir[touch="tilt-right"].touch-active,
+i-thir[hover="tilt-right"][touch]:not([touch*="="]).touch-active {
+  transform: rotate(3deg);
+}
+
+/* Perspective tilt (3D) */
+i-thir[hover="tilt-3d"] {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+i-thir[hover="tilt-3d"]:hover,
+i-thir[touch="tilt-3d"].touch-active,
+i-thir[hover="tilt-3d"][touch]:not([touch*="="]).touch-active {
+  transform: rotateX(5deg) rotateY(-5deg);
+}
+
+/* Wiggle (playful) */
+@keyframes thir-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+i-thir[hover="wiggle"]:hover,
+i-thir[touch="wiggle"].touch-active,
+i-thir[hover="wiggle"][touch]:not([touch*="="]).touch-active {
+  animation: thir-wiggle 0.3s ease-in-out;
+}
+
+/* Pulse */
+@keyframes thir-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+i-thir[hover="pulse"]:hover,
+i-thir[touch="pulse"].touch-active,
+i-thir[hover="pulse"][touch]:not([touch*="="]).touch-active {
+  animation: thir-pulse 0.6s ease-in-out infinite;
+}
+
+/* Jiggle */
+@keyframes thir-jiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+i-thir[hover="jiggle"]:hover,
+i-thir[touch="jiggle"].touch-active,
+i-thir[hover="jiggle"][touch]:not([touch*="="]).touch-active {
+  animation: thir-jiggle 0.2s ease-in-out;
+}
+
+/* Pop (scale up then settle) */
+@keyframes thir-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1.05); }
+}
+
+i-thir[hover="pop"]:hover,
+i-thir[touch="pop"].touch-active,
+i-thir[hover="pop"][touch]:not([touch*="="]).touch-active {
+  animation: thir-pop 0.2s ease-out forwards;
+}
+
+/* Glow (brightness increase) */
+i-thir[hover="glow"]:hover,
+i-thir[touch="glow"].touch-active,
+i-thir[hover="glow"][touch]:not([touch*="="]).touch-active {
+  filter: brightness(1.15);
+}
+
+/* Dim (brightness decrease) */
+i-thir[hover="dim"]:hover,
+i-thir[touch="dim"].touch-active,
+i-thir[hover="dim"][touch]:not([touch*="="]).touch-active {
+  filter: brightness(0.85);
+}
+
+/* Always-on transforms (not hover-based) */
+i-thir[rotate="45"]  { transform: rotate(45deg); }
+i-thir[rotate="90"]  { transform: rotate(90deg); }
+i-thir[rotate="180"] { transform: rotate(180deg); }
+i-thir[rotate="-45"] { transform: rotate(-45deg); }
+i-thir[rotate="-90"] { transform: rotate(-90deg); }
+
+i-thir[skew="x"]  { transform: skewX(5deg); }
+i-thir[skew="y"]  { transform: skewY(5deg); }
+i-thir[skew="xy"] { transform: skew(5deg, 5deg); }
+
+i-thir[flip="x"] { transform: scaleX(-1); }
+i-thir[flip="y"] { transform: scaleY(-1); }
+i-thir[flip="both"] { transform: scale(-1, -1); }
+
+/* ---------------------------------------------------------------------------
+   OPACITY SHORTCUTS
+   --------------------------------------------------------------------------- */
+
+i-thir[opacity="0"]   { opacity: 0; }
+i-thir[opacity="10"]  { opacity: 0.1; }
+i-thir[opacity="25"]  { opacity: 0.25; }
+i-thir[opacity="50"]  { opacity: 0.5; }
+i-thir[opacity="75"]  { opacity: 0.75; }
+i-thir[opacity="90"]  { opacity: 0.9; }
+i-thir[opacity="100"] { opacity: 1; }
+
+/* Hover opacity changes */
+i-thir[hover-opacity="fade"]:hover { opacity: 0.7; }
+i-thir[hover-opacity="dim"]:hover  { opacity: 0.5; }
+i-thir[hover-opacity="full"]:hover { opacity: 1; }
+
+/* ---------------------------------------------------------------------------
+   CURSOR SHORTCUTS
+   --------------------------------------------------------------------------- */
+
+i-thir[cursor="pointer"]  { cursor: pointer; }
+i-thir[cursor="grab"]     { cursor: grab; }
+i-thir[cursor="grabbing"] { cursor: grabbing; }
+i-thir[cursor="zoom-in"]  { cursor: zoom-in; }
+i-thir[cursor="zoom-out"] { cursor: zoom-out; }
+i-thir[cursor="not-allowed"] { cursor: not-allowed; }
+i-thir[cursor="help"]     { cursor: help; }
+i-thir[cursor="wait"]     { cursor: wait; }
+i-thir[cursor="crosshair"] { cursor: crosshair; }
+i-thir[cursor="text"]     { cursor: text; }
+i-thir[cursor="move"]     { cursor: move; }
+i-thir[cursor="none"]     { cursor: none; }
+
+/* ==========================================================================
+   TIER 3: CSS CUSTOM PROPERTIES (Customization Layer)
+   
+   Fine-tune any effect by overriding these variables.
+   ========================================================================== */
+
+i-thir {
+  /* === Color Configuration === */
+  --thir-color-primary: var(--color-accent, oklch(60% 0.2 250));
+  --thir-color-secondary: var(--brand-complement, oklch(60% 0.2 30));
+  --thir-color-bg: var(--color-surface, oklch(98% 0 0));
+  --thir-color-text: var(--color-text, oklch(20% 0 0));
+  --thir-color-border: var(--color-border, oklch(80% 0 0));
+  
+  /* === Shape Configuration === */
+  --thir-shape-radius: var(--invert-radius, 1rem);
+  --thir-border-radius: var(--s-1, 0.5rem);
+  --thir-notch-width: 4rem;
+  
+  /* === Spacing === */
+  --thir-padding: var(--s1, 1rem);
+  
+  /* === Effect Intensities === */
+  --thir-blur-amount: 8px;
+  --thir-shadow-color: oklch(0% 0 0 / 0.15);
+  --thir-shadow-offset: 4px;
+  --thir-shadow-blur: 12px;
+  --thir-glow-spread: 20px;
+  
+  /* === Neon Effect === */
+  --thir-neon-color: var(--thir-color-primary);
+  --thir-neon-intensity: 1;
+  --thir-neon-bg: oklch(15% 0.02 240);
+  
+  /* === Glass Effect === */
+  --thir-glass-blur: 10px;
+  --thir-glass-opacity: 0.7;
+  --thir-glass-saturation: 1.2;
+  
+  /* === Neumorphism === */
+  --thir-neu-bg: oklch(92% 0 0);
+  --thir-neu-distance: 6px;
+  --thir-neu-blur: 12px;
+  --thir-neu-intensity: 0.15;
+  
+  /* === Animation === */
+  --thir-transition-duration: 0.3s;
+  --thir-transition-timing: ease;
+  
+  /* === Grain Effect === */
+  --thir-grain-opacity: 0.15;
+}
+
+/* ==========================================================================
+   TIER 4: RAW CSS ESCAPE HATCH
+   
+   For truly custom effects, use style="" or external CSS.
+   The [custom] attribute removes default styling.
+   ========================================================================== */
+
+/* Remove all default styles - pure container for custom CSS */
+i-thir[custom] {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  filter: none;
+  mask: none;
+  transform: none;
+  transition: none;
+}
+
+/* Partial reset - keep layout, remove visuals */
+i-thir[custom="visual"] {
+  background: transparent;
+  box-shadow: none;
+  filter: none;
+  border: none;
+}
+
+/* Partial reset - keep visuals, remove shape */
+i-thir[custom="shape"] {
+  mask: none;
+  border-radius: 0;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  i-thir[hover],
+  i-thir[hover="lift"]:hover,
+  i-thir[hover="grow"]:hover,
+  i-thir[hover="shrink"]:hover,
+  i-thir[hover="tilt"]:hover,
+  i-thir[hover="wiggle"]:hover,
+  i-thir[hover="pulse"]:hover,
+  i-thir[hover="jiggle"]:hover,
+  i-thir[hover="pop"]:hover,
+  i-thir[touch].touch-active {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE ADJUSTMENTS
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  i-thir {
+    --thir-color-bg: oklch(20% 0 0);
+    --thir-color-text: oklch(90% 0 0);
+  }
+  
+  i-thir[effect="embossed"],
+  i-thir[effect="raised"] {
+    box-shadow:
+      inset 0 -2px 0 oklch(10% 0 0),
+      inset 0 2px 0 oklch(30% 0 0),
+      0 4px 8px oklch(0% 0 0 / 0.4);
+  }
+}
+
+
+/* === global/typography.css === */
+/**
+ * Elvish - Typography (i-têw)
+ * 
+ * "Têw" (Sindarin) = letters, characters, writing
+ * Handles all text and font styling concerns.
+ * 
+ * Philosophy:
+ * - Typography is about readability, hierarchy, and voice
+ * - Separate from visual effects (i-thîr) and layout (i-hath, etc.)
+ * - Attributes map to typography CSS properties
+ * - Composable with other Elvish primitives
+ * 
+ * Usage:
+ *   <i-tew family="serif" size="lg" weight="bold">Heading</i-tew>
+ *   <i-tew leading="loose" tracking="wide">Spaced text</i-tew>
+ *   <i-tew transform="uppercase" align="center">CENTERED</i-tew>
+ * 
+ * Browser Support:
+ * - Chrome/Edge: ✅ Full support
+ * - Safari: ✅ Full support
+ * - Firefox: ✅ Full support
+ * - text-wrap: balance/pretty requires Chrome 114+/117+ (graceful fallback)
+ */
+
+/* ==========================================================================
+   BASE ELEMENT
+   ========================================================================== */
+
+i-tew {
+  /* Inline by default (text element) */
+  display: inline;
+  
+  /* Inherit by default, attributes override */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  
+  /* Modular scale from tokens */
+  --tew-size-base: var(--s0, 1rem);
+}
+
+/* Block variant for paragraphs/headings */
+i-tew[block],
+i-tew[display="block"] {
+  display: block;
+}
+
+/* Inline-block for sized inline elements */
+i-tew[inline-block] {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   FONT FAMILY
+   
+   Uses the five font variables from tokens.css:
+   --font-serif, --font-sans, --font-title, --font-code, --font-alt
+   
+   Override at any scope to change fonts locally:
+     <section style="--font-serif: 'Playfair Display', serif;">
+   ========================================================================== */
+
+i-tew[family="sans"],
+i-tew[family="plain"] {
+  font-family: var(--font-sans);
+}
+
+i-tew[family="serif"] {
+  font-family: var(--font-serif);
+}
+
+i-tew[family="title"],
+i-tew[family="heading"],
+i-tew[family="display"] {
+  font-family: var(--font-title);
+}
+
+i-tew[family="mono"],
+i-tew[family="monospace"],
+i-tew[family="code"] {
+  font-family: var(--font-code);
+}
+
+i-tew[family="alt"],
+i-tew[family="accent"] {
+  font-family: var(--font-alt);
+}
+
+i-tew[family="display"],
+i-tew[family="heading"] {
+  font-family: var(--tew-font-display);
+}
+
+/* System font stacks */
+i-tew[family="system"] {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+i-tew[family="ui"] {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* ==========================================================================
+   FONT SIZE (Modular Scale)
+   ========================================================================== */
+
+/* Using the Elvish modular scale */
+i-tew[size="-3"], i-tew[size="3xs"] { font-size: var(--s-3, 0.579rem); }
+i-tew[size="-2"], i-tew[size="2xs"] { font-size: var(--s-2, 0.694rem); }
+i-tew[size="-1"], i-tew[size="xs"]  { font-size: var(--s-1, 0.833rem); }
+i-tew[size="0"],  i-tew[size="sm"]  { font-size: var(--s0, 1rem); }
+i-tew[size="1"],  i-tew[size="base"],
+i-tew[size="md"] { font-size: var(--s1, 1.2rem); }
+i-tew[size="2"],  i-tew[size="lg"]  { font-size: var(--s2, 1.44rem); }
+i-tew[size="3"],  i-tew[size="xl"]  { font-size: var(--s3, 1.728rem); }
+i-tew[size="4"],  i-tew[size="2xl"] { font-size: var(--s4, 2.074rem); }
+i-tew[size="5"],  i-tew[size="3xl"] { font-size: var(--s5, 2.488rem); }
+i-tew[size="6"],  i-tew[size="4xl"] { font-size: var(--s6, 2.986rem); }
+i-tew[size="7"],  i-tew[size="5xl"] { font-size: var(--s7, 3.583rem); }
+i-tew[size="8"],  i-tew[size="6xl"] { font-size: var(--s8, 4.3rem); }
+
+/* Fluid/responsive sizing */
+i-tew[size="fluid-sm"] { font-size: clamp(0.875rem, 2vw, 1rem); }
+i-tew[size="fluid"]    { font-size: clamp(1rem, 2.5vw, 1.5rem); }
+i-tew[size="fluid-lg"] { font-size: clamp(1.5rem, 4vw, 3rem); }
+i-tew[size="fluid-xl"] { font-size: clamp(2rem, 6vw, 5rem); }
+
+/* ==========================================================================
+   FONT WEIGHT
+   ========================================================================== */
+
+i-tew[weight="thin"],       i-tew[weight="100"] { font-weight: 100; }
+i-tew[weight="extralight"], i-tew[weight="200"] { font-weight: 200; }
+i-tew[weight="light"],      i-tew[weight="300"] { font-weight: 300; }
+i-tew[weight="normal"],     i-tew[weight="400"] { font-weight: 400; }
+i-tew[weight="medium"],     i-tew[weight="500"] { font-weight: 500; }
+i-tew[weight="semibold"],   i-tew[weight="600"] { font-weight: 600; }
+i-tew[weight="bold"],       i-tew[weight="700"] { font-weight: 700; }
+i-tew[weight="extrabold"],  i-tew[weight="800"] { font-weight: 800; }
+i-tew[weight="black"],      i-tew[weight="900"] { font-weight: 900; }
+
+/* ==========================================================================
+   LINE HEIGHT (Leading)
+   ========================================================================== */
+
+i-tew[leading="none"]    { line-height: 1; }
+i-tew[leading="tight"]   { line-height: 1.25; }
+i-tew[leading="snug"]    { line-height: 1.375; }
+i-tew[leading="normal"]  { line-height: 1.5; }
+i-tew[leading="relaxed"] { line-height: 1.625; }
+i-tew[leading="loose"]   { line-height: 2; }
+
+/* Numeric values */
+i-tew[leading="1"]   { line-height: 1; }
+i-tew[leading="1.2"] { line-height: 1.2; }
+i-tew[leading="1.4"] { line-height: 1.4; }
+i-tew[leading="1.5"] { line-height: 1.5; }
+i-tew[leading="1.6"] { line-height: 1.6; }
+i-tew[leading="1.8"] { line-height: 1.8; }
+i-tew[leading="2"]   { line-height: 2; }
+
+/* ==========================================================================
+   LETTER SPACING (Tracking)
+   ========================================================================== */
+
+i-tew[tracking="tighter"] { letter-spacing: -0.05em; }
+i-tew[tracking="tight"]   { letter-spacing: -0.025em; }
+i-tew[tracking="normal"]  { letter-spacing: 0; }
+i-tew[tracking="wide"]    { letter-spacing: 0.025em; }
+i-tew[tracking="wider"]   { letter-spacing: 0.05em; }
+i-tew[tracking="widest"]  { letter-spacing: 0.1em; }
+
+/* Uppercase often needs more tracking */
+i-tew[tracking="caps"] { letter-spacing: 0.15em; }
+
+/* ==========================================================================
+   WORD SPACING
+   ========================================================================== */
+
+i-tew[word-spacing="tight"]   { word-spacing: -0.05em; }
+i-tew[word-spacing="normal"]  { word-spacing: normal; }
+i-tew[word-spacing="wide"]    { word-spacing: 0.1em; }
+i-tew[word-spacing="wider"]   { word-spacing: 0.25em; }
+
+/* ==========================================================================
+   TEXT ALIGNMENT
+   ========================================================================== */
+
+i-tew[align="left"]    { text-align: left; }
+i-tew[align="center"]  { text-align: center; }
+i-tew[align="right"]   { text-align: right; }
+i-tew[align="justify"] { text-align: justify; }
+i-tew[align="start"]   { text-align: start; }
+i-tew[align="end"]     { text-align: end; }
+
+/* Vertical alignment (for inline elements) */
+i-tew[valign="top"]      { vertical-align: top; }
+i-tew[valign="middle"]   { vertical-align: middle; }
+i-tew[valign="bottom"]   { vertical-align: bottom; }
+i-tew[valign="baseline"] { vertical-align: baseline; }
+i-tew[valign="sub"]      { vertical-align: sub; }
+i-tew[valign="super"]    { vertical-align: super; }
+
+/* ==========================================================================
+   TEXT TRANSFORM (Case)
+   ========================================================================== */
+
+i-tew[transform="uppercase"],
+i-tew[case="upper"] { 
+  text-transform: uppercase; 
+}
+
+i-tew[transform="lowercase"],
+i-tew[case="lower"] { 
+  text-transform: lowercase; 
+}
+
+i-tew[transform="capitalize"],
+i-tew[case="title"] { 
+  text-transform: capitalize; 
+}
+
+i-tew[transform="none"],
+i-tew[case="none"] { 
+  text-transform: none; 
+}
+
+/* Small caps */
+i-tew[transform="small-caps"],
+i-tew[variant="small-caps"] { 
+  font-variant-caps: small-caps; 
+}
+
+i-tew[transform="all-small-caps"],
+i-tew[variant="all-small-caps"] { 
+  font-variant-caps: all-small-caps; 
+}
+
+/* ==========================================================================
+   FONT STYLE
+   ========================================================================== */
+
+i-tew[style="italic"],
+i-tew[italic] { 
+  font-style: italic; 
+}
+
+i-tew[style="oblique"] { 
+  font-style: oblique; 
+}
+
+i-tew[style="normal"] { 
+  font-style: normal; 
+}
+
+/* ==========================================================================
+   TEXT DECORATION
+   ========================================================================== */
+
+/* Underline */
+i-tew[decoration="underline"],
+i-tew[underline] { 
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-wavy"] { 
+  text-decoration: wavy underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-dotted"] { 
+  text-decoration: dotted underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-dashed"] { 
+  text-decoration: dashed underline;
+  text-underline-offset: 0.2em;
+}
+
+i-tew[decoration="underline-double"] { 
+  text-decoration: double underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Line-through (strikethrough) */
+i-tew[decoration="line-through"],
+i-tew[decoration="strike"],
+i-tew[strikethrough] { 
+  text-decoration: line-through; 
+}
+
+/* Overline */
+i-tew[decoration="overline"] { 
+  text-decoration: overline; 
+}
+
+/* None */
+i-tew[decoration="none"],
+i-tew[no-decoration] { 
+  text-decoration: none; 
+}
+
+/* Decoration thickness */
+i-tew[decoration-thickness="thin"]   { text-decoration-thickness: 1px; }
+i-tew[decoration-thickness="medium"] { text-decoration-thickness: 2px; }
+i-tew[decoration-thickness="thick"]  { text-decoration-thickness: 3px; }
+i-tew[decoration-thickness="auto"]   { text-decoration-thickness: from-font; }
+
+/* Skip ink (for underlines) */
+i-tew[decoration-skip="auto"] { text-decoration-skip-ink: auto; }
+i-tew[decoration-skip="none"] { text-decoration-skip-ink: none; }
+i-tew[decoration-skip="all"]  { text-decoration-skip-ink: all; }
+
+/* ==========================================================================
+   TEXT WRAPPING
+   ========================================================================== */
+
+/* Modern text-wrap property */
+i-tew[wrap="balance"] { 
+  text-wrap: balance; 
+}
+
+i-tew[wrap="pretty"] { 
+  text-wrap: pretty; 
+}
+
+i-tew[wrap="stable"] { 
+  text-wrap: stable; 
+}
+
+i-tew[wrap="nowrap"],
+i-tew[nowrap] { 
+  text-wrap: nowrap;
+  white-space: nowrap; 
+}
+
+/* White-space control */
+i-tew[whitespace="normal"]   { white-space: normal; }
+i-tew[whitespace="nowrap"]   { white-space: nowrap; }
+i-tew[whitespace="pre"]      { white-space: pre; }
+i-tew[whitespace="pre-wrap"] { white-space: pre-wrap; }
+i-tew[whitespace="pre-line"] { white-space: pre-line; }
+i-tew[whitespace="break"]    { white-space: break-spaces; }
+
+/* Word break */
+i-tew[break="normal"] { word-break: normal; }
+i-tew[break="all"]    { word-break: break-all; }
+i-tew[break="keep"]   { word-break: keep-all; }
+i-tew[break="word"]   { overflow-wrap: break-word; }
+
+/* Hyphenation */
+i-tew[hyphens="auto"]   { hyphens: auto; }
+i-tew[hyphens="manual"] { hyphens: manual; }
+i-tew[hyphens="none"]   { hyphens: none; }
+
+/* ==========================================================================
+   TEXT OVERFLOW & TRUNCATION
+   ========================================================================== */
+
+i-tew[overflow="ellipsis"],
+i-tew[truncate] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+i-tew[overflow="clip"] {
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Multi-line truncation (line-clamp) */
+i-tew[lines="1"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+i-tew[lines="2"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+i-tew[lines="3"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+i-tew[lines="4"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+i-tew[lines="5"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   TEXT INDENT
+   ========================================================================== */
+
+i-tew[indent="none"]   { text-indent: 0; }
+i-tew[indent="sm"]     { text-indent: 1em; }
+i-tew[indent="md"]     { text-indent: 2em; }
+i-tew[indent="lg"]     { text-indent: 3em; }
+i-tew[indent="hanging"] { 
+  text-indent: -1em; 
+  padding-left: 1em; 
+}
+
+/* ==========================================================================
+   TEXT COLOR
+   ========================================================================== */
+
+/* Semantic colors */
+i-tew[color="primary"]   { color: var(--color-text, currentColor); }
+i-tew[color="secondary"],
+i-tew[color="muted"]     { color: var(--color-text-muted, oklch(50% 0 0)); }
+i-tew[color="accent"]    { color: var(--color-accent, oklch(60% 0.2 250)); }
+i-tew[color="success"]   { color: var(--color-success, oklch(65% 0.2 145)); }
+i-tew[color="warning"]   { color: var(--color-warning, oklch(75% 0.15 85)); }
+i-tew[color="error"],
+i-tew[color="danger"]    { color: var(--color-error, oklch(60% 0.25 25)); }
+i-tew[color="info"]      { color: var(--color-info, oklch(65% 0.15 230)); }
+
+/* Neutral colors */
+i-tew[color="inherit"]     { color: inherit; }
+i-tew[color="current"]     { color: currentColor; }
+i-tew[color="transparent"] { color: transparent; }
+i-tew[color="white"]       { color: oklch(100% 0 0); }
+i-tew[color="black"]       { color: oklch(0% 0 0); }
+i-tew[color="gray"],
+i-tew[color="grey"]        { color: oklch(50% 0 0); }
+
+/* ==========================================================================
+   FONT FEATURES & VARIANTS
+   ========================================================================== */
+
+/* Numeric variants */
+i-tew[numeric="tabular"] { 
+  font-variant-numeric: tabular-nums; 
+}
+i-tew[numeric="proportional"] { 
+  font-variant-numeric: proportional-nums; 
+}
+i-tew[numeric="lining"] { 
+  font-variant-numeric: lining-nums; 
+}
+i-tew[numeric="oldstyle"] { 
+  font-variant-numeric: oldstyle-nums; 
+}
+i-tew[numeric="diagonal-fractions"] { 
+  font-variant-numeric: diagonal-fractions; 
+}
+i-tew[numeric="stacked-fractions"] { 
+  font-variant-numeric: stacked-fractions; 
+}
+i-tew[numeric="ordinal"] { 
+  font-variant-numeric: ordinal; 
+}
+i-tew[numeric="slashed-zero"] { 
+  font-variant-numeric: slashed-zero; 
+}
+
+/* Ligatures */
+i-tew[ligatures="normal"]      { font-variant-ligatures: normal; }
+i-tew[ligatures="none"]        { font-variant-ligatures: none; }
+i-tew[ligatures="common"]      { font-variant-ligatures: common-ligatures; }
+i-tew[ligatures="contextual"]  { font-variant-ligatures: contextual; }
+i-tew[ligatures="discretionary"] { font-variant-ligatures: discretionary-ligatures; }
+
+/* Kerning */
+i-tew[kerning="auto"]   { font-kerning: auto; }
+i-tew[kerning="normal"] { font-kerning: normal; }
+i-tew[kerning="none"]   { font-kerning: none; }
+
+/* ==========================================================================
+   TEXT RENDERING
+   ========================================================================== */
+
+i-tew[rendering="auto"]        { text-rendering: auto; }
+i-tew[rendering="speed"]       { text-rendering: optimizeSpeed; }
+i-tew[rendering="legibility"]  { text-rendering: optimizeLegibility; }
+i-tew[rendering="precision"]   { text-rendering: geometricPrecision; }
+
+/* Font smoothing (WebKit/Blink) */
+i-tew[smoothing="auto"] {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+i-tew[smoothing="antialiased"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+i-tew[smoothing="subpixel"] {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+/* ==========================================================================
+   WRITING MODE & DIRECTION
+   ========================================================================== */
+
+/* Writing mode */
+i-tew[writing="horizontal"] { writing-mode: horizontal-tb; }
+i-tew[writing="vertical-rl"] { writing-mode: vertical-rl; }
+i-tew[writing="vertical-lr"] { writing-mode: vertical-lr; }
+i-tew[writing="sideways-rl"] { writing-mode: sideways-rl; }
+i-tew[writing="sideways-lr"] { writing-mode: sideways-lr; }
+
+/* Text direction */
+i-tew[dir="ltr"] { direction: ltr; }
+i-tew[dir="rtl"] { direction: rtl; }
+
+/* Text orientation (for vertical text) */
+i-tew[orientation="mixed"]    { text-orientation: mixed; }
+i-tew[orientation="upright"]  { text-orientation: upright; }
+i-tew[orientation="sideways"] { text-orientation: sideways; }
+
+/* ==========================================================================
+   TEXT SHADOWS
+   ========================================================================== */
+
+i-tew[shadow="none"] { text-shadow: none; }
+
+i-tew[shadow="sm"] { 
+  text-shadow: 0 1px 2px oklch(0% 0 0 / 0.2); 
+}
+i-tew[shadow],
+i-tew[shadow="md"] { 
+  text-shadow: 0 2px 4px oklch(0% 0 0 / 0.25); 
+}
+i-tew[shadow="lg"] { 
+  text-shadow: 0 4px 8px oklch(0% 0 0 / 0.3); 
+}
+
+/* Crisp shadow (no blur) */
+i-tew[shadow="crisp"] { 
+  text-shadow: 1px 1px 0 oklch(0% 0 0 / 0.3); 
+}
+
+/* Glow effect */
+i-tew[shadow="glow"] { 
+  text-shadow: 
+    0 0 4px currentColor,
+    0 0 8px currentColor; 
+}
+i-tew[shadow="glow-lg"] { 
+  text-shadow: 
+    0 0 8px currentColor,
+    0 0 16px currentColor,
+    0 0 32px currentColor; 
+}
+
+/* Outline/stroke effect via shadow */
+i-tew[shadow="outline"] {
+  text-shadow:
+    -1px -1px 0 currentColor,
+     1px -1px 0 currentColor,
+    -1px  1px 0 currentColor,
+     1px  1px 0 currentColor;
+}
+
+/* 3D/emboss effect */
+i-tew[shadow="3d"],
+i-tew[shadow="emboss"] {
+  text-shadow:
+    1px 1px 0 oklch(0% 0 0 / 0.3),
+    2px 2px 0 oklch(0% 0 0 / 0.2),
+    3px 3px 0 oklch(0% 0 0 / 0.1);
+}
+
+/* Long shadow */
+i-tew[shadow="long"] {
+  text-shadow:
+    1px 1px 0 oklch(0% 0 0 / 0.15),
+    2px 2px 0 oklch(0% 0 0 / 0.12),
+    3px 3px 0 oklch(0% 0 0 / 0.09),
+    4px 4px 0 oklch(0% 0 0 / 0.06),
+    5px 5px 0 oklch(0% 0 0 / 0.03);
+}
+
+/* ==========================================================================
+   SELECTION STYLING
+   ========================================================================== */
+
+i-tew[selection="none"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+i-tew[selection="all"] {
+  user-select: all;
+}
+
+i-tew[selection="text"] {
+  user-select: text;
+}
+
+/* ==========================================================================
+   PRESETS / COMBINATIONS
+   
+   Opinionated bundles of typography properties for common patterns.
+   All presets use the font variables from tokens.css.
+   ========================================================================== */
+
+/* === HEADINGS (h1-h6) === */
+
+i-tew[preset="heading"],
+i-tew[preset="h1"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s5, 2.488rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h2"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s4, 2.074rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h3"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s3, 1.728rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+i-tew[preset="h4"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s2, 1.44rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+i-tew[preset="h5"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s1, 1.2rem);
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+i-tew[preset="h6"] {
+  display: block;
+  font-family: var(--font-title);
+  font-size: var(--s0, 1rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-wrap: balance;
+}
+
+/* === BODY TEXT === */
+
+i-tew[preset="body"] {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--s0, 1rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* Lead/intro paragraph */
+i-tew[preset="lead"] {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--s1, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Caption/small text */
+i-tew[preset="caption"],
+i-tew[preset="small"] {
+  font-size: var(--s-1, 0.833rem);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* Label preset */
+i-tew[preset="label"] {
+  font-size: var(--s-1, 0.833rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === CODE === */
+
+i-tew[preset="code"] {
+  font-family: var(--font-code);
+  font-size: 0.9em;
+  font-variant-ligatures: none;
+  background: oklch(from var(--color-surface) calc(l - 0.05) c h);
+  padding: 0.1em 0.3em;
+  border-radius: 0.25em;
+}
+
+/* === QUOTES === */
+
+/* Simple quote (border left) */
+i-tew[preset="quote"] {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--s1, 1.2rem);
+  line-height: 1.6;
+  border-left: 3px solid var(--color-accent, oklch(60% 0.2 250));
+  padding-left: 1em;
+}
+
+/* Big quote / Pull quote (giant quotation mark) */
+i-tew[preset="bquote"],
+i-tew[preset="pullquote"] {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--s2, 1.44rem);
+  line-height: 1.5;
+  padding-left: 3.5rem;
+  position: relative;
+  
+  /* Quote character customization */
+  --tew-quote-char: '"';
+  --tew-quote-color: var(--color-accent, oklch(60% 0.2 250));
+  --tew-quote-size: var(--s6, 4rem);
+  --tew-quote-opacity: 0.25;
+}
+
+/* The giant quote mark */
+i-tew[preset="bquote"]::before,
+i-tew[preset="pullquote"]::before {
+  content: var(--tew-quote-char);
+  position: absolute;
+  left: 0;
+  top: -0.1em;
+  font-family: var(--font-serif);
+  font-size: var(--tew-quote-size);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tew-quote-color);
+  opacity: var(--tew-quote-opacity);
+}
+
+/* Attribution via data-cite attribute */
+i-tew[preset="bquote"][data-cite]::after,
+i-tew[preset="pullquote"][data-cite]::after {
+  content: "— " attr(data-cite);
+  display: block;
+  margin-top: var(--s0, 1rem);
+  font-size: var(--s-1, 0.833rem);
+  font-style: normal;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Optional closing quote mark */
+i-tew[preset="bquote"][closing],
+i-tew[preset="pullquote"][closing] {
+  padding-right: 2.5rem;
+}
+
+i-tew[preset="bquote"][closing]::after,
+i-tew[preset="pullquote"][closing]::after {
+  content: var(--tew-quote-char);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-family: var(--font-serif);
+  font-size: calc(var(--tew-quote-size) * 0.7);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tew-quote-color);
+  opacity: var(--tew-quote-opacity);
+  transform: rotate(180deg);
+}
+
+/* When both closing AND data-cite, use a wrapper approach */
+i-tew[preset="bquote"][closing][data-cite]::after {
+  content: none; /* Let the closing quote be shown, cite needs a wrapper */
+}
+
+/* ==========================================================================
+   MEASURE (Line Length)
+   ========================================================================== */
+
+i-tew[measure="narrow"]  { max-width: 45ch; }
+i-tew[measure="normal"]  { max-width: 65ch; }
+i-tew[measure],
+i-tew[measure="wide"]    { max-width: 75ch; }
+i-tew[measure="full"]    { max-width: none; }
+
+/* ==========================================================================
+   RESPONSIVE TYPOGRAPHY
+   ========================================================================== */
+
+/* Responsive size adjustments */
+@media (max-width: 640px) {
+  i-tew[responsive] {
+    font-size: max(0.875em, 16px);
+  }
+  
+  i-tew[preset="heading"],
+  i-tew[preset="h1"][responsive] {
+    font-size: var(--s3, 1.728rem);
+  }
+  
+  i-tew[preset="h2"][responsive] {
+    font-size: var(--s2, 1.44rem);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  i-tew[color="muted"],
+  i-tew[color="secondary"] {
+    color: var(--color-text);
+  }
+}
+
+/* Reduced motion - disable text animations if any */
+@media (prefers-reduced-motion: reduce) {
+  i-tew {
+    transition: none !important;
   }
 }
 

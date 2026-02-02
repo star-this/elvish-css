@@ -26,3 +26,7 @@
 @import './primitives/him/him.css';             /* Sticky */
 @import './primitives/miriant/miriant.css';     /* Grid-placed */
 @import './primitives/gonath/gonath.css';       /* Masonry - "stone collection" */
+
+/* Visual Effects & Typography */
+@import './primitives/thir/thir.css';           /* Visual Effects - "appearance, look" */
+@import './primitives/tew/tew.css';             /* Typography - "letters, writing" */

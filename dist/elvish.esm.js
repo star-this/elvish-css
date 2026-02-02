@@ -1,8 +1,8 @@
 /**
- * Elvish CSS Layout System v1.0.0
+ * Elvish Layout System v2.0.0
  * Custom Elements for intrinsic CSS layouts
- *
- * https://github.com/star-this/elvish-css
+ * 
+ * https://github.com/yourusername/elvish-layout
  * License: MIT
  */
 
@@ -2166,17 +2166,17 @@ export {
 export const VERSION = '2.0.0';
 
 export const PRIMITIVES = {
-  'i-hath': 'Stacked',
-  'i-bau': 'Quad',
-  'i-enedh': 'Centered',
-  'i-tiniath': 'Clustered',
+  'i-hath': 'Stack',
+  'i-bau': 'Box',
+  'i-enedh': 'Center',
+  'i-tiniath': 'Cluster',
   'i-glan-veleg': 'Sidebar',
-  'i-gwistindor': 'Switching',
-  'i-esgal': 'Covering',
+  'i-gwistindor': 'Switcher',
+  'i-esgal': 'Cover',
   'i-vircantie': 'Grid',
-  'i-gant-thala': 'Aspect',
-  'i-glan-tholl': 'Side-Scrolling',
-  'i-fano': 'Overcast',
+  'i-gant-thala': 'Frame',
+  'i-glan-tholl': 'Reel',
+  'i-fano': 'Imposter',
   'i-thann': 'Icon',
   'i-adleithian': 'Container',
   'i-him': 'Sticky',

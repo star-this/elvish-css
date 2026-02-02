@@ -1,5 +1,5 @@
 /**
- * Elvish CSS Layout System
+ * Elvish Layout System
  * TypeScript declarations
  */
 

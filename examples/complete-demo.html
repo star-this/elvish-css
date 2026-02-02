@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elvish - Complete Demo (Sindarin Edition)</title>
   <link rel="stylesheet" href="../global/global.css">
-  <link rel="stylesheet" href="../elvish.css">
+  <link rel="stylesheet" href="../dist/elvish.css">
   <style>
     /* Demo-specific styles */
     body {
@@ -892,7 +892,125 @@
           <i-bau padding="var(--s0)" border><strong>him</strong> — steadfast (Sticky)</i-bau>
           <i-bau padding="var(--s0)" border><strong>miriant</strong> — jewel-work (Grid-placed)</i-bau>
           <i-bau padding="var(--s0)" border><strong>gonath</strong> — stone collection (Masonry)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>thîr</strong> — appearance, look (Visual Effects)</i-bau>
+          <i-bau padding="var(--s0)" border><strong>têw</strong> — letters, writing (Typography)</i-bau>
         </i-vircantie>
+      </section>
+
+      <!-- I-Thîr: Visual Effects -->
+      <section class="demo-section">
+        <h2>
+          I-Thîr
+          <span class="translation">"appearance, look"</span>
+          <span class="badge primitive">Visual Effects</span>
+        </h2>
+        <p class="demo-description">
+          Visual effects, shapes, and interactions. Separates "how it looks" from layout.
+        </p>
+        
+        <h3>Packaged Effects</h3>
+        <i-tiniath space="var(--s1)" justify="flex-start" style="--tiniath-space: var(--s1); margin-bottom: var(--s2);">
+          <i-thir effect="neon" style="--thir-neon-color: oklch(70% 0.3 180); padding: var(--s0);">
+            <span>effect="neon"</span>
+          </i-thir>
+          <i-thir effect="glassmorphism" style="background: oklch(100% 0 0 / 0.1); padding: var(--s0);">
+            <span>effect="glassmorphism"</span>
+          </i-thir>
+          <i-thir effect="neumorphism" style="padding: var(--s0);">
+            <span>effect="neumorphism"</span>
+          </i-thir>
+          <i-thir effect="shadow" style="background: var(--color-surface-raised); padding: var(--s0);">
+            <span>effect="shadow"</span>
+          </i-thir>
+        </i-tiniath>
+        
+        <h3>Shapes & Corners</h3>
+        <i-tiniath space="var(--s1)" justify="flex-start" style="--tiniath-space: var(--s1); margin-bottom: var(--s2);">
+          <i-thir corners="inverted" style="background: var(--color-accent); color: white; padding: var(--s1);">
+            corners="inverted"
+          </i-thir>
+          <i-thir shape="ticket" style="background: var(--brand-complement); color: white; padding: var(--s1);">
+            shape="ticket"
+          </i-thir>
+          <i-thir shape="pill" style="background: oklch(60% 0.2 200); color: white; padding: var(--s0) var(--s2);">
+            shape="pill"
+          </i-thir>
+        </i-tiniath>
+        
+        <h3>Hover & Touch Interactions</h3>
+        <p style="margin-bottom: var(--s1);">Hover over these (or long-press on mobile):</p>
+        <i-tiniath space="var(--s1)" justify="flex-start" style="--tiniath-space: var(--s1);">
+          <i-thir hover="lift" touch style="background: var(--color-accent); color: white; padding: var(--s0); cursor: pointer;">
+            hover="lift" touch
+          </i-thir>
+          <i-thir hover="grow" touch style="background: var(--brand-complement); color: white; padding: var(--s0); cursor: pointer;">
+            hover="grow" touch
+          </i-thir>
+          <i-thir hover="wiggle" touch style="background: oklch(60% 0.2 150); color: white; padding: var(--s0); cursor: pointer;">
+            hover="wiggle" touch
+          </i-thir>
+          <i-thir hover="pulse" touch style="background: oklch(65% 0.2 30); color: white; padding: var(--s0); cursor: pointer;">
+            hover="pulse" touch
+          </i-thir>
+        </i-tiniath>
+      </section>
+
+      <!-- I-Têw: Typography -->
+      <section class="demo-section">
+        <h2>
+          I-Têw
+          <span class="translation">"letters, writing"</span>
+          <span class="badge primitive">Typography</span>
+        </h2>
+        <p class="demo-description">
+          All text and font styling. Separate from visual effects and layout.
+        </p>
+        
+        <h3>Heading Presets</h3>
+        <i-hath space="var(--s-1)" style="--hath-space: var(--s-1); margin-bottom: var(--s2);">
+          <i-tew preset="h1">H1 — The Main Title</i-tew>
+          <i-tew preset="h2">H2 — Section Title</i-tew>
+          <i-tew preset="h3">H3 — Subsection</i-tew>
+          <i-tew preset="h4">H4 — Topic Heading</i-tew>
+          <i-tew preset="h5">H5 — Subtopic</i-tew>
+          <i-tew preset="h6">H6 — LABEL STYLE</i-tew>
+        </i-hath>
+        
+        <h3>Font Families</h3>
+        <i-tiniath space="var(--s1)" justify="flex-start" style="--tiniath-space: var(--s1); margin-bottom: var(--s2);">
+          <i-tew family="sans" size="lg">family="sans"</i-tew>
+          <i-tew family="serif" size="lg">family="serif"</i-tew>
+          <i-tew family="code" size="lg">family="code"</i-tew>
+          <i-tew family="title" size="lg" weight="bold">family="title"</i-tew>
+        </i-tiniath>
+        
+        <h3>Big Quote (bquote) Preset</h3>
+        <i-tew preset="bquote" data-cite="J.R.R. Tolkien">
+          Not all those who wander are lost.
+        </i-tew>
+        
+        <h3>Text Styling</h3>
+        <i-tiniath space="var(--s1)" align="center" style="--tiniath-space: var(--s1);">
+          <i-tew weight="bold" size="lg">Bold Large</i-tew>
+          <i-tew style="italic" family="serif" size="lg">Italic Serif</i-tew>
+          <i-tew tracking="widest" transform="uppercase">Wide Tracking</i-tew>
+          <i-tew decoration="underline-wavy" color="accent">Wavy Underline</i-tew>
+        </i-tiniath>
+        
+        <h3>🌟 Neon Glow</h3>
+        <div style="background: oklch(15% 0.02 250); padding: var(--s2); border-radius: var(--s0); margin-top: var(--s1);">
+          <i-tiniath space="var(--s2)" align="center" justify="center" style="--tiniath-space: var(--s2);">
+            <i-tew shadow="glow" glow-color="cyan" size="xl">CYAN</i-tew>
+            <i-tew shadow="glow" glow-color="magenta" size="xl">MAGENTA</i-tew>
+            <i-tew shadow="glow" glow-color="green" animation="pulse" size="xl">PULSE</i-tew>
+            <i-tew shadow="glow" glow-color="gold" animation="buzz" size="xl">BUZZ</i-tew>
+          </i-tiniath>
+          <div style="text-align: center; margin-top: var(--s2);">
+            <i-tew shadow="glow-lg" glow-color="magenta" animation="flicker-off" speed="slow" size="4" family="title" weight="bold">
+              NEON SIGN
+            </i-tew>
+          </div>
+        </div>
       </section>
 
       <!-- Footer -->

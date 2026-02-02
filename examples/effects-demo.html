@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elvish - Visual Effects (i-thîr) Demo</title>
   <link rel="stylesheet" href="../global/global.css">
-  <link rel="stylesheet" href="../global/effects.css">
+  <link rel="stylesheet" href="../primitives/thir/thir.css">
+  <link rel="stylesheet" href="../primitives/tew/tew.css">
   <style>
     body {
       font-family: var(--font-plain);
@@ -1097,7 +1098,7 @@
       <tr><td style="padding: var(--s-1);"><code>backdrop</code></td><td>backdrop="blur"</td><td>blur-*, dim, brighten, saturate, grayscale, frost</td></tr>
       <tr><td style="padding: var(--s-1);"><code>blend</code></td><td>blend="multiply"</td><td>multiply, screen, overlay, darken, lighten, difference, etc.</td></tr>
       <tr><td style="padding: var(--s-1);"><code>hover</code></td><td>hover="lift"</td><td>lift, grow, shrink, tilt, wiggle, pulse, pop, jiggle, glow, dim</td></tr>
-      <tr><td style="padding: var(--s-1);"><code>touch</code></td><td>touch (boolean) or touch="pulse"</td><td>Same values as hover; enables mobile long-press (requires touch.js)</td></tr>
+      <tr><td style="padding: var(--s-1);"><code>touch</code></td><td>touch (boolean) or touch="pulse"</td><td>Same values as hover; enables mobile long-press (built into i-thir)</td></tr>
       <tr><td style="padding: var(--s-1);"><code>rotate</code></td><td>rotate="45"</td><td>45, 90, 180, -45, -90</td></tr>
       <tr><td style="padding: var(--s-1);"><code>flip</code></td><td>flip="x"</td><td>x, y, both</td></tr>
       <tr><td style="padding: var(--s-1);"><code>skew</code></td><td>skew="x"</td><td>x, y, xy</td></tr>
@@ -1116,6 +1117,7 @@
   </table>
 
   <!-- Touch support script for mobile long-press -->
-  <script src="../global/touch.js"></script>
+  <script type="module" src="../primitives/thir/thir.js"></script>
+  <script type="module" src="../primitives/tew/tew.js"></script>
 </body>
 </html>

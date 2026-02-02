@@ -7,9 +7,9 @@
  * - Utility classes
  * - Modern CSS features (@function, if(), sibling-index, etc.)
  * - View Transitions for smooth layout changes
- * - Inverted border radius (scalloped corners)
- * - Visual effects (neon, glass, neumorphism, etc.)
- * - Typography (fonts, sizes, spacing, text styling)
+ * - Inverted border radius (scalloped corners) [legacy - use i-thir corners="..."]
+ * 
+ * Note: i-thir (effects) and i-tew (typography) are in primitives/
  */
 
 @import 'tokens.css';
@@ -18,5 +18,3 @@
 @import 'modern.css';
 @import 'transitions.css';
 @import 'inverted-radius.css';
-@import 'effects.css';
-@import 'typography.css';
