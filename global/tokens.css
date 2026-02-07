@@ -31,8 +31,21 @@
   /* Default: Perfect Fifth for balanced harmony */
   --ratio: var(--ratio-fifth);
   
-  /* ===== MODULAR SCALE ===== */
+  /* ===== MODULAR SCALE (Every Layout) ===== */
   /* 
+   * STATIC scale based on mathematical ratios.
+   * Values are fixed and do NOT respond to viewport width.
+   * 
+   * USE THIS WHEN:
+   *   - You want to switch ratios dynamically (golden/silver/fifth)
+   *   - You need consistent spacing regardless of viewport
+   *   - Building print stylesheets or fixed-width layouts
+   * 
+   * USE UTOPIA'S --step-* and --space-* WHEN:
+   *   - You want fluid responsive typography
+   *   - You want spacing that scales with viewport
+   *   - Building responsive web layouts (most cases)
+   * 
    * Golden Ratio scale at 16px base:
    * s-2: 6px   | s-1: 10px  | s0: 16px (base)
    * s1: 26px   | s2: 42px   | s3: 68px
@@ -51,6 +64,10 @@
   --s5: calc(var(--s4) * var(--ratio));
   
   /* ===== STATIC SIZES (rem-based) ===== */
+  /* 
+   * Fixed sizes for when you need exact pixel values.
+   * These do NOT respond to viewport - use Utopia's --space-* for fluid.
+   */
   --size-1: 0.25rem;    /* 4px */
   --size-2: 0.5rem;     /* 8px */
   --size-3: 0.75rem;    /* 12px */
@@ -67,10 +84,22 @@
   --size-14: 8rem;      /* 128px */
   --size-15: 10rem;     /* 160px */
   
-  /* ===== FLUID SIZES (viewport-responsive) ===== */
+  /* ===== FLUID SIZES - DEPRECATED ===== */
   /* 
-   * Fluid sizes use clamp() to scale between min and max based on viewport.
-   * Great for responsive padding, margins, gaps.
+   * ⚠️  DEPRECATED: Use Utopia's --space-* system instead (in fluid.css)
+   * 
+   * These naive clamp() values are kept for backwards compatibility only.
+   * Utopia's system is mathematically precise and harmonious.
+   * 
+   * Migration guide:
+   *   --size-fluid-1  →  --space-3xs or --space-2xs
+   *   --size-fluid-2  →  --space-xs or --space-s
+   *   --size-fluid-3  →  --space-s or --space-m
+   *   --size-fluid-4  →  --space-m or --space-l
+   *   --size-fluid-5  →  --space-l or --space-xl
+   *   --size-fluid-6  →  --space-xl
+   *   --size-fluid-7  →  --space-xl-2xl (space pair)
+   *   --size-fluid-8  →  --space-2xl-3xl (space pair)
    */
   --size-fluid-1: clamp(0.5rem, 1vw, 1rem);
   --size-fluid-2: clamp(1rem, 2vw, 1.5rem);

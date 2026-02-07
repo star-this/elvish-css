@@ -1,0 +1,282 @@
+/**
+ * Elvish - Fluid Scale System
+ * 
+ * Inspired by Utopia.fyi's fluid responsive design philosophy.
+ * Type and space scales that interpolate smoothly between viewport widths.
+ * 
+ * PHILOSOPHY:
+ * Instead of breakpoints, we define scales at two viewport widths (@min, @max)
+ * and let the browser interpolate between them. Everything stays in harmony.
+ * 
+ * CONFIGURATION:
+ * Override these custom properties to customize the fluid system:
+ *   --fluid-min-width: 360      (px, unitless)
+ *   --fluid-max-width: 1240     (px, unitless)
+ *   --fluid-min-size: 18        (px, base font at @min)
+ *   --fluid-max-size: 20        (px, base font at @max)
+ *   --fluid-min-scale: 1.2      (minor third)
+ *   --fluid-max-scale: 1.25     (major third)
+ * 
+ * USAGE:
+ *   font-size: var(--step-2);           /* Fluid heading */
+ *   padding: var(--space-m);            /* Fluid padding */
+ *   gap: var(--space-s-l);              /* Aggressive fluid gap (small→large) */
+ *   margin-block: var(--space-l-s);     /* Reverse fluid (large→small) */
+ * 
+ * CONTAINER QUERIES:
+ * For component-level fluid sizing, add to a container:
+ *   .card { container-type: inline-size; }
+ * Then use --space-*-cqi or --step-*-cqi variants.
+ */
+
+:root {
+  /* ===== FLUID SYSTEM CONFIGURATION ===== */
+  /* 
+   * These define where the fluid interpolation starts and stops.
+   * Values are unitless (assumed px) for calculation purposes.
+   */
+  --fluid-min-width: 360;
+  --fluid-max-width: 1240;
+  --fluid-min-size: 18;
+  --fluid-max-size: 20;
+  --fluid-min-scale: 1.2;   /* Minor Third */
+  --fluid-max-scale: 1.25;  /* Major Third */
+  
+  /* Calculated values for the clamp formula */
+  --fluid-width-diff: calc(var(--fluid-max-width) - var(--fluid-min-width));
+  --fluid-size-diff: calc(var(--fluid-max-size) - var(--fluid-min-size));
+  
+  /* ===== FLUID TYPE SCALE ===== */
+  /* 
+   * Named steps that scale fluidly between viewports.
+   * step-0 is your base (body text), positive steps go up, negative down.
+   * 
+   * At 360px viewport: 18px base, 1.2 scale
+   * At 1240px viewport: 20px base, 1.25 scale
+   * 
+   * Pre-calculated using Utopia formula:
+   *   clamp(minSize, yIntercept + slope * 100vw, maxSize)
+   *   slope = (maxSize - minSize) / (maxWidth - minWidth)
+   *   yIntercept = minSize - (minWidth * slope)
+   */
+  
+  /* Negative steps (smaller than base) */
+  --step--2: clamp(0.7813rem, 0.7536rem + 0.1227vw, 0.8rem);
+  --step--1: clamp(0.9375rem, 0.8943rem + 0.1918vw, 1rem);
+  
+  /* Base step */
+  --step-0: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+  
+  /* Positive steps (headings) */
+  --step-1: clamp(1.35rem, 1.2455rem + 0.4631vw, 1.5625rem);
+  --step-2: clamp(1.62rem, 1.4645rem + 0.6895vw, 1.9531rem);
+  --step-3: clamp(1.944rem, 1.7191rem + 0.9974vw, 2.4414rem);
+  --step-4: clamp(2.3328rem, 2.0148rem + 1.4096vw, 3.0518rem);
+  --step-5: clamp(2.7994rem, 2.3579rem + 1.9577vw, 3.8147rem);
+  
+  /* Extended steps for display typography */
+  --step-6: clamp(3.3592rem, 2.7544rem + 2.6804vw, 4.7684rem);
+  --step-7: clamp(4.0311rem, 3.2116rem + 3.6328vw, 5.9605rem);
+  
+  /* ===== FLUID SPACE SCALE ===== */
+  /*
+   * T-shirt sizes based on the same base unit as typography.
+   * This ensures visual harmony between text and spacing.
+   * 
+   * Multipliers from step-0:
+   *   3xs: 0.25   2xs: 0.5    xs: 0.75   s: 1
+   *   m: 1.5      l: 2        xl: 3      2xl: 4      3xl: 6
+   */
+  
+  --space-3xs: clamp(0.3125rem, 0.2983rem + 0.0631vw, 0.3125rem);
+  --space-2xs: clamp(0.5625rem, 0.5341rem + 0.1261vw, 0.625rem);
+  --space-xs: clamp(0.875rem, 0.8324rem + 0.1892vw, 0.9375rem);
+  --space-s: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+  --space-m: clamp(1.6875rem, 1.5852rem + 0.4541vw, 1.875rem);
+  --space-l: clamp(2.25rem, 2.1136rem + 0.6057vw, 2.5rem);
+  --space-xl: clamp(3.375rem, 3.1705rem + 0.9085vw, 3.75rem);
+  --space-2xl: clamp(4.5rem, 4.2273rem + 1.2114vw, 5rem);
+  --space-3xl: clamp(6.75rem, 6.3409rem + 1.8171vw, 7.5rem);
+  
+  /* ===== SPACE PAIRS (One-Up) ===== */
+  /*
+   * 🔥 THE KILLER FEATURE from Utopia
+   * 
+   * These interpolate between TWO DIFFERENT sizes.
+   * At @min viewport, you get the first size.
+   * At @max viewport, you get the second size.
+   * 
+   * Use case: A card gap that's tight on mobile, spacious on desktop.
+   *   gap: var(--space-s-m);  /* 18px → 30px */
+   */
+  
+  /* One-up pairs (adjacent sizes) */
+  --space-3xs-2xs: clamp(0.3125rem, 0.2131rem + 0.4403vw, 0.625rem);
+  --space-2xs-xs: clamp(0.5625rem, 0.4489rem + 0.5045vw, 0.9375rem);
+  --space-xs-s: clamp(0.875rem, 0.7472rem + 0.5676vw, 1.25rem);
+  --space-s-m: clamp(1.125rem, 0.9006rem + 0.9967vw, 1.875rem);
+  --space-m-l: clamp(1.6875rem, 1.4290rem + 1.1466vw, 2.5rem);
+  --space-l-xl: clamp(2.25rem, 1.8011rem + 1.9936vw, 3.75rem);
+  --space-xl-2xl: clamp(3.375rem, 2.8580rem + 2.2932vw, 5rem);
+  --space-2xl-3xl: clamp(4.5rem, 3.6023rem + 3.9872vw, 7.5rem);
+  
+  /* ===== SPACE PAIRS (Custom/Aggressive) ===== */
+  /*
+   * Steeper slopes for more dramatic responsive behavior.
+   * Great for hero sections, feature cards, section padding.
+   */
+  
+  /* Two-up pairs */
+  --space-s-l: clamp(1.125rem, 0.7443rem + 1.6892vw, 2.5rem);
+  --space-s-xl: clamp(1.125rem, 0.4318rem + 3.0761vw, 3.75rem);
+  --space-m-xl: clamp(1.6875rem, 1.1165rem + 2.5348vw, 3.75rem);
+  --space-l-2xl: clamp(2.25rem, 1.4886rem + 3.3795vw, 5rem);
+  
+  /* Three-up pairs (very aggressive) */
+  --space-s-2xl: clamp(1.125rem, 0.1193rem + 4.4631vw, 5rem);
+  --space-xs-xl: clamp(0.875rem, 0.1193rem + 3.3540vw, 3.75rem);
+  --space-m-2xl: clamp(1.6875rem, 0.8040rem + 3.9219vw, 5rem);
+  
+  /* Four-up pairs (maximum drama) */
+  --space-s-3xl: clamp(1.125rem, -0.5057rem + 7.2386vw, 7.5rem);
+  --space-xs-2xl: clamp(0.875rem, -0.1932rem + 4.7415vw, 5rem);
+  
+  /* ===== REVERSE SPACE PAIRS ===== */
+  /*
+   * 🔄 Counter-intuitive but powerful!
+   * 
+   * These get SMALLER as viewport grows.
+   * Use for: mobile-first padding that tightens on desktop,
+   * or letting content breathe more on small screens.
+   * 
+   * At @min (360px): you get the LARGER size
+   * At @max (1240px): you get the SMALLER size
+   */
+  
+  /* Recalculated with correct Utopia formula */
+  --space-l-s: clamp(1.125rem, 3.0625rem - 2.5vw, 2.5rem);
+  --space-xl-s: clamp(1.125rem, 4.824rem - 4.773vw, 3.75rem);
+  --space-xl-m: clamp(1.6875rem, 4.594rem - 3.75vw, 3.75rem);
+  --space-2xl-m: clamp(1.6875rem, 6.355rem - 6.023vw, 5rem);
+  --space-2xl-l: clamp(2.25rem, 6.125rem - 5vw, 5rem);
+  --space-3xl-l: clamp(2.25rem, 9.648rem - 9.545vw, 7.5rem);
+  
+  /* ===== CONTAINER-RELATIVE VARIANTS ===== */
+  /*
+   * Same scales but using container query units (cqi) instead of viewport (vw).
+   * Use these inside elements with `container-type: inline-size`.
+   * 
+   * Example:
+   *   .card { container-type: inline-size; }
+   *   .card-content { padding: var(--space-s-l-cqi); }
+   */
+  
+  --space-s-cqi: clamp(1.125rem, 1.0568rem + 0.3028cqi, 1.25rem);
+  --space-m-cqi: clamp(1.6875rem, 1.5852rem + 0.4541cqi, 1.875rem);
+  --space-l-cqi: clamp(2.25rem, 2.1136rem + 0.6057cqi, 2.5rem);
+  --space-s-l-cqi: clamp(1.125rem, 0.7443rem + 1.6892cqi, 2.5rem);
+  --space-s-xl-cqi: clamp(1.125rem, 0.4318rem + 3.0761cqi, 3.75rem);
+  
+  /* Type scale container variants */
+  --step-0-cqi: clamp(1.125rem, 1.0568rem + 0.3028cqi, 1.25rem);
+  --step-1-cqi: clamp(1.35rem, 1.2455rem + 0.4631cqi, 1.5625rem);
+  --step-2-cqi: clamp(1.62rem, 1.4645rem + 0.6895cqi, 1.9531rem);
+  
+  /* ===== SEMANTIC ALIASES ===== */
+  /*
+   * Human-readable names for common use cases.
+   * Override these to quickly adjust the feel of your design.
+   */
+  
+  /* Typography */
+  --font-size-body: var(--step-0);
+  --font-size-small: var(--step--1);
+  --font-size-caption: var(--step--2);
+  --font-size-h6: var(--step-0);
+  --font-size-h5: var(--step-1);
+  --font-size-h4: var(--step-2);
+  --font-size-h3: var(--step-3);
+  --font-size-h2: var(--step-4);
+  --font-size-h1: var(--step-5);
+  --font-size-display: var(--step-6);
+  --font-size-hero: var(--step-7);
+  
+  /* Spacing */
+  --gap-tight: var(--space-2xs);
+  --gap-default: var(--space-s);
+  --gap-loose: var(--space-m);
+  --gap-spacious: var(--space-l);
+  
+  /* Section spacing (aggressive fluid) */
+  --section-padding-sm: var(--space-m-l);
+  --section-padding: var(--space-l-xl);
+  --section-padding-lg: var(--space-xl-2xl);
+  --section-padding-hero: var(--space-xl-3xl);
+  
+  /* Card/component spacing */
+  --card-padding: var(--space-s-m);
+  --card-gap: var(--space-xs-s);
+  
+  /* Gutter (layout gaps) */
+  --gutter: var(--space-s-l);
+  --gutter-tight: var(--space-xs-m);
+  --gutter-loose: var(--space-m-xl);
+}
+
+/* ===== UTILITY CLASSES ===== */
+/*
+ * Optional utility classes for quick application.
+ * Use sparingly - prefer semantic class names in production.
+ */
+
+/* Fluid type utilities */
+.text-step--2 { font-size: var(--step--2); }
+.text-step--1 { font-size: var(--step--1); }
+.text-step-0 { font-size: var(--step-0); }
+.text-step-1 { font-size: var(--step-1); }
+.text-step-2 { font-size: var(--step-2); }
+.text-step-3 { font-size: var(--step-3); }
+.text-step-4 { font-size: var(--step-4); }
+.text-step-5 { font-size: var(--step-5); }
+.text-step-6 { font-size: var(--step-6); }
+.text-step-7 { font-size: var(--step-7); }
+
+/* Fluid space utilities - margin/padding */
+.space-3xs { --_space: var(--space-3xs); }
+.space-2xs { --_space: var(--space-2xs); }
+.space-xs { --_space: var(--space-xs); }
+.space-s { --_space: var(--space-s); }
+.space-m { --_space: var(--space-m); }
+.space-l { --_space: var(--space-l); }
+.space-xl { --_space: var(--space-xl); }
+.space-2xl { --_space: var(--space-2xl); }
+.space-3xl { --_space: var(--space-3xl); }
+
+/* Gap utilities */
+.gap-3xs { gap: var(--space-3xs); }
+.gap-2xs { gap: var(--space-2xs); }
+.gap-xs { gap: var(--space-xs); }
+.gap-s { gap: var(--space-s); }
+.gap-m { gap: var(--space-m); }
+.gap-l { gap: var(--space-l); }
+.gap-xl { gap: var(--space-xl); }
+.gap-2xl { gap: var(--space-2xl); }
+.gap-3xl { gap: var(--space-3xl); }
+
+/* Fluid gap pairs */
+.gap-s-m { gap: var(--space-s-m); }
+.gap-s-l { gap: var(--space-s-l); }
+.gap-s-xl { gap: var(--space-s-xl); }
+.gap-m-l { gap: var(--space-m-l); }
+.gap-m-xl { gap: var(--space-m-xl); }
+.gap-l-xl { gap: var(--space-l-xl); }
+.gap-l-2xl { gap: var(--space-l-2xl); }
+
+/* Flow utility (vertical rhythm) */
+.flow > * + * {
+  margin-block-start: var(--flow-space, var(--space-s-m));
+}
+
+.flow-tight { --flow-space: var(--space-xs-s); }
+.flow-loose { --flow-space: var(--space-m-l); }
+.flow-spacious { --flow-space: var(--space-l-xl); }

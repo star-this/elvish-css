@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish Fluid Scale System - Utopia-Inspired</title>
+  <style>
+    /* ===== EMBEDDED FLUID SYSTEM ===== */
+    :root {
+      /* Fluid Type Scale */
+      --step--2: clamp(0.7813rem, 0.7536rem + 0.1227vw, 0.8rem);
+      --step--1: clamp(0.9375rem, 0.8943rem + 0.1918vw, 1rem);
+      --step-0: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+      --step-1: clamp(1.35rem, 1.2455rem + 0.4631vw, 1.5625rem);
+      --step-2: clamp(1.62rem, 1.4645rem + 0.6895vw, 1.9531rem);
+      --step-3: clamp(1.944rem, 1.7191rem + 0.9974vw, 2.4414rem);
+      --step-4: clamp(2.3328rem, 2.0148rem + 1.4096vw, 3.0518rem);
+      --step-5: clamp(2.7994rem, 2.3579rem + 1.9577vw, 3.8147rem);
+      --step-6: clamp(3.3592rem, 2.7544rem + 2.6804vw, 4.7684rem);
+      --step-7: clamp(4.0311rem, 3.2116rem + 3.6328vw, 5.9605rem);
+      
+      /* Fluid Space Scale */
+      --space-3xs: clamp(0.3125rem, 0.2983rem + 0.0631vw, 0.3125rem);
+      --space-2xs: clamp(0.5625rem, 0.5341rem + 0.1261vw, 0.625rem);
+      --space-xs: clamp(0.875rem, 0.8324rem + 0.1892vw, 0.9375rem);
+      --space-s: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+      --space-m: clamp(1.6875rem, 1.5852rem + 0.4541vw, 1.875rem);
+      --space-l: clamp(2.25rem, 2.1136rem + 0.6057vw, 2.5rem);
+      --space-xl: clamp(3.375rem, 3.1705rem + 0.9085vw, 3.75rem);
+      --space-2xl: clamp(4.5rem, 4.2273rem + 1.2114vw, 5rem);
+      --space-3xl: clamp(6.75rem, 6.3409rem + 1.8171vw, 7.5rem);
+      
+      /* Space Pairs (One-Up) */
+      --space-3xs-2xs: clamp(0.3125rem, 0.2131rem + 0.4403vw, 0.625rem);
+      --space-2xs-xs: clamp(0.5625rem, 0.4489rem + 0.5045vw, 0.9375rem);
+      --space-xs-s: clamp(0.875rem, 0.7472rem + 0.5676vw, 1.25rem);
+      --space-s-m: clamp(1.125rem, 0.9006rem + 0.9967vw, 1.875rem);
+      --space-m-l: clamp(1.6875rem, 1.4290rem + 1.1466vw, 2.5rem);
+      --space-l-xl: clamp(2.25rem, 1.8011rem + 1.9936vw, 3.75rem);
+      --space-xl-2xl: clamp(3.375rem, 2.8580rem + 2.2932vw, 5rem);
+      --space-2xl-3xl: clamp(4.5rem, 3.6023rem + 3.9872vw, 7.5rem);
+      
+      /* Space Pairs (Custom/Aggressive) */
+      --space-s-l: clamp(1.125rem, 0.7443rem + 1.6892vw, 2.5rem);
+      --space-s-xl: clamp(1.125rem, 0.4318rem + 3.0761vw, 3.75rem);
+      --space-m-xl: clamp(1.6875rem, 1.1165rem + 2.5348vw, 3.75rem);
+      --space-l-2xl: clamp(2.25rem, 1.4886rem + 3.3795vw, 5rem);
+      --space-s-2xl: clamp(1.125rem, 0.1193rem + 4.4631vw, 5rem);
+      --space-xs-xl: clamp(0.875rem, 0.1193rem + 3.3540vw, 3.75rem);
+      --space-m-2xl: clamp(1.6875rem, 0.8040rem + 3.9219vw, 5rem);
+      --space-s-3xl: clamp(1.125rem, -0.5057rem + 7.2386vw, 7.5rem);
+      --space-xs-2xl: clamp(0.875rem, -0.1932rem + 4.7415vw, 5rem);
+      
+      /* Reverse Space Pairs */
+      --space-l-s: clamp(1.25rem, 2.7841rem - 1.7045vw, 2.25rem);
+      --space-xl-s: clamp(1.25rem, 4.6591rem - 3.7879vw, 3.375rem);
+      --space-xl-m: clamp(1.875rem, 4.2841rem - 2.6761vw, 3.375rem);
+      --space-2xl-m: clamp(1.875rem, 5.9091rem - 4.4886vw, 4.5rem);
+      --space-2xl-l: clamp(2.5rem, 5.5341rem - 3.3712vw, 4.5rem);
+      --space-3xl-l: clamp(2.5rem, 8.6591rem - 6.8466vw, 6.75rem);
+      
+      /* Brand colors for demo */
+      --brand: oklch(83% 0.17 168);
+      --brand-light: oklch(90% 0.12 168);
+      --brand-dark: oklch(70% 0.17 168);
+      --brand-complement: oklch(83% 0.17 348);
+      --brand-ghost: oklch(83% 0.17 168 / 0.15);
+      --brand-muted: oklch(83% 0.085 168);
+    }
+    
+    /* ===== DEMO-SPECIFIC STYLES ===== */
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a2e;
+      margin: 0;
+      padding: var(--space-m);
+      font-size: var(--step-0);
+      line-height: 1.5;
+    }
+    
+    .container {
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: var(--space-xl-2xl);
+    }
+    
+    h1 {
+      font-size: var(--step-5);
+      margin: 0 0 var(--space-s);
+      background: linear-gradient(135deg, var(--brand), var(--brand-complement));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: var(--step-1);
+      color: #6c757d;
+      margin: 0;
+    }
+    
+    .viewport-indicator {
+      position: fixed;
+      top: var(--space-s);
+      right: var(--space-s);
+      background: #1a1a2e;
+      color: white;
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: 6px;
+      font-size: var(--step--1);
+      font-family: monospace;
+      z-index: 1000;
+    }
+    
+    section {
+      background: white;
+      border-radius: 12px;
+      padding: var(--space-m-l);
+      margin-bottom: var(--space-l-xl);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    h2 {
+      font-size: var(--step-3);
+      margin: 0 0 var(--space-s);
+      color: #1a1a2e;
+    }
+    
+    h3 {
+      font-size: var(--step-1);
+      margin: var(--space-m) 0 var(--space-xs);
+      color: #4a4a5a;
+    }
+    
+    p {
+      margin: 0 0 var(--space-s);
+      max-width: 65ch;
+    }
+    
+    .description {
+      color: #6c757d;
+      font-size: var(--step--1);
+      margin-bottom: var(--space-m);
+    }
+    
+    /* Type Scale Demo */
+    .type-scale {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .type-step {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-s);
+      padding: var(--space-2xs) 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .type-step:last-child {
+      border-bottom: none;
+    }
+    
+    .type-label {
+      font-size: var(--step--1);
+      font-family: monospace;
+      color: #888;
+      min-width: 8ch;
+    }
+    
+    .type-sample {
+      flex: 1;
+    }
+    
+    .type-size {
+      font-size: var(--step--2);
+      color: var(--brand);
+      font-family: monospace;
+      min-width: 10ch;
+      text-align: right;
+    }
+    
+    /* Space Scale Demo */
+    .space-scale {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .space-step {
+      display: flex;
+      align-items: center;
+      gap: var(--space-s);
+    }
+    
+    .space-label {
+      font-size: var(--step--1);
+      font-family: monospace;
+      color: #888;
+      min-width: 10ch;
+    }
+    
+    .space-bar {
+      height: 24px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-light));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .space-value {
+      font-size: var(--step--2);
+      color: #888;
+      font-family: monospace;
+      min-width: 8ch;
+    }
+    
+    /* Space Pairs Demo */
+    .pairs-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-m);
+    }
+    
+    .pair-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: var(--space-s);
+      border: 1px solid #eee;
+    }
+    
+    .pair-card h4 {
+      font-size: var(--step-0);
+      margin: 0 0 var(--space-2xs);
+      font-family: monospace;
+      color: var(--brand-dark);
+    }
+    
+    .pair-card p {
+      font-size: var(--step--1);
+      color: #666;
+      margin: 0 0 var(--space-xs);
+    }
+    
+    .pair-visual {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xs);
+    }
+    
+    .pair-box {
+      background: var(--brand);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .pair-arrow {
+      color: #aaa;
+      font-size: var(--step--1);
+    }
+    
+    /* Interactive Demo */
+    .interactive-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-s-l);
+    }
+    
+    .demo-card {
+      background: linear-gradient(135deg, #f8f9fa, white);
+      border-radius: 12px;
+      padding: var(--space-s-m);
+      border: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs-s);
+    }
+    
+    .demo-card h4 {
+      font-size: var(--step-1);
+      margin: 0;
+      color: #1a1a2e;
+    }
+    
+    .demo-card p {
+      font-size: var(--step--1);
+      color: #666;
+      margin: 0;
+    }
+    
+    .demo-card .cta {
+      margin-top: auto;
+      padding: var(--space-2xs) var(--space-s);
+      background: var(--brand);
+      color: #1a1a2e;
+      border: none;
+      border-radius: 6px;
+      font-size: var(--step--1);
+      cursor: pointer;
+      align-self: flex-start;
+    }
+    
+    /* Hero Section Demo */
+    .hero-demo {
+      background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+      color: white;
+      border-radius: 12px;
+      padding: var(--space-xl-3xl);
+      text-align: center;
+      margin-bottom: var(--space-l);
+    }
+    
+    .hero-demo h2 {
+      font-size: var(--step-5);
+      color: white;
+      margin-bottom: var(--space-s-m);
+    }
+    
+    .hero-demo p {
+      font-size: var(--step-1);
+      color: rgba(255,255,255,0.8);
+      max-width: 50ch;
+      margin: 0 auto;
+    }
+    
+    /* Code Block */
+    pre {
+      background: #1a1a2e;
+      color: #f0f0f5;
+      padding: var(--space-s);
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: var(--step--1);
+      line-height: 1.6;
+    }
+    
+    code {
+      font-family: ui-monospace, 'Fira Code', monospace;
+    }
+    
+    .highlight {
+      color: var(--brand);
+    }
+    
+    /* Reverse Demo */
+    .reverse-demo {
+      background: linear-gradient(135deg, var(--brand-ghost), white);
+      border: 2px dashed var(--brand-muted);
+      border-radius: 12px;
+      padding: var(--space-2xl-l); /* Gets SMALLER on larger screens! */
+      text-align: center;
+    }
+    
+    .reverse-demo p {
+      margin: 0 auto;
+    }
+    
+    /* Comparison Table */
+    .comparison {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--step--1);
+    }
+    
+    .comparison th,
+    .comparison td {
+      padding: var(--space-2xs) var(--space-xs);
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
+    
+    .comparison .value {
+      font-family: monospace;
+      color: var(--brand-dark);
+    }
+    
+    /* Responsive info */
+    @media (max-width: 600px) {
+      .type-step {
+        flex-wrap: wrap;
+      }
+      .type-size {
+        width: 100%;
+        text-align: left;
+        margin-top: var(--space-3xs);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-indicator">
+    <span id="vw">--</span>px
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Elvish Fluid Scale</h1>
+      <p class="subtitle">Utopia-Inspired Fluid Typography & Spacing</p>
+    </header>
+    
+    <section>
+      <h2>The Philosophy</h2>
+      <p class="description">
+        Instead of breakpoints, we define scales at two viewport widths and let the browser 
+        interpolate between them. Everything stays in harmony, automatically.
+      </p>
+      
+      <div class="comparison" style="margin-top: var(--space-m);">
+        <table class="comparison">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>@min (360px)</th>
+              <th>@max (1240px)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Base Font Size</td>
+              <td class="value">18px</td>
+              <td class="value">20px</td>
+            </tr>
+            <tr>
+              <td>Type Scale</td>
+              <td class="value">1.2 (Minor Third)</td>
+              <td class="value">1.25 (Major Third)</td>
+            </tr>
+            <tr>
+              <td>Result</td>
+              <td colspan="2">Smooth interpolation across all viewports</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Fluid Type Scale</h2>
+      <p class="description">
+        Named steps that scale fluidly. Resize your browser to see them change.
+      </p>
+      
+      <div class="type-scale">
+        <div class="type-step">
+          <span class="type-label">--step--2</span>
+          <span class="type-sample" style="font-size: var(--step--2);">Caption text, fine print</span>
+          <span class="type-size" data-step="--step--2"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step--1</span>
+          <span class="type-sample" style="font-size: var(--step--1);">Small text, metadata</span>
+          <span class="type-size" data-step="--step--1"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-0</span>
+          <span class="type-sample" style="font-size: var(--step-0); font-weight: 500;">Body text (base)</span>
+          <span class="type-size" data-step="--step-0"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-1</span>
+          <span class="type-sample" style="font-size: var(--step-1);">Large text, H6</span>
+          <span class="type-size" data-step="--step-1"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-2</span>
+          <span class="type-sample" style="font-size: var(--step-2);">Heading H5</span>
+          <span class="type-size" data-step="--step-2"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-3</span>
+          <span class="type-sample" style="font-size: var(--step-3);">Heading H4</span>
+          <span class="type-size" data-step="--step-3"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-4</span>
+          <span class="type-sample" style="font-size: var(--step-4);">Heading H3</span>
+          <span class="type-size" data-step="--step-4"></span>
+        </div>
+        <div class="type-step">
+          <span class="type-label">--step-5</span>
+          <span class="type-sample" style="font-size: var(--step-5);">Display</span>
+          <span class="type-size" data-step="--step-5"></span>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Fluid Space Scale</h2>
+      <p class="description">
+        T-shirt sizes based on the same base unit as typography. Visual harmony guaranteed.
+      </p>
+      
+      <div class="space-scale">
+        <div class="space-step">
+          <span class="space-label">--space-3xs</span>
+          <div class="space-bar" style="width: var(--space-3xs);"></div>
+          <span class="space-value" data-space="--space-3xs"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-2xs</span>
+          <div class="space-bar" style="width: var(--space-2xs);"></div>
+          <span class="space-value" data-space="--space-2xs"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-xs</span>
+          <div class="space-bar" style="width: var(--space-xs);"></div>
+          <span class="space-value" data-space="--space-xs"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-s</span>
+          <div class="space-bar" style="width: var(--space-s);"></div>
+          <span class="space-value" data-space="--space-s"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-m</span>
+          <div class="space-bar" style="width: var(--space-m);"></div>
+          <span class="space-value" data-space="--space-m"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-l</span>
+          <div class="space-bar" style="width: var(--space-l);"></div>
+          <span class="space-value" data-space="--space-l"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-xl</span>
+          <div class="space-bar" style="width: var(--space-xl);"></div>
+          <span class="space-value" data-space="--space-xl"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-2xl</span>
+          <div class="space-bar" style="width: var(--space-2xl);"></div>
+          <span class="space-value" data-space="--space-2xl"></span>
+        </div>
+        <div class="space-step">
+          <span class="space-label">--space-3xl</span>
+          <div class="space-bar" style="width: var(--space-3xl);"></div>
+          <span class="space-value" data-space="--space-3xl"></span>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>🔥 Space Pairs - The Killer Feature</h2>
+      <p class="description">
+        Interpolate between TWO DIFFERENT sizes. At @min viewport, you get the first size.
+        At @max viewport, you get the second. Watch the boxes change as you resize!
+      </p>
+      
+      <div class="pairs-demo">
+        <div class="pair-card">
+          <h4>--space-s-m</h4>
+          <p>Subtle: small → medium</p>
+          <div class="pair-visual">
+            <div class="pair-box" style="width: var(--space-s-m); height: var(--space-s-m);"></div>
+            <span class="pair-arrow">→</span>
+            <span class="space-value" data-space="--space-s-m"></span>
+          </div>
+        </div>
+        
+        <div class="pair-card">
+          <h4>--space-s-l</h4>
+          <p>Moderate: small → large</p>
+          <div class="pair-visual">
+            <div class="pair-box" style="width: var(--space-s-l); height: var(--space-s-l);"></div>
+            <span class="pair-arrow">→</span>
+            <span class="space-value" data-space="--space-s-l"></span>
+          </div>
+        </div>
+        
+        <div class="pair-card">
+          <h4>--space-s-xl</h4>
+          <p>Aggressive: small → extra large</p>
+          <div class="pair-visual">
+            <div class="pair-box" style="width: var(--space-s-xl); height: var(--space-s-xl);"></div>
+            <span class="pair-arrow">→</span>
+            <span class="space-value" data-space="--space-s-xl"></span>
+          </div>
+        </div>
+        
+        <div class="pair-card">
+          <h4>--space-s-2xl</h4>
+          <p>Dramatic: small → 2x-large</p>
+          <div class="pair-visual">
+            <div class="pair-box" style="width: var(--space-s-2xl); height: var(--space-s-2xl);"></div>
+            <span class="pair-arrow">→</span>
+            <span class="space-value" data-space="--space-s-2xl"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>🔄 Reverse Pairs</h2>
+      <p class="description">
+        Counter-intuitive but powerful! These get SMALLER as viewport grows.
+        Perfect for mobile-first designs where you want content to breathe more on small screens.
+      </p>
+      
+      <div class="reverse-demo">
+        <p>
+          <strong>This box uses <code>--space-2xl-l</code></strong><br>
+          Padding is larger on mobile, tighter on desktop!<br>
+          <span style="font-size: var(--step--1); color: #666;">
+            Current: <span data-space="--space-2xl-l"></span>
+          </span>
+        </p>
+      </div>
+      
+      <pre><code><span class="highlight">.mobile-first-card</span> {
+  padding: <span class="highlight">var(--space-2xl-l)</span>;  /* 72px → 40px */
+}
+
+<span class="highlight">.hero-breathing</span> {
+  padding: <span class="highlight">var(--space-3xl-l)</span>;  /* 108px → 40px */
+}</code></pre>
+    </section>
+    
+    <section>
+      <h2>Real-World Example</h2>
+      <p class="description">
+        Cards using fluid space pairs for responsive gaps and padding.
+      </p>
+      
+      <div class="hero-demo">
+        <h2>Hero Section</h2>
+        <p>
+          Using <code>--space-xl-3xl</code> for padding that dramatically 
+          expands on larger screens.
+        </p>
+      </div>
+      
+      <div class="interactive-demo">
+        <div class="demo-card">
+          <h4>Card Title</h4>
+          <p>This card uses <code>--space-s-m</code> for padding and <code>--space-xs-s</code> for internal gaps.</p>
+          <button class="cta">Learn More</button>
+        </div>
+        <div class="demo-card">
+          <h4>Another Card</h4>
+          <p>The gap between cards is <code>--space-s-l</code> - tight on mobile, spacious on desktop.</p>
+          <button class="cta">Explore</button>
+        </div>
+        <div class="demo-card">
+          <h4>Third Card</h4>
+          <p>All sizing is fluid and harmonious. No breakpoints needed!</p>
+          <button class="cta">Get Started</button>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Usage</h2>
+      
+      <h3>Import</h3>
+      <pre><code>@import 'elvish/global/fluid.css';</code></pre>
+      
+      <h3>Typography</h3>
+      <pre><code><span class="highlight">h1</span> { font-size: <span class="highlight">var(--step-5)</span>; }
+<span class="highlight">h2</span> { font-size: <span class="highlight">var(--step-4)</span>; }
+<span class="highlight">h3</span> { font-size: <span class="highlight">var(--step-3)</span>; }
+<span class="highlight">body</span> { font-size: <span class="highlight">var(--step-0)</span>; }
+<span class="highlight">small</span> { font-size: <span class="highlight">var(--step--1)</span>; }</code></pre>
+      
+      <h3>Spacing</h3>
+      <pre><code><span class="highlight">.card</span> {
+  padding: <span class="highlight">var(--space-s-m)</span>;     /* 18px → 30px */
+  gap: <span class="highlight">var(--space-xs-s)</span>;          /* 14px → 20px */
+}
+
+<span class="highlight">.section</span> {
+  padding-block: <span class="highlight">var(--space-l-xl)</span>;  /* 36px → 60px */
+}
+
+<span class="highlight">.hero</span> {
+  padding-block: <span class="highlight">var(--space-xl-3xl)</span>; /* 54px → 120px */
+}</code></pre>
+      
+      <h3>Semantic Aliases</h3>
+      <pre><code>/* Pre-defined for common use cases */
+<span class="highlight">--gutter</span>: var(--space-s-l);           /* Layout gaps */
+<span class="highlight">--card-padding</span>: var(--space-s-m);    /* Card internal spacing */
+<span class="highlight">--section-padding</span>: var(--space-l-xl); /* Section blocks */</code></pre>
+    </section>
+  </div>
+
+  <script>
+    // Update viewport width indicator
+    function updateVW() {
+      document.getElementById('vw').textContent = window.innerWidth;
+    }
+    updateVW();
+    window.addEventListener('resize', updateVW);
+    
+    // Helper to get computed pixel value of a CSS variable
+    function getComputedSize(varName) {
+      const el = document.createElement('div');
+      el.style.position = 'absolute';
+      el.style.visibility = 'hidden';
+      el.style.width = `var(${varName})`;
+      document.body.appendChild(el);
+      const computed = getComputedStyle(el).width;
+      document.body.removeChild(el);
+      return parseFloat(computed);
+    }
+    
+    // Update computed values
+    function updateComputedValues() {
+      // Type steps
+      document.querySelectorAll('[data-step]').forEach(el => {
+        const step = el.dataset.step;
+        const px = getComputedSize(step);
+        el.textContent = isNaN(px) ? '—' : `${px.toFixed(1)}px`;
+      });
+      
+      // Space values
+      document.querySelectorAll('[data-space]').forEach(el => {
+        const space = el.dataset.space;
+        const px = getComputedSize(space);
+        el.textContent = isNaN(px) ? '—' : `${px.toFixed(1)}px`;
+      });
+    }
+    
+    updateComputedValues();
+    window.addEventListener('resize', updateComputedValues);
+  </script>
+</body>
+</html>

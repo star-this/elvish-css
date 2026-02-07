@@ -32,6 +32,13 @@ if (!existsSync(DIST)) {
 const CSS_FILES = [
   // Global styles
   'global/tokens.css',
+  'global/fluid.css',         // Utopia-style fluid type & space scales
+  'global/colors.css',        // 19 color palettes × 13 shades
+  'global/borders.css',       // Borders, radii, drawn/blob shapes
+  'global/shadows.css',       // Outer & inner shadows
+  'global/easings.css',       // 50+ easing functions
+  'global/gradients.css',     // 30 curated gradients
+  'global/noise.css',         // SVG-based noise textures
   'global/reset.css',
   'global/utilities.css',
   'global/modern.css',
@@ -59,6 +66,7 @@ const CSS_FILES = [
   // Visual effects and typography primitives
   'primitives/thir/thir.css',
   'primitives/tew/tew.css',
+  'primitives/gil/gil.css',
 ];
 
 function bundleCSS() {

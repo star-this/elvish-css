@@ -1,0 +1,27 @@
+/* Style based on an attribute */
+my-custom-element[state="alert"] {
+    border: 1px solid red;
+}
+
+/* Style when the element is defined and upgraded by the browser */
+my-custom-element:defined {
+    /* styles for when the element is ready */
+}
+
+/*
+CSS Custom Properties (Variables):
+These properties ("CSS variables")
+easily cross the Shadow DOM boundary
+and are the primary way to allow
+external CSS to affect the internal
+styles of a custom element.
+*/
+:root {
+    --main-color: blue;
+}
+
+my-custom-element {
+    --component-color: var(
+        --main-color
+    ); /* Pass a global var to a component var */
+}
