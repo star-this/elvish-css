@@ -40,8 +40,21 @@
   /* Default: Perfect Fifth for balanced harmony */
   --ratio: var(--ratio-fifth);
   
-  /* ===== MODULAR SCALE ===== */
+  /* ===== MODULAR SCALE (Every Layout) ===== */
   /* 
+   * STATIC scale based on mathematical ratios.
+   * Values are fixed and do NOT respond to viewport width.
+   * 
+   * USE THIS WHEN:
+   *   - You want to switch ratios dynamically (golden/silver/fifth)
+   *   - You need consistent spacing regardless of viewport
+   *   - Building print stylesheets or fixed-width layouts
+   * 
+   * USE UTOPIA'S --step-* and --space-* WHEN:
+   *   - You want fluid responsive typography
+   *   - You want spacing that scales with viewport
+   *   - Building responsive web layouts (most cases)
+   * 
    * Golden Ratio scale at 16px base:
    * s-2: 6px   | s-1: 10px  | s0: 16px (base)
    * s1: 26px   | s2: 42px   | s3: 68px
@@ -60,6 +73,10 @@
   --s5: calc(var(--s4) * var(--ratio));
   
   /* ===== STATIC SIZES (rem-based) ===== */
+  /* 
+   * Fixed sizes for when you need exact pixel values.
+   * These do NOT respond to viewport - use Utopia's --space-* for fluid.
+   */
   --size-1: 0.25rem;    /* 4px */
   --size-2: 0.5rem;     /* 8px */
   --size-3: 0.75rem;    /* 12px */
@@ -76,10 +93,22 @@
   --size-14: 8rem;      /* 128px */
   --size-15: 10rem;     /* 160px */
   
-  /* ===== FLUID SIZES (viewport-responsive) ===== */
+  /* ===== FLUID SIZES - DEPRECATED ===== */
   /* 
-   * Fluid sizes use clamp() to scale between min and max based on viewport.
-   * Great for responsive padding, margins, gaps.
+   * ⚠️  DEPRECATED: Use Utopia's --space-* system instead (in fluid.css)
+   * 
+   * These naive clamp() values are kept for backwards compatibility only.
+   * Utopia's system is mathematically precise and harmonious.
+   * 
+   * Migration guide:
+   *   --size-fluid-1  →  --space-3xs or --space-2xs
+   *   --size-fluid-2  →  --space-xs or --space-s
+   *   --size-fluid-3  →  --space-s or --space-m
+   *   --size-fluid-4  →  --space-m or --space-l
+   *   --size-fluid-5  →  --space-l or --space-xl
+   *   --size-fluid-6  →  --space-xl
+   *   --size-fluid-7  →  --space-xl-2xl (space pair)
+   *   --size-fluid-8  →  --space-2xl-3xl (space pair)
    */
   --size-fluid-1: clamp(0.5rem, 1vw, 1rem);
   --size-fluid-2: clamp(1rem, 2vw, 1.5rem);
@@ -272,6 +301,1517 @@
   --transition-fast: var(--duration-fast) var(--ease-out);
   --transition-medium: var(--duration-normal) var(--ease-out);
   --transition-slow: var(--duration-slow) var(--ease-out);
+}
+
+
+/* === global/fluid.css === */
+/**
+ * Elvish - Fluid Scale System
+ * 
+ * Inspired by Utopia.fyi's fluid responsive design philosophy.
+ * Type and space scales that interpolate smoothly between viewport widths.
+ * 
+ * PHILOSOPHY:
+ * Instead of breakpoints, we define scales at two viewport widths (@min, @max)
+ * and let the browser interpolate between them. Everything stays in harmony.
+ * 
+ * CONFIGURATION:
+ * Override these custom properties to customize the fluid system:
+ *   --fluid-min-width: 360      (px, unitless)
+ *   --fluid-max-width: 1240     (px, unitless)
+ *   --fluid-min-size: 18        (px, base font at @min)
+ *   --fluid-max-size: 20        (px, base font at @max)
+ *   --fluid-min-scale: 1.2      (minor third)
+ *   --fluid-max-scale: 1.25     (major third)
+ * 
+ * USAGE:
+ *   font-size: var(--step-2);           /* Fluid heading */
+ *   padding: var(--space-m);            /* Fluid padding */
+ *   gap: var(--space-s-l);              /* Aggressive fluid gap (small→large) */
+ *   margin-block: var(--space-l-s);     /* Reverse fluid (large→small) */
+ * 
+ * CONTAINER QUERIES:
+ * For component-level fluid sizing, add to a container:
+ *   .card { container-type: inline-size; }
+ * Then use --space-*-cqi or --step-*-cqi variants.
+ */
+
+:root {
+  /* ===== FLUID SYSTEM CONFIGURATION ===== */
+  /* 
+   * These define where the fluid interpolation starts and stops.
+   * Values are unitless (assumed px) for calculation purposes.
+   */
+  --fluid-min-width: 360;
+  --fluid-max-width: 1240;
+  --fluid-min-size: 18;
+  --fluid-max-size: 20;
+  --fluid-min-scale: 1.2;   /* Minor Third */
+  --fluid-max-scale: 1.25;  /* Major Third */
+  
+  /* Calculated values for the clamp formula */
+  --fluid-width-diff: calc(var(--fluid-max-width) - var(--fluid-min-width));
+  --fluid-size-diff: calc(var(--fluid-max-size) - var(--fluid-min-size));
+  
+  /* ===== FLUID TYPE SCALE ===== */
+  /* 
+   * Named steps that scale fluidly between viewports.
+   * step-0 is your base (body text), positive steps go up, negative down.
+   * 
+   * At 360px viewport: 18px base, 1.2 scale
+   * At 1240px viewport: 20px base, 1.25 scale
+   * 
+   * Pre-calculated using Utopia formula:
+   *   clamp(minSize, yIntercept + slope * 100vw, maxSize)
+   *   slope = (maxSize - minSize) / (maxWidth - minWidth)
+   *   yIntercept = minSize - (minWidth * slope)
+   */
+  
+  /* Negative steps (smaller than base) */
+  --step--2: clamp(0.7813rem, 0.7536rem + 0.1227vw, 0.8rem);
+  --step--1: clamp(0.9375rem, 0.8943rem + 0.1918vw, 1rem);
+  
+  /* Base step */
+  --step-0: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+  
+  /* Positive steps (headings) */
+  --step-1: clamp(1.35rem, 1.2455rem + 0.4631vw, 1.5625rem);
+  --step-2: clamp(1.62rem, 1.4645rem + 0.6895vw, 1.9531rem);
+  --step-3: clamp(1.944rem, 1.7191rem + 0.9974vw, 2.4414rem);
+  --step-4: clamp(2.3328rem, 2.0148rem + 1.4096vw, 3.0518rem);
+  --step-5: clamp(2.7994rem, 2.3579rem + 1.9577vw, 3.8147rem);
+  
+  /* Extended steps for display typography */
+  --step-6: clamp(3.3592rem, 2.7544rem + 2.6804vw, 4.7684rem);
+  --step-7: clamp(4.0311rem, 3.2116rem + 3.6328vw, 5.9605rem);
+  
+  /* ===== FLUID SPACE SCALE ===== */
+  /*
+   * T-shirt sizes based on the same base unit as typography.
+   * This ensures visual harmony between text and spacing.
+   * 
+   * Multipliers from step-0:
+   *   3xs: 0.25   2xs: 0.5    xs: 0.75   s: 1
+   *   m: 1.5      l: 2        xl: 3      2xl: 4      3xl: 6
+   */
+  
+  --space-3xs: clamp(0.3125rem, 0.2983rem + 0.0631vw, 0.3125rem);
+  --space-2xs: clamp(0.5625rem, 0.5341rem + 0.1261vw, 0.625rem);
+  --space-xs: clamp(0.875rem, 0.8324rem + 0.1892vw, 0.9375rem);
+  --space-s: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+  --space-m: clamp(1.6875rem, 1.5852rem + 0.4541vw, 1.875rem);
+  --space-l: clamp(2.25rem, 2.1136rem + 0.6057vw, 2.5rem);
+  --space-xl: clamp(3.375rem, 3.1705rem + 0.9085vw, 3.75rem);
+  --space-2xl: clamp(4.5rem, 4.2273rem + 1.2114vw, 5rem);
+  --space-3xl: clamp(6.75rem, 6.3409rem + 1.8171vw, 7.5rem);
+  
+  /* ===== SPACE PAIRS (One-Up) ===== */
+  /*
+   * 🔥 THE KILLER FEATURE from Utopia
+   * 
+   * These interpolate between TWO DIFFERENT sizes.
+   * At @min viewport, you get the first size.
+   * At @max viewport, you get the second size.
+   * 
+   * Use case: A card gap that's tight on mobile, spacious on desktop.
+   *   gap: var(--space-s-m);  /* 18px → 30px */
+   */
+  
+  /* One-up pairs (adjacent sizes) */
+  --space-3xs-2xs: clamp(0.3125rem, 0.2131rem + 0.4403vw, 0.625rem);
+  --space-2xs-xs: clamp(0.5625rem, 0.4489rem + 0.5045vw, 0.9375rem);
+  --space-xs-s: clamp(0.875rem, 0.7472rem + 0.5676vw, 1.25rem);
+  --space-s-m: clamp(1.125rem, 0.9006rem + 0.9967vw, 1.875rem);
+  --space-m-l: clamp(1.6875rem, 1.4290rem + 1.1466vw, 2.5rem);
+  --space-l-xl: clamp(2.25rem, 1.8011rem + 1.9936vw, 3.75rem);
+  --space-xl-2xl: clamp(3.375rem, 2.8580rem + 2.2932vw, 5rem);
+  --space-2xl-3xl: clamp(4.5rem, 3.6023rem + 3.9872vw, 7.5rem);
+  
+  /* ===== SPACE PAIRS (Custom/Aggressive) ===== */
+  /*
+   * Steeper slopes for more dramatic responsive behavior.
+   * Great for hero sections, feature cards, section padding.
+   */
+  
+  /* Two-up pairs */
+  --space-s-l: clamp(1.125rem, 0.7443rem + 1.6892vw, 2.5rem);
+  --space-s-xl: clamp(1.125rem, 0.4318rem + 3.0761vw, 3.75rem);
+  --space-m-xl: clamp(1.6875rem, 1.1165rem + 2.5348vw, 3.75rem);
+  --space-l-2xl: clamp(2.25rem, 1.4886rem + 3.3795vw, 5rem);
+  
+  /* Three-up pairs (very aggressive) */
+  --space-s-2xl: clamp(1.125rem, 0.1193rem + 4.4631vw, 5rem);
+  --space-xs-xl: clamp(0.875rem, 0.1193rem + 3.3540vw, 3.75rem);
+  --space-m-2xl: clamp(1.6875rem, 0.8040rem + 3.9219vw, 5rem);
+  
+  /* Four-up pairs (maximum drama) */
+  --space-s-3xl: clamp(1.125rem, -0.5057rem + 7.2386vw, 7.5rem);
+  --space-xs-2xl: clamp(0.875rem, -0.1932rem + 4.7415vw, 5rem);
+  
+  /* ===== REVERSE SPACE PAIRS ===== */
+  /*
+   * 🔄 Counter-intuitive but powerful!
+   * 
+   * These get SMALLER as viewport grows.
+   * Use for: mobile-first padding that tightens on desktop,
+   * or letting content breathe more on small screens.
+   * 
+   * At @min (360px): you get the LARGER size
+   * At @max (1240px): you get the SMALLER size
+   */
+  
+  /* Recalculated with correct Utopia formula */
+  --space-l-s: clamp(1.125rem, 3.0625rem - 2.5vw, 2.5rem);
+  --space-xl-s: clamp(1.125rem, 4.824rem - 4.773vw, 3.75rem);
+  --space-xl-m: clamp(1.6875rem, 4.594rem - 3.75vw, 3.75rem);
+  --space-2xl-m: clamp(1.6875rem, 6.355rem - 6.023vw, 5rem);
+  --space-2xl-l: clamp(2.25rem, 6.125rem - 5vw, 5rem);
+  --space-3xl-l: clamp(2.25rem, 9.648rem - 9.545vw, 7.5rem);
+  
+  /* ===== CONTAINER-RELATIVE VARIANTS ===== */
+  /*
+   * Same scales but using container query units (cqi) instead of viewport (vw).
+   * Use these inside elements with `container-type: inline-size`.
+   * 
+   * Example:
+   *   .card { container-type: inline-size; }
+   *   .card-content { padding: var(--space-s-l-cqi); }
+   */
+  
+  --space-s-cqi: clamp(1.125rem, 1.0568rem + 0.3028cqi, 1.25rem);
+  --space-m-cqi: clamp(1.6875rem, 1.5852rem + 0.4541cqi, 1.875rem);
+  --space-l-cqi: clamp(2.25rem, 2.1136rem + 0.6057cqi, 2.5rem);
+  --space-s-l-cqi: clamp(1.125rem, 0.7443rem + 1.6892cqi, 2.5rem);
+  --space-s-xl-cqi: clamp(1.125rem, 0.4318rem + 3.0761cqi, 3.75rem);
+  
+  /* Type scale container variants */
+  --step-0-cqi: clamp(1.125rem, 1.0568rem + 0.3028cqi, 1.25rem);
+  --step-1-cqi: clamp(1.35rem, 1.2455rem + 0.4631cqi, 1.5625rem);
+  --step-2-cqi: clamp(1.62rem, 1.4645rem + 0.6895cqi, 1.9531rem);
+  
+  /* ===== SEMANTIC ALIASES ===== */
+  /*
+   * Human-readable names for common use cases.
+   * Override these to quickly adjust the feel of your design.
+   */
+  
+  /* Typography */
+  --font-size-body: var(--step-0);
+  --font-size-small: var(--step--1);
+  --font-size-caption: var(--step--2);
+  --font-size-h6: var(--step-0);
+  --font-size-h5: var(--step-1);
+  --font-size-h4: var(--step-2);
+  --font-size-h3: var(--step-3);
+  --font-size-h2: var(--step-4);
+  --font-size-h1: var(--step-5);
+  --font-size-display: var(--step-6);
+  --font-size-hero: var(--step-7);
+  
+  /* Spacing */
+  --gap-tight: var(--space-2xs);
+  --gap-default: var(--space-s);
+  --gap-loose: var(--space-m);
+  --gap-spacious: var(--space-l);
+  
+  /* Section spacing (aggressive fluid) */
+  --section-padding-sm: var(--space-m-l);
+  --section-padding: var(--space-l-xl);
+  --section-padding-lg: var(--space-xl-2xl);
+  --section-padding-hero: var(--space-xl-3xl);
+  
+  /* Card/component spacing */
+  --card-padding: var(--space-s-m);
+  --card-gap: var(--space-xs-s);
+  
+  /* Gutter (layout gaps) */
+  --gutter: var(--space-s-l);
+  --gutter-tight: var(--space-xs-m);
+  --gutter-loose: var(--space-m-xl);
+}
+
+/* ===== UTILITY CLASSES ===== */
+/*
+ * Optional utility classes for quick application.
+ * Use sparingly - prefer semantic class names in production.
+ */
+
+/* Fluid type utilities */
+.text-step--2 { font-size: var(--step--2); }
+.text-step--1 { font-size: var(--step--1); }
+.text-step-0 { font-size: var(--step-0); }
+.text-step-1 { font-size: var(--step-1); }
+.text-step-2 { font-size: var(--step-2); }
+.text-step-3 { font-size: var(--step-3); }
+.text-step-4 { font-size: var(--step-4); }
+.text-step-5 { font-size: var(--step-5); }
+.text-step-6 { font-size: var(--step-6); }
+.text-step-7 { font-size: var(--step-7); }
+
+/* Fluid space utilities - margin/padding */
+.space-3xs { --_space: var(--space-3xs); }
+.space-2xs { --_space: var(--space-2xs); }
+.space-xs { --_space: var(--space-xs); }
+.space-s { --_space: var(--space-s); }
+.space-m { --_space: var(--space-m); }
+.space-l { --_space: var(--space-l); }
+.space-xl { --_space: var(--space-xl); }
+.space-2xl { --_space: var(--space-2xl); }
+.space-3xl { --_space: var(--space-3xl); }
+
+/* Gap utilities */
+.gap-3xs { gap: var(--space-3xs); }
+.gap-2xs { gap: var(--space-2xs); }
+.gap-xs { gap: var(--space-xs); }
+.gap-s { gap: var(--space-s); }
+.gap-m { gap: var(--space-m); }
+.gap-l { gap: var(--space-l); }
+.gap-xl { gap: var(--space-xl); }
+.gap-2xl { gap: var(--space-2xl); }
+.gap-3xl { gap: var(--space-3xl); }
+
+/* Fluid gap pairs */
+.gap-s-m { gap: var(--space-s-m); }
+.gap-s-l { gap: var(--space-s-l); }
+.gap-s-xl { gap: var(--space-s-xl); }
+.gap-m-l { gap: var(--space-m-l); }
+.gap-m-xl { gap: var(--space-m-xl); }
+.gap-l-xl { gap: var(--space-l-xl); }
+.gap-l-2xl { gap: var(--space-l-2xl); }
+
+/* Flow utility (vertical rhythm) */
+.flow > * + * {
+  margin-block-start: var(--flow-space, var(--space-s-m));
+}
+
+.flow-tight { --flow-space: var(--space-xs-s); }
+.flow-loose { --flow-space: var(--space-m-l); }
+.flow-spacious { --flow-space: var(--space-l-xl); }
+
+
+/* === global/colors.css === */
+/**
+ * Elvish - Color Palettes
+ * 
+ * 19 color palettes × 13 shades each (0-12).
+ * Uses OKLCH for perceptual uniformity.
+ * 
+ * Shade Guide:
+ *   0-2: Very light (backgrounds in light mode)
+ *   3-5: Light (borders, subtle elements)
+ *   6:   Mid-tone (neutral reference)
+ *   7-9: Dark (text in light mode, backgrounds in dark mode)
+ *   10-12: Very dark (high contrast, emphasis)
+ * 
+ * Usage:
+ *   background: var(--gray-1);
+ *   color: var(--gray-11);
+ *   border-color: var(--blue-4);
+ */
+
+:root {
+  /* ==========================================================================
+     NEUTRAL PALETTES
+     ========================================================================== */
+  
+  /* --- Gray (Pure neutral, no hue) --- */
+  --gray-0: oklch(99% 0 0);
+  --gray-1: oklch(97% 0 0);
+  --gray-2: oklch(93% 0 0);
+  --gray-3: oklch(87% 0 0);
+  --gray-4: oklch(79% 0 0);
+  --gray-5: oklch(70% 0 0);
+  --gray-6: oklch(60% 0 0);
+  --gray-7: oklch(50% 0 0);
+  --gray-8: oklch(40% 0 0);
+  --gray-9: oklch(32% 0 0);
+  --gray-10: oklch(24% 0 0);
+  --gray-11: oklch(16% 0 0);
+  --gray-12: oklch(9% 0 0);
+  
+  /* --- Stone (Warm neutral, slight yellow) --- */
+  --stone-0: oklch(99% 0.005 90);
+  --stone-1: oklch(97% 0.007 90);
+  --stone-2: oklch(93% 0.01 85);
+  --stone-3: oklch(87% 0.015 80);
+  --stone-4: oklch(79% 0.02 75);
+  --stone-5: oklch(70% 0.02 70);
+  --stone-6: oklch(60% 0.02 65);
+  --stone-7: oklch(50% 0.02 60);
+  --stone-8: oklch(40% 0.015 55);
+  --stone-9: oklch(32% 0.015 50);
+  --stone-10: oklch(24% 0.01 45);
+  --stone-11: oklch(16% 0.008 40);
+  --stone-12: oklch(9% 0.005 35);
+  
+  /* --- Sand (Warm beige/tan) --- */
+  --sand-0: oklch(98% 0.01 80);
+  --sand-1: oklch(96% 0.02 75);
+  --sand-2: oklch(92% 0.03 70);
+  --sand-3: oklch(86% 0.04 65);
+  --sand-4: oklch(78% 0.05 60);
+  --sand-5: oklch(69% 0.05 55);
+  --sand-6: oklch(59% 0.05 50);
+  --sand-7: oklch(49% 0.04 45);
+  --sand-8: oklch(40% 0.04 40);
+  --sand-9: oklch(32% 0.03 35);
+  --sand-10: oklch(24% 0.025 30);
+  --sand-11: oklch(17% 0.02 25);
+  --sand-12: oklch(10% 0.015 20);
+
+  /* ==========================================================================
+     WARM PALETTES
+     ========================================================================== */
+  
+  /* --- Red (Vibrant, alert) --- */
+  --red-0: oklch(97% 0.02 25);
+  --red-1: oklch(93% 0.05 25);
+  --red-2: oklch(87% 0.1 25);
+  --red-3: oklch(80% 0.15 25);
+  --red-4: oklch(72% 0.19 25);
+  --red-5: oklch(64% 0.22 25);
+  --red-6: oklch(57% 0.23 25);
+  --red-7: oklch(50% 0.22 25);
+  --red-8: oklch(43% 0.2 25);
+  --red-9: oklch(36% 0.17 25);
+  --red-10: oklch(29% 0.14 25);
+  --red-11: oklch(22% 0.1 25);
+  --red-12: oklch(15% 0.06 25);
+  
+  /* --- Orange (Energetic, warm) --- */
+  --orange-0: oklch(97% 0.02 55);
+  --orange-1: oklch(93% 0.05 55);
+  --orange-2: oklch(87% 0.1 55);
+  --orange-3: oklch(80% 0.14 55);
+  --orange-4: oklch(75% 0.17 55);
+  --orange-5: oklch(70% 0.18 55);
+  --orange-6: oklch(65% 0.18 50);
+  --orange-7: oklch(55% 0.16 45);
+  --orange-8: oklch(46% 0.14 40);
+  --orange-9: oklch(38% 0.11 35);
+  --orange-10: oklch(30% 0.08 30);
+  --orange-11: oklch(22% 0.06 25);
+  --orange-12: oklch(15% 0.04 20);
+  
+  /* --- Yellow (Bright, optimistic) --- */
+  --yellow-0: oklch(99% 0.02 95);
+  --yellow-1: oklch(97% 0.06 95);
+  --yellow-2: oklch(94% 0.12 95);
+  --yellow-3: oklch(91% 0.16 95);
+  --yellow-4: oklch(88% 0.18 95);
+  --yellow-5: oklch(84% 0.17 92);
+  --yellow-6: oklch(78% 0.15 88);
+  --yellow-7: oklch(65% 0.12 80);
+  --yellow-8: oklch(52% 0.1 70);
+  --yellow-9: oklch(42% 0.08 60);
+  --yellow-10: oklch(32% 0.06 50);
+  --yellow-11: oklch(23% 0.04 40);
+  --yellow-12: oklch(15% 0.03 30);
+  
+  /* --- Choco (Rich brown) --- */
+  --choco-0: oklch(97% 0.015 55);
+  --choco-1: oklch(93% 0.03 50);
+  --choco-2: oklch(86% 0.05 45);
+  --choco-3: oklch(77% 0.07 40);
+  --choco-4: oklch(67% 0.09 35);
+  --choco-5: oklch(57% 0.1 32);
+  --choco-6: oklch(48% 0.1 30);
+  --choco-7: oklch(40% 0.09 28);
+  --choco-8: oklch(33% 0.08 26);
+  --choco-9: oklch(27% 0.06 24);
+  --choco-10: oklch(21% 0.05 22);
+  --choco-11: oklch(16% 0.04 20);
+  --choco-12: oklch(11% 0.03 18);
+  
+  /* --- Brown (Earthy, natural) --- */
+  --brown-0: oklch(97% 0.01 60);
+  --brown-1: oklch(93% 0.025 55);
+  --brown-2: oklch(86% 0.04 50);
+  --brown-3: oklch(77% 0.06 45);
+  --brown-4: oklch(67% 0.07 40);
+  --brown-5: oklch(57% 0.08 38);
+  --brown-6: oklch(48% 0.08 36);
+  --brown-7: oklch(40% 0.07 34);
+  --brown-8: oklch(33% 0.06 32);
+  --brown-9: oklch(27% 0.05 30);
+  --brown-10: oklch(21% 0.04 28);
+  --brown-11: oklch(16% 0.03 26);
+  --brown-12: oklch(11% 0.02 24);
+
+  /* ==========================================================================
+     PINK/MAGENTA PALETTES
+     ========================================================================== */
+  
+  /* --- Pink (Soft, playful) --- */
+  --pink-0: oklch(97% 0.02 350);
+  --pink-1: oklch(94% 0.05 350);
+  --pink-2: oklch(89% 0.1 350);
+  --pink-3: oklch(83% 0.14 350);
+  --pink-4: oklch(76% 0.17 350);
+  --pink-5: oklch(69% 0.19 345);
+  --pink-6: oklch(62% 0.2 340);
+  --pink-7: oklch(52% 0.18 335);
+  --pink-8: oklch(43% 0.15 330);
+  --pink-9: oklch(35% 0.12 325);
+  --pink-10: oklch(28% 0.09 320);
+  --pink-11: oklch(21% 0.06 315);
+  --pink-12: oklch(14% 0.04 310);
+  
+  /* --- Purple (Royal, creative) --- */
+  --purple-0: oklch(97% 0.02 310);
+  --purple-1: oklch(93% 0.05 310);
+  --purple-2: oklch(87% 0.1 305);
+  --purple-3: oklch(79% 0.15 300);
+  --purple-4: oklch(70% 0.18 295);
+  --purple-5: oklch(62% 0.2 295);
+  --purple-6: oklch(53% 0.21 295);
+  --purple-7: oklch(45% 0.19 295);
+  --purple-8: oklch(38% 0.16 295);
+  --purple-9: oklch(31% 0.13 295);
+  --purple-10: oklch(24% 0.1 295);
+  --purple-11: oklch(18% 0.07 295);
+  --purple-12: oklch(12% 0.04 295);
+  
+  /* --- Violet (Deep, mysterious) --- */
+  --violet-0: oklch(97% 0.02 290);
+  --violet-1: oklch(93% 0.05 285);
+  --violet-2: oklch(86% 0.1 280);
+  --violet-3: oklch(78% 0.15 275);
+  --violet-4: oklch(68% 0.19 270);
+  --violet-5: oklch(58% 0.22 270);
+  --violet-6: oklch(50% 0.23 270);
+  --violet-7: oklch(42% 0.21 270);
+  --violet-8: oklch(35% 0.18 270);
+  --violet-9: oklch(28% 0.14 270);
+  --violet-10: oklch(22% 0.1 270);
+  --violet-11: oklch(16% 0.07 270);
+  --violet-12: oklch(11% 0.04 270);
+
+  /* ==========================================================================
+     BLUE PALETTES
+     ========================================================================== */
+  
+  /* --- Indigo (Deep blue-violet) --- */
+  --indigo-0: oklch(97% 0.02 270);
+  --indigo-1: oklch(93% 0.04 265);
+  --indigo-2: oklch(87% 0.08 260);
+  --indigo-3: oklch(78% 0.13 255);
+  --indigo-4: oklch(68% 0.17 250);
+  --indigo-5: oklch(58% 0.2 250);
+  --indigo-6: oklch(50% 0.21 250);
+  --indigo-7: oklch(42% 0.19 250);
+  --indigo-8: oklch(35% 0.16 250);
+  --indigo-9: oklch(28% 0.13 250);
+  --indigo-10: oklch(22% 0.1 250);
+  --indigo-11: oklch(16% 0.07 250);
+  --indigo-12: oklch(11% 0.04 250);
+  
+  /* --- Blue (Classic, trustworthy) --- */
+  --blue-0: oklch(97% 0.02 240);
+  --blue-1: oklch(94% 0.04 235);
+  --blue-2: oklch(88% 0.08 230);
+  --blue-3: oklch(80% 0.13 225);
+  --blue-4: oklch(71% 0.17 220);
+  --blue-5: oklch(62% 0.2 220);
+  --blue-6: oklch(54% 0.21 220);
+  --blue-7: oklch(46% 0.19 220);
+  --blue-8: oklch(38% 0.16 220);
+  --blue-9: oklch(31% 0.13 220);
+  --blue-10: oklch(24% 0.1 220);
+  --blue-11: oklch(18% 0.07 220);
+  --blue-12: oklch(12% 0.04 220);
+  
+  /* --- Cyan (Fresh, digital) --- */
+  --cyan-0: oklch(97% 0.02 200);
+  --cyan-1: oklch(94% 0.05 200);
+  --cyan-2: oklch(89% 0.1 195);
+  --cyan-3: oklch(83% 0.14 195);
+  --cyan-4: oklch(76% 0.17 195);
+  --cyan-5: oklch(70% 0.18 195);
+  --cyan-6: oklch(62% 0.18 195);
+  --cyan-7: oklch(52% 0.16 195);
+  --cyan-8: oklch(43% 0.14 195);
+  --cyan-9: oklch(35% 0.11 195);
+  --cyan-10: oklch(27% 0.08 195);
+  --cyan-11: oklch(20% 0.06 195);
+  --cyan-12: oklch(13% 0.04 195);
+
+  /* ==========================================================================
+     GREEN PALETTES
+     ========================================================================== */
+  
+  /* --- Teal (Blue-green, balanced) --- */
+  --teal-0: oklch(97% 0.02 175);
+  --teal-1: oklch(94% 0.05 175);
+  --teal-2: oklch(88% 0.1 175);
+  --teal-3: oklch(81% 0.14 175);
+  --teal-4: oklch(73% 0.16 175);
+  --teal-5: oklch(65% 0.17 175);
+  --teal-6: oklch(57% 0.17 175);
+  --teal-7: oklch(48% 0.15 175);
+  --teal-8: oklch(40% 0.13 175);
+  --teal-9: oklch(32% 0.1 175);
+  --teal-10: oklch(25% 0.08 175);
+  --teal-11: oklch(18% 0.06 175);
+  --teal-12: oklch(12% 0.04 175);
+  
+  /* --- Green (Natural, growth) --- */
+  --green-0: oklch(97% 0.02 145);
+  --green-1: oklch(94% 0.05 145);
+  --green-2: oklch(88% 0.1 145);
+  --green-3: oklch(81% 0.15 145);
+  --green-4: oklch(73% 0.18 145);
+  --green-5: oklch(65% 0.2 145);
+  --green-6: oklch(57% 0.2 145);
+  --green-7: oklch(48% 0.17 145);
+  --green-8: oklch(40% 0.14 145);
+  --green-9: oklch(32% 0.11 145);
+  --green-10: oklch(25% 0.08 145);
+  --green-11: oklch(18% 0.06 145);
+  --green-12: oklch(12% 0.04 145);
+  
+  /* --- Lime (Vibrant, energetic) --- */
+  --lime-0: oklch(98% 0.03 125);
+  --lime-1: oklch(95% 0.08 125);
+  --lime-2: oklch(91% 0.14 125);
+  --lime-3: oklch(86% 0.19 125);
+  --lime-4: oklch(81% 0.22 125);
+  --lime-5: oklch(75% 0.23 125);
+  --lime-6: oklch(67% 0.21 125);
+  --lime-7: oklch(55% 0.17 125);
+  --lime-8: oklch(45% 0.14 125);
+  --lime-9: oklch(36% 0.1 125);
+  --lime-10: oklch(28% 0.07 125);
+  --lime-11: oklch(20% 0.05 125);
+  --lime-12: oklch(13% 0.03 125);
+  
+  /* --- Camo (Olive/military green) --- */
+  --camo-0: oklch(97% 0.015 115);
+  --camo-1: oklch(93% 0.03 115);
+  --camo-2: oklch(86% 0.05 110);
+  --camo-3: oklch(77% 0.07 105);
+  --camo-4: oklch(67% 0.08 100);
+  --camo-5: oklch(57% 0.08 95);
+  --camo-6: oklch(48% 0.08 90);
+  --camo-7: oklch(40% 0.07 85);
+  --camo-8: oklch(33% 0.06 80);
+  --camo-9: oklch(27% 0.05 75);
+  --camo-10: oklch(21% 0.04 70);
+  --camo-11: oklch(16% 0.03 65);
+  --camo-12: oklch(11% 0.02 60);
+  
+  /* --- Jungle (Deep forest green) --- */
+  --jungle-0: oklch(97% 0.015 155);
+  --jungle-1: oklch(93% 0.03 155);
+  --jungle-2: oklch(86% 0.06 155);
+  --jungle-3: oklch(77% 0.1 155);
+  --jungle-4: oklch(67% 0.13 155);
+  --jungle-5: oklch(57% 0.14 155);
+  --jungle-6: oklch(48% 0.14 155);
+  --jungle-7: oklch(40% 0.12 155);
+  --jungle-8: oklch(33% 0.1 155);
+  --jungle-9: oklch(27% 0.08 155);
+  --jungle-10: oklch(21% 0.06 155);
+  --jungle-11: oklch(16% 0.04 155);
+  --jungle-12: oklch(11% 0.03 155);
+
+  /* ==========================================================================
+     BRAND PALETTE (Dynamic - based on --brand variable)
+     
+     Set your brand color and get automatic 13-shade palette:
+       :root { --brand: oklch(65% 0.2 195); }
+     ========================================================================== */
+  
+  /* Brand uses the --brand from tokens.css */
+  --brand-0: oklch(from var(--brand) 98% calc(c * 0.15) h);
+  --brand-1: oklch(from var(--brand) 95% calc(c * 0.3) h);
+  --brand-2: oklch(from var(--brand) 90% calc(c * 0.5) h);
+  --brand-3: oklch(from var(--brand) 85% calc(c * 0.7) h);
+  --brand-4: oklch(from var(--brand) 78% calc(c * 0.85) h);
+  --brand-5: oklch(from var(--brand) 72% c h);
+  --brand-6: oklch(from var(--brand) l c h);  /* Original brand color */
+  --brand-7: oklch(from var(--brand) calc(l - 0.1) c h);
+  --brand-8: oklch(from var(--brand) calc(l - 0.2) c h);
+  --brand-9: oklch(from var(--brand) calc(l - 0.28) calc(c * 0.9) h);
+  --brand-10: oklch(from var(--brand) calc(l - 0.36) calc(c * 0.8) h);
+  --brand-11: oklch(from var(--brand) calc(l - 0.44) calc(c * 0.6) h);
+  --brand-12: oklch(from var(--brand) calc(l - 0.52) calc(c * 0.4) h);
+}
+
+
+/* === global/borders.css === */
+/**
+ * Elvish - Border System
+ * 
+ * Border sizes, radii (standard, conditional, drawn, blob).
+ * 
+ * Conditional Radii: Border radius that disappears when element is full-width
+ * (useful for cards/modals that go edge-to-edge on mobile).
+ * 
+ * Drawn Borders: Organic, hand-drawn looking irregular radii.
+ * Blob Borders: Organic blob shapes using complex border-radius.
+ */
+
+:root {
+  /* ==========================================================================
+     BORDER SIZES
+     ========================================================================== */
+  
+  --border-1: 1px;
+  --border-2: 2px;
+  --border-3: 3px;
+  --border-4: 4px;
+  --border-5: 5px;
+  
+  /* ==========================================================================
+     STANDARD RADII
+     ========================================================================== */
+  
+  --radius-1: 0.125rem;   /* 2px - subtle */
+  --radius-2: 0.25rem;    /* 4px - small */
+  --radius-3: 0.5rem;     /* 8px - medium */
+  --radius-4: 0.75rem;    /* 12px - large */
+  --radius-5: 1rem;       /* 16px - extra large */
+  --radius-6: 1.5rem;     /* 24px - pill-like */
+  --radius-round: 1e5px;  /* Full circle/pill */
+  
+  /* ==========================================================================
+     CONDITIONAL RADII
+     
+     Disappears when container is 100% width (fullscreen cards, edge-to-edge).
+     Uses max() trick: if container > threshold, radius applies; else 0.
+     
+     Usage:
+       .card { border-radius: var(--radius-conditional-3); }
+     ========================================================================== */
+  
+  --radius-conditional-1: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-1));
+  --radius-conditional-2: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-2));
+  --radius-conditional-3: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-3));
+  --radius-conditional-4: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-4));
+  --radius-conditional-5: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-5));
+  --radius-conditional-6: clamp(0px, calc((100vw - 100%) * 1e5), var(--radius-6));
+  
+  /* ==========================================================================
+     DRAWN BORDERS (Hand-drawn, organic look)
+     
+     Irregular border-radius values create a sketchy, hand-drawn appearance.
+     Inspired by Paper CSS.
+     
+     Usage:
+       .note { border-radius: var(--radius-drawn-1); }
+     ========================================================================== */
+  
+  --radius-drawn-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-drawn-2: 15px 255px 15px 225px / 225px 15px 255px 15px;
+  --radius-drawn-3: 225px 15px 255px 15px / 15px 255px 15px 225px;
+  --radius-drawn-4: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  --radius-drawn-5: 185px 25px 215px 25px / 25px 215px 25px 185px;
+  --radius-drawn-6: 25px 185px 25px 215px / 215px 25px 185px 25px;
+  
+  /* ==========================================================================
+     BLOB BORDERS (Organic blob shapes)
+     
+     Complex border-radius percentages create organic, amoeba-like shapes.
+     Best on square or near-square elements with aspect-ratio: 1.
+     
+     Usage:
+       .avatar { 
+         aspect-ratio: 1;
+         border-radius: var(--radius-blob-1); 
+       }
+     ========================================================================== */
+  
+  --radius-blob-1: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  --radius-blob-2: 53% 47% 34% 66% / 63% 46% 54% 37%;
+  --radius-blob-3: 37% 63% 56% 44% / 49% 56% 44% 51%;
+  --radius-blob-4: 63% 37% 37% 63% / 43% 37% 63% 57%;
+  --radius-blob-5: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  
+  /* ==========================================================================
+     SQUIRCLE (iOS-style superellipse approximation)
+     
+     Not a true squircle (which requires SVG/canvas), but a close CSS approximation
+     using smooth corner transitions.
+     ========================================================================== */
+  
+  --radius-squircle-sm: 22% 22% 22% 22% / 22% 22% 22% 22%;
+  --radius-squircle-md: 28% 28% 28% 28% / 28% 28% 28% 28%;
+  --radius-squircle-lg: 35% 35% 35% 35% / 35% 35% 35% 35%;
+}
+
+
+/* === global/shadows.css === */
+/**
+ * Elvish - Shadow System
+ * 
+ * Outer shadows (elevation) and inner shadows (inset/pressed states).
+ * Shadows adapt to light/dark mode using CSS variables.
+ * 
+ * Outer Shadows: For elevation (cards, buttons, modals)
+ * Inner Shadows: For pressed states, inputs, inset effects
+ */
+
+:root {
+  /* Shadow color adapts to color scheme */
+  --shadow-color: light-dark(
+    oklch(20% 0 0 / 0.1),
+    oklch(0% 0 0 / 0.3)
+  );
+  
+  --shadow-color-strong: light-dark(
+    oklch(20% 0 0 / 0.2),
+    oklch(0% 0 0 / 0.5)
+  );
+  
+  /* ==========================================================================
+     OUTER SHADOWS (Elevation)
+     
+     Numbered 1-6: subtle to dramatic elevation
+     ========================================================================== */
+  
+  --shadow-1: 
+    0 1px 2px 0 var(--shadow-color);
+  
+  --shadow-2: 
+    0 1px 3px 0 var(--shadow-color),
+    0 1px 2px -1px var(--shadow-color);
+  
+  --shadow-3: 
+    0 4px 6px -1px var(--shadow-color),
+    0 2px 4px -2px var(--shadow-color);
+  
+  --shadow-4: 
+    0 10px 15px -3px var(--shadow-color),
+    0 4px 6px -4px var(--shadow-color);
+  
+  --shadow-5: 
+    0 20px 25px -5px var(--shadow-color),
+    0 8px 10px -6px var(--shadow-color);
+  
+  --shadow-6: 
+    0 25px 50px -12px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     INNER SHADOWS (Inset/Pressed)
+     
+     For pressed buttons, active states, input fields
+     ========================================================================== */
+  
+  /* Subtle inset - minimal depth */
+  --inner-shadow-0: 
+    inset 0 1px 2px var(--shadow-color);
+  
+  /* Light inset - inputs, subtle pressed */
+  --inner-shadow-1: 
+    inset 0 2px 4px var(--shadow-color);
+  
+  /* Medium inset - pressed buttons */
+  --inner-shadow-2: 
+    inset 0 2px 4px var(--shadow-color),
+    inset 0 4px 6px var(--shadow-color);
+  
+  /* Deep inset - strong pressed state */
+  --inner-shadow-3: 
+    inset 0 4px 8px var(--shadow-color),
+    inset 0 2px 4px var(--shadow-color-strong);
+  
+  /* Very deep inset - recessed panels */
+  --inner-shadow-4: 
+    inset 0 4px 12px var(--shadow-color-strong),
+    inset 0 2px 4px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     INNER SHADOWS - DIRECTIONAL
+     ========================================================================== */
+  
+  --inner-shadow-top: 
+    inset 0 4px 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-bottom: 
+    inset 0 -4px 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-left: 
+    inset 4px 0 6px -4px var(--shadow-color-strong);
+  
+  --inner-shadow-right: 
+    inset -4px 0 6px -4px var(--shadow-color-strong);
+  
+  /* ==========================================================================
+     COMBINED SHADOWS (3D effects)
+     ========================================================================== */
+  
+  /* Raised button with highlight and shadow */
+  --shadow-raised: 
+    0 1px 0 oklch(100% 0 0 / 0.1),
+    0 2px 4px var(--shadow-color),
+    0 4px 8px var(--shadow-color);
+  
+  /* Pressed button */
+  --shadow-pressed: 
+    inset 0 2px 4px var(--shadow-color-strong),
+    0 1px 0 oklch(100% 0 0 / 0.05);
+  
+  /* Floating element */
+  --shadow-floating: 
+    0 8px 30px var(--shadow-color-strong),
+    0 4px 10px var(--shadow-color);
+  
+  /* Text input field */
+  --shadow-input: 
+    inset 0 1px 2px var(--shadow-color),
+    0 1px 0 oklch(100% 0 0 / 0.05);
+  
+  /* Focus ring shadow (for accessibility) */
+  --shadow-focus: 
+    0 0 0 3px oklch(from var(--brand) l c h / 0.3);
+  
+  /* ==========================================================================
+     GLOW SHADOWS (for highlights, neon effects)
+     ========================================================================== */
+  
+  --shadow-glow-sm: 
+    0 0 10px oklch(from var(--brand) l c h / 0.3);
+  
+  --shadow-glow-md: 
+    0 0 20px oklch(from var(--brand) l c h / 0.3),
+    0 0 40px oklch(from var(--brand) l c h / 0.2);
+  
+  --shadow-glow-lg: 
+    0 0 30px oklch(from var(--brand) l c h / 0.3),
+    0 0 60px oklch(from var(--brand) l c h / 0.2),
+    0 0 90px oklch(from var(--brand) l c h / 0.1);
+}
+
+
+/* === global/easings.css === */
+/**
+ * Elvish - Easing Functions
+ * 
+ * Comprehensive collection of easing/timing functions.
+ * Includes standard ease variants, elastic, spring, bounce,
+ * steps, and Robert Penner's classic easing equations.
+ * 
+ * Usage:
+ *   animation: slide-in 300ms var(--ease-out-3);
+ *   transition: transform 200ms var(--ease-spring-2);
+ */
+
+:root {
+  /* ==========================================================================
+     STANDARD EASE (out direction - most common)
+     
+     Numbered 1-5: subtle to dramatic
+     ========================================================================== */
+  
+  --ease-1: cubic-bezier(0.25, 0.1, 0.25, 1);      /* Subtle */
+  --ease-2: cubic-bezier(0.25, 0.1, 0.2, 1);
+  --ease-3: cubic-bezier(0.1, 0, 0.2, 1);          /* Standard (Material) */
+  --ease-4: cubic-bezier(0.05, 0, 0.2, 1);
+  --ease-5: cubic-bezier(0, 0, 0.1, 1);            /* Dramatic */
+  
+  /* ==========================================================================
+     EASE IN (accelerate)
+     ========================================================================== */
+  
+  --ease-in-1: cubic-bezier(0.25, 0, 0.75, 0.9);
+  --ease-in-2: cubic-bezier(0.3, 0, 0.7, 0.2);
+  --ease-in-3: cubic-bezier(0.4, 0, 1, 1);         /* Standard */
+  --ease-in-4: cubic-bezier(0.5, 0, 0.9, 0.2);
+  --ease-in-5: cubic-bezier(0.7, 0, 1, 0.5);       /* Dramatic */
+  
+  /* ==========================================================================
+     EASE OUT (decelerate)
+     ========================================================================== */
+  
+  --ease-out-1: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-2: cubic-bezier(0.1, 0.25, 0.25, 1);
+  --ease-out-3: cubic-bezier(0, 0, 0.2, 1);        /* Standard */
+  --ease-out-4: cubic-bezier(0, 0, 0.15, 1);
+  --ease-out-5: cubic-bezier(0, 0, 0.1, 1);        /* Dramatic */
+  
+  /* ==========================================================================
+     EASE IN-OUT (accelerate then decelerate)
+     ========================================================================== */
+  
+  --ease-in-out-1: cubic-bezier(0.4, 0, 0.6, 1);
+  --ease-in-out-2: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-in-out-3: cubic-bezier(0.4, 0, 0.2, 1);   /* Standard (Material) */
+  --ease-in-out-4: cubic-bezier(0.5, 0, 0.15, 1);
+  --ease-in-out-5: cubic-bezier(0.6, 0, 0.1, 1);   /* Dramatic */
+  
+  /* ==========================================================================
+     ELASTIC OUT (overshoot with bounce back)
+     
+     Great for attention-grabbing animations
+     ========================================================================== */
+  
+  --ease-elastic-out-1: cubic-bezier(0.5, 0.75, 0.75, 1.25);
+  --ease-elastic-out-2: cubic-bezier(0.5, 1, 0.75, 1.25);
+  --ease-elastic-out-3: cubic-bezier(0.5, 1.25, 0.75, 1.25);
+  --ease-elastic-out-4: cubic-bezier(0.5, 1.5, 0.75, 1.25);
+  --ease-elastic-out-5: cubic-bezier(0.5, 1.75, 0.75, 1.25);
+  
+  /* ==========================================================================
+     ELASTIC IN (compress then release)
+     ========================================================================== */
+  
+  --ease-elastic-in-1: cubic-bezier(0.25, -0.25, 0.75, 1);
+  --ease-elastic-in-2: cubic-bezier(0.25, -0.5, 0.75, 1);
+  --ease-elastic-in-3: cubic-bezier(0.25, -0.75, 0.75, 1);
+  --ease-elastic-in-4: cubic-bezier(0.25, -1, 0.75, 1);
+  --ease-elastic-in-5: cubic-bezier(0.25, -1.25, 0.75, 1);
+  
+  /* ==========================================================================
+     ELASTIC IN-OUT (squish effect)
+     ========================================================================== */
+  
+  --ease-elastic-in-out-1: cubic-bezier(0.5, -0.25, 0.5, 1.25);
+  --ease-elastic-in-out-2: cubic-bezier(0.5, -0.5, 0.5, 1.5);
+  --ease-elastic-in-out-3: cubic-bezier(0.5, -0.75, 0.5, 1.75);
+  --ease-elastic-in-out-4: cubic-bezier(0.5, -1, 0.5, 2);
+  --ease-elastic-in-out-5: cubic-bezier(0.5, -1.25, 0.5, 2.25);
+  
+  /* ==========================================================================
+     SPRING (natural physics-based motion)
+     
+     Simulates spring dynamics with overshoot
+     ========================================================================== */
+  
+  --ease-spring-1: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-spring-2: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --ease-spring-3: cubic-bezier(0.34, 1.56, 0.64, 1);   /* Popular */
+  --ease-spring-4: cubic-bezier(0.22, 1.6, 0.36, 1);
+  --ease-spring-5: cubic-bezier(0.12, 1.8, 0.22, 1);
+  
+  /* ==========================================================================
+     BOUNCE (impact with bounce-back)
+     
+     Great for playful, energetic UI
+     ========================================================================== */
+  
+  --ease-bounce-1: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --ease-bounce-2: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-bounce-3: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce-4: cubic-bezier(0.68, -0.4, 0.32, 1.4);
+  --ease-bounce-5: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* ==========================================================================
+     STEP FUNCTIONS (discrete jumps)
+     
+     For frame-by-frame or stepped animations
+     ========================================================================== */
+  
+  --ease-step-1: steps(2, jump-end);
+  --ease-step-2: steps(3, jump-end);
+  --ease-step-3: steps(4, jump-end);
+  --ease-step-4: steps(7, jump-end);
+  --ease-step-5: steps(10, jump-end);
+  
+  /* ==========================================================================
+     ROBERT PENNER'S EASING EQUATIONS
+     
+     Classic, battle-tested curves from Flash/animation days
+     ========================================================================== */
+  
+  /* Sine - gentle, natural */
+  --ease-sine-in: cubic-bezier(0.47, 0, 0.745, 0.715);
+  --ease-sine-out: cubic-bezier(0.39, 0.575, 0.565, 1);
+  --ease-sine-in-out: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  
+  /* Quad - slight acceleration */
+  --ease-quad-in: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  --ease-quad-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-quad-in-out: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  
+  /* Cubic - moderate acceleration */
+  --ease-cubic-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --ease-cubic-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-cubic-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  
+  /* Quart - strong acceleration */
+  --ease-quart-in: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+  --ease-quart-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-quart-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  
+  /* Quint - very strong acceleration */
+  --ease-quint-in: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  --ease-quint-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-quint-in-out: cubic-bezier(0.86, 0, 0.07, 1);
+  
+  /* Expo - extreme acceleration */
+  --ease-expo-in: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --ease-expo-out: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-expo-in-out: cubic-bezier(1, 0, 0, 1);
+  
+  /* Circ - circular motion feel */
+  --ease-circ-in: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+  --ease-circ-out: cubic-bezier(0.075, 0.82, 0.165, 1);
+  --ease-circ-in-out: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  
+  /* Back - slight overshoot */
+  --ease-back-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  --ease-back-out: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-back-in-out: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* ==========================================================================
+     SPECIAL PURPOSE EASINGS
+     ========================================================================== */
+  
+  /* Smooth - Apple's preferred easing */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Sharp - quick start, gradual end */
+  --ease-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+  
+  /* Decelerate - starts fast, slows to stop */
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  
+  /* Accelerate - starts slow, speeds up */
+  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  
+  /* Snap - quick movement with slight settle */
+  --ease-snap: cubic-bezier(0.7, 0, 0.3, 1);
+  
+  /* Glide - smooth continuous motion */
+  --ease-glide: cubic-bezier(0.165, 0.84, 0.44, 1);
+  
+  /* Pop - attention-grabbing overshoot */
+  --ease-pop: cubic-bezier(0.3, 1.5, 0.6, 1);
+  
+  /* Wobble - playful oscillation */
+  --ease-wobble: cubic-bezier(0.5, -0.5, 0.1, 1.5);
+  
+  /* ==========================================================================
+     LINEAR EASING WITH KEYFRAMES (CSS linear() function)
+     
+     For complex multi-step easings. Use sparingly as these are verbose.
+     Note: Requires browser support for linear() function (2023+)
+     ========================================================================== */
+  
+  /* True elastic with multiple bounces */
+  --ease-elastic-true: linear(
+    0, 0.22, 0.36, 0.51, 0.72, 0.8, 0.86,
+    0.92, 0.97, 1.01, 1.03, 1.02, 1, 0.99,
+    1, 1, 1
+  );
+  
+  /* Smooth bounce landing */
+  --ease-bounce-true: linear(
+    0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141,
+    0.191, 0.25, 0.316, 0.391, 0.472, 0.562, 0.66,
+    0.765, 0.878, 1, 0.965, 0.935, 0.965, 1,
+    0.985, 1
+  );
+}
+
+
+/* === global/gradients.css === */
+/**
+ * Elvish - Gradient Presets
+ * 
+ * 30 curated gradient presets for backgrounds, overlays, and accents.
+ * Uses OKLCH for perceptually uniform color transitions.
+ * 
+ * Categories:
+ *   1-10:  Warm/Sunset gradients
+ *   11-20: Cool/Ocean gradients  
+ *   21-25: Nature gradients
+ *   26-30: Special/Premium gradients
+ * 
+ * Usage:
+ *   background: var(--gradient-5);
+ *   background: var(--gradient-sunset);
+ */
+
+:root {
+  /* ==========================================================================
+     WARM / SUNSET GRADIENTS (1-10)
+     ========================================================================== */
+  
+  /* Soft peach sunrise */
+  --gradient-1: linear-gradient(
+    to bottom right,
+    oklch(90% 0.08 50),
+    oklch(85% 0.12 30),
+    oklch(80% 0.15 350)
+  );
+  
+  /* Golden hour */
+  --gradient-2: linear-gradient(
+    135deg,
+    oklch(85% 0.15 85),
+    oklch(75% 0.18 55),
+    oklch(65% 0.2 25)
+  );
+  
+  /* Warm sunset */
+  --gradient-3: linear-gradient(
+    to right,
+    oklch(75% 0.2 40),
+    oklch(65% 0.22 350),
+    oklch(55% 0.2 310)
+  );
+  
+  /* Fire */
+  --gradient-4: linear-gradient(
+    to top,
+    oklch(50% 0.25 30),
+    oklch(65% 0.22 45),
+    oklch(80% 0.18 70)
+  );
+  
+  /* Peach fuzz */
+  --gradient-5: linear-gradient(
+    135deg,
+    oklch(88% 0.1 55),
+    oklch(82% 0.14 25)
+  );
+  
+  /* Coral reef */
+  --gradient-6: linear-gradient(
+    to right,
+    oklch(70% 0.18 30),
+    oklch(65% 0.2 350)
+  );
+  
+  /* Mango tango */
+  --gradient-7: linear-gradient(
+    160deg,
+    oklch(82% 0.16 80),
+    oklch(70% 0.2 40)
+  );
+  
+  /* Flamingo */
+  --gradient-8: linear-gradient(
+    to bottom right,
+    oklch(80% 0.15 10),
+    oklch(70% 0.2 340)
+  );
+  
+  /* Terracotta */
+  --gradient-9: linear-gradient(
+    135deg,
+    oklch(65% 0.12 50),
+    oklch(50% 0.1 35)
+  );
+  
+  /* Rose gold */
+  --gradient-10: linear-gradient(
+    to right,
+    oklch(85% 0.08 30),
+    oklch(78% 0.12 350),
+    oklch(85% 0.06 80)
+  );
+  
+  /* ==========================================================================
+     COOL / OCEAN GRADIENTS (11-20)
+     ========================================================================== */
+  
+  /* Ocean depths */
+  --gradient-11: linear-gradient(
+    to bottom,
+    oklch(75% 0.15 220),
+    oklch(55% 0.18 240),
+    oklch(35% 0.15 250)
+  );
+  
+  /* Arctic */
+  --gradient-12: linear-gradient(
+    135deg,
+    oklch(95% 0.03 220),
+    oklch(85% 0.1 200),
+    oklch(75% 0.15 210)
+  );
+  
+  /* Electric blue */
+  --gradient-13: linear-gradient(
+    to right,
+    oklch(60% 0.2 250),
+    oklch(70% 0.22 220)
+  );
+  
+  /* Midnight */
+  --gradient-14: linear-gradient(
+    to bottom,
+    oklch(25% 0.1 280),
+    oklch(15% 0.08 250)
+  );
+  
+  /* Aquamarine */
+  --gradient-15: linear-gradient(
+    160deg,
+    oklch(80% 0.12 195),
+    oklch(70% 0.15 175)
+  );
+  
+  /* Teal dream */
+  --gradient-16: linear-gradient(
+    to right,
+    oklch(65% 0.15 195),
+    oklch(55% 0.18 220)
+  );
+  
+  /* Cool steel */
+  --gradient-17: linear-gradient(
+    135deg,
+    oklch(70% 0.03 250),
+    oklch(55% 0.05 240)
+  );
+  
+  /* Lavender mist */
+  --gradient-18: linear-gradient(
+    to bottom right,
+    oklch(88% 0.08 290),
+    oklch(80% 0.12 270)
+  );
+  
+  /* Purple haze */
+  --gradient-19: linear-gradient(
+    135deg,
+    oklch(55% 0.2 300),
+    oklch(45% 0.22 280)
+  );
+  
+  /* Cyberpunk */
+  --gradient-20: linear-gradient(
+    to right,
+    oklch(50% 0.25 330),
+    oklch(60% 0.22 270),
+    oklch(55% 0.2 200)
+  );
+  
+  /* ==========================================================================
+     NATURE GRADIENTS (21-25)
+     ========================================================================== */
+  
+  /* Forest */
+  --gradient-21: linear-gradient(
+    to bottom,
+    oklch(65% 0.15 145),
+    oklch(45% 0.12 135),
+    oklch(30% 0.1 130)
+  );
+  
+  /* Spring meadow */
+  --gradient-22: linear-gradient(
+    135deg,
+    oklch(85% 0.18 130),
+    oklch(75% 0.15 145)
+  );
+  
+  /* Moss */
+  --gradient-23: linear-gradient(
+    to right,
+    oklch(55% 0.1 140),
+    oklch(50% 0.12 120)
+  );
+  
+  /* Earth */
+  --gradient-24: linear-gradient(
+    to bottom,
+    oklch(60% 0.08 80),
+    oklch(45% 0.1 60),
+    oklch(35% 0.08 45)
+  );
+  
+  /* Aurora */
+  --gradient-25: linear-gradient(
+    135deg,
+    oklch(75% 0.2 145),
+    oklch(65% 0.18 180),
+    oklch(60% 0.2 290)
+  );
+  
+  /* ==========================================================================
+     SPECIAL / PREMIUM GRADIENTS (26-30)
+     ========================================================================== */
+  
+  /* Chrome */
+  --gradient-26: linear-gradient(
+    to bottom,
+    oklch(90% 0.02 0),
+    oklch(60% 0 0),
+    oklch(85% 0.02 0)
+  );
+  
+  /* Gold foil */
+  --gradient-27: linear-gradient(
+    135deg,
+    oklch(85% 0.12 85),
+    oklch(70% 0.14 75),
+    oklch(85% 0.1 90)
+  );
+  
+  /* Holographic */
+  --gradient-28: linear-gradient(
+    135deg,
+    oklch(85% 0.15 350),
+    oklch(80% 0.18 200),
+    oklch(85% 0.15 300),
+    oklch(80% 0.12 140)
+  );
+  
+  /* Glassmorphism base */
+  --gradient-29: linear-gradient(
+    135deg,
+    oklch(100% 0 0 / 0.3),
+    oklch(100% 0 0 / 0.1)
+  );
+  
+  /* Dark glass */
+  --gradient-30: linear-gradient(
+    135deg,
+    oklch(0% 0 0 / 0.5),
+    oklch(0% 0 0 / 0.2)
+  );
+  
+  /* ==========================================================================
+     SEMANTIC ALIASES
+     ========================================================================== */
+  
+  --gradient-sunrise: var(--gradient-1);
+  --gradient-sunset: var(--gradient-3);
+  --gradient-fire: var(--gradient-4);
+  --gradient-coral: var(--gradient-6);
+  --gradient-ocean: var(--gradient-11);
+  --gradient-arctic: var(--gradient-12);
+  --gradient-midnight: var(--gradient-14);
+  --gradient-teal: var(--gradient-16);
+  --gradient-lavender: var(--gradient-18);
+  --gradient-cyberpunk: var(--gradient-20);
+  --gradient-forest: var(--gradient-21);
+  --gradient-aurora: var(--gradient-25);
+  --gradient-chrome: var(--gradient-26);
+  --gradient-gold: var(--gradient-27);
+  --gradient-holographic: var(--gradient-28);
+  --gradient-glass: var(--gradient-29);
+  --gradient-dark-glass: var(--gradient-30);
+  
+  /* ==========================================================================
+     UTILITY GRADIENTS
+     ========================================================================== */
+  
+  /* Fade to transparent */
+  --gradient-fade-down: linear-gradient(to bottom, black, transparent);
+  --gradient-fade-up: linear-gradient(to top, black, transparent);
+  --gradient-fade-left: linear-gradient(to left, black, transparent);
+  --gradient-fade-right: linear-gradient(to right, black, transparent);
+  
+  /* Vignette (for overlays) */
+  --gradient-vignette: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    oklch(0% 0 0 / 0.3) 100%
+  );
+  
+  /* Spotlight */
+  --gradient-spotlight: radial-gradient(
+    ellipse at center,
+    oklch(100% 0 0 / 0.15) 0%,
+    transparent 70%
+  );
+}
+
+
+/* === global/noise.css === */
+/**
+ * Elvish - Noise & Grain Textures
+ * 
+ * SVG-based noise patterns for texture effects.
+ * No external files needed - all textures are inline data URIs.
+ * 
+ * Usage:
+ *   background-image: var(--noise-1);
+ *   filter: var(--noise-filter-2);
+ * 
+ * Combine with gradients for grainy effects:
+ *   background-image: var(--gradient-sunset), var(--noise-3);
+ *   filter: var(--noise-filter-3);
+ */
+
+:root {
+  /* ==========================================================================
+     NOISE PATTERNS (SVG turbulence)
+     
+     Numbered 1-5: fine to coarse grain
+     ========================================================================== */
+  
+  /* Ultra-fine grain - barely visible texture */
+  --noise-1: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Fine grain - subtle film grain effect */
+  --noise-2: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Medium grain - visible texture */
+  --noise-3: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Coarse grain - prominent texture */
+  --noise-4: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Extra coarse - dramatic grain */
+  --noise-5: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.3' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     NOISE FILTERS
+     
+     Apply these to make noise textures blend with colors.
+     Use contrast and brightness to control intensity.
+     ========================================================================== */
+  
+  /* Subtle - barely visible grain */
+  --noise-filter-1: contrast(150%) brightness(500%);
+  
+  /* Light - gentle film grain */
+  --noise-filter-2: contrast(170%) brightness(400%);
+  
+  /* Medium - noticeable texture */
+  --noise-filter-3: contrast(200%) brightness(300%);
+  
+  /* Strong - prominent grain */
+  --noise-filter-4: contrast(250%) brightness(250%);
+  
+  /* Heavy - dramatic texture */
+  --noise-filter-5: contrast(300%) brightness(200%);
+  
+  /* ==========================================================================
+     GRAIN OVERLAYS (ready-to-use noise + blend)
+     
+     These combine noise with blend mode for easy application.
+     Just add as background-image over your gradient.
+     ========================================================================== */
+  
+  /* Light grain overlay (for light backgrounds) */
+  --grain-light: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  
+  /* Dark grain overlay (for dark backgrounds) */
+  --grain-dark: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     PAPER TEXTURES
+     ========================================================================== */
+  
+  /* Smooth paper */
+  --texture-paper: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* Rough paper */
+  --texture-paper-rough: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='3'%3E%3CfeDistantLight azimuth='45' elevation='50'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  
+  /* ==========================================================================
+     DOT/HALFTONE PATTERNS
+     ========================================================================== */
+  
+  /* Subtle dots */
+  --pattern-dots-sm: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='currentColor' opacity='0.15'/%3E%3C/svg%3E");
+  
+  /* Medium dots */
+  --pattern-dots-md: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='currentColor' opacity='0.2'/%3E%3C/svg%3E");
+  
+  /* Grid pattern */
+  --pattern-grid: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40' fill='none' stroke='currentColor' stroke-width='1' opacity='0.1'/%3E%3C/svg%3E");
+  
+  /* Diagonal lines */
+  --pattern-diagonal: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10L10 0' stroke='currentColor' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E");
 }
 
 
@@ -5781,6 +7321,44 @@ i-tew[measure="full"]    { max-width: none; }
   i-tew {
     transition: none !important;
   }
+}
+
+
+/* === primitives/gil/gil.css === */
+/**
+ * i-gil - Smart Prefetch Link
+ * 
+ * Sindarin: "gil" = star, bright spark
+ * 
+ * Minimal styling - inherits from context.
+ * The element is primarily JavaScript-driven.
+ */
+
+i-gil {
+  display: inline;
+}
+
+i-gil a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Loading indicator (optional) */
+i-gil[prefetching] a::after {
+  content: '';
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.25em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: i-gil-spin 0.6s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes i-gil-spin {
+  to { transform: rotate(360deg); }
 }
 
 
