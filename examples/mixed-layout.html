@@ -1,927 +1,1047 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elvish Mixed Layout — Fluid Meets Fixed</title>
-  <style>
-    /* ============================================================
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Elvish Mixed Layout — Fluid Meets Fixed</title>
+        <style>
+            /* ============================================================
        UTOPIA FLUID SYSTEM (Dynamic, viewport-responsive)
        ============================================================ */
-    :root {
-      /* Fluid Type Scale */
-      --step--2: clamp(0.7813rem, 0.7536rem + 0.1227vw, 0.8rem);
-      --step--1: clamp(0.9375rem, 0.8943rem + 0.1918vw, 1rem);
-      --step-0: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
-      --step-1: clamp(1.35rem, 1.2455rem + 0.4631vw, 1.5625rem);
-      --step-2: clamp(1.62rem, 1.4645rem + 0.6895vw, 1.9531rem);
-      --step-3: clamp(1.944rem, 1.7191rem + 0.9974vw, 2.4414rem);
-      --step-4: clamp(2.3328rem, 2.0148rem + 1.4096vw, 3.0518rem);
-      --step-5: clamp(2.7994rem, 2.3579rem + 1.9577vw, 3.8147rem);
-      --step-6: clamp(3.3592rem, 2.7544rem + 2.6804vw, 4.7684rem);
-      --step-7: clamp(4.0311rem, 3.2116rem + 3.6328vw, 5.9605rem);
-      
-      /* Fluid Space Scale */
-      --space-3xs: clamp(0.3125rem, 0.2983rem + 0.0631vw, 0.3125rem);
-      --space-2xs: clamp(0.5625rem, 0.5341rem + 0.1261vw, 0.625rem);
-      --space-xs: clamp(0.875rem, 0.8324rem + 0.1892vw, 0.9375rem);
-      --space-s: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
-      --space-m: clamp(1.6875rem, 1.5852rem + 0.4541vw, 1.875rem);
-      --space-l: clamp(2.25rem, 2.1136rem + 0.6057vw, 2.5rem);
-      --space-xl: clamp(3.375rem, 3.1705rem + 0.9085vw, 3.75rem);
-      --space-2xl: clamp(4.5rem, 4.2273rem + 1.2114vw, 5rem);
-      --space-3xl: clamp(6.75rem, 6.3409rem + 1.8171vw, 7.5rem);
-      
-      /* 🔥 Space Pairs — different sizes at different viewports */
-      --space-s-m: clamp(1.125rem, 0.9006rem + 0.9967vw, 1.875rem);
-      --space-s-l: clamp(1.125rem, 0.7443rem + 1.6892vw, 2.5rem);
-      --space-s-xl: clamp(1.125rem, 0.4318rem + 3.0761vw, 3.75rem);
-      --space-m-l: clamp(1.6875rem, 1.4290rem + 1.1466vw, 2.5rem);
-      --space-m-xl: clamp(1.6875rem, 1.1165rem + 2.5348vw, 3.75rem);
-      --space-l-xl: clamp(2.25rem, 1.8011rem + 1.9936vw, 3.75rem);
-      --space-l-2xl: clamp(2.25rem, 1.4886rem + 3.3795vw, 5rem);
-      --space-xl-2xl: clamp(3.375rem, 2.8580rem + 2.2932vw, 5rem);
-      --space-xl-3xl: clamp(3.375rem, 2.2330rem + 5.0568vw, 7.5rem);
-      --space-s-2xl: clamp(1.125rem, 0.1193rem + 4.4631vw, 5rem);
-      
-      /* 🔄 Reverse Pairs — SHRINKS as viewport grows */
-      --space-l-s: clamp(1.25rem, 2.7841rem - 1.7045vw, 2.25rem);
-      --space-xl-m: clamp(1.875rem, 4.2841rem - 2.6761vw, 3.375rem);
-      --space-2xl-l: clamp(2.5rem, 5.5341rem - 3.3712vw, 4.5rem);
-      --space-2xl-s: clamp(1.25rem, 5.9091rem - 5.1705vw, 4.5rem);
-      --space-3xl-m: clamp(1.875rem, 8.0341rem - 6.8466vw, 6.75rem);
-      
-      /* ============================================================
+            :root {
+                /* Fluid Type Scale */
+                --step--2: clamp(0.7813rem, 0.7536rem + 0.1227vw, 0.8rem);
+                --step--1: clamp(0.9375rem, 0.8943rem + 0.1918vw, 1rem);
+                --step-0: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+                --step-1: clamp(1.35rem, 1.2455rem + 0.4631vw, 1.5625rem);
+                --step-2: clamp(1.62rem, 1.4645rem + 0.6895vw, 1.9531rem);
+                --step-3: clamp(1.944rem, 1.7191rem + 0.9974vw, 2.4414rem);
+                --step-4: clamp(2.3328rem, 2.0148rem + 1.4096vw, 3.0518rem);
+                --step-5: clamp(2.7994rem, 2.3579rem + 1.9577vw, 3.8147rem);
+                --step-6: clamp(3.3592rem, 2.7544rem + 2.6804vw, 4.7684rem);
+                --step-7: clamp(4.0311rem, 3.2116rem + 3.6328vw, 5.9605rem);
+
+                /* Fluid Space Scale */
+                --space-3xs: clamp(0.3125rem, 0.2983rem + 0.0631vw, 0.3125rem);
+                --space-2xs: clamp(0.5625rem, 0.5341rem + 0.1261vw, 0.625rem);
+                --space-xs: clamp(0.875rem, 0.8324rem + 0.1892vw, 0.9375rem);
+                --space-s: clamp(1.125rem, 1.0568rem + 0.3028vw, 1.25rem);
+                --space-m: clamp(1.6875rem, 1.5852rem + 0.4541vw, 1.875rem);
+                --space-l: clamp(2.25rem, 2.1136rem + 0.6057vw, 2.5rem);
+                --space-xl: clamp(3.375rem, 3.1705rem + 0.9085vw, 3.75rem);
+                --space-2xl: clamp(4.5rem, 4.2273rem + 1.2114vw, 5rem);
+                --space-3xl: clamp(6.75rem, 6.3409rem + 1.8171vw, 7.5rem);
+
+                /* 🔥 Space Pairs — different sizes at different viewports */
+                --space-s-m: clamp(1.125rem, 0.9006rem + 0.9967vw, 1.875rem);
+                --space-s-l: clamp(1.125rem, 0.7443rem + 1.6892vw, 2.5rem);
+                --space-s-xl: clamp(1.125rem, 0.4318rem + 3.0761vw, 3.75rem);
+                --space-m-l: clamp(1.6875rem, 1.429rem + 1.1466vw, 2.5rem);
+                --space-m-xl: clamp(1.6875rem, 1.1165rem + 2.5348vw, 3.75rem);
+                --space-l-xl: clamp(2.25rem, 1.8011rem + 1.9936vw, 3.75rem);
+                --space-l-2xl: clamp(2.25rem, 1.4886rem + 3.3795vw, 5rem);
+                --space-xl-2xl: clamp(3.375rem, 2.858rem + 2.2932vw, 5rem);
+                --space-xl-3xl: clamp(3.375rem, 2.233rem + 5.0568vw, 7.5rem);
+                --space-s-2xl: clamp(1.125rem, 0.1193rem + 4.4631vw, 5rem);
+
+                /* 🔄 Reverse Pairs — SHRINKS as viewport grows */
+                --space-l-s: clamp(1.25rem, 2.7841rem - 1.7045vw, 2.25rem);
+                --space-xl-m: clamp(1.875rem, 4.2841rem - 2.6761vw, 3.375rem);
+                --space-2xl-l: clamp(2.5rem, 5.5341rem - 3.3712vw, 4.5rem);
+                --space-2xl-s: clamp(1.25rem, 5.9091rem - 5.1705vw, 4.5rem);
+                --space-3xl-m: clamp(1.875rem, 8.0341rem - 6.8466vw, 6.75rem);
+
+                /* ============================================================
          EVERY LAYOUT STATIC SYSTEM (Fixed, ratio-based)
          ============================================================ */
-      
-      /* Ratio Presets */
-      --ratio-golden: 1.618;
-      --ratio-silver: 1.414;
-      --ratio-fifth: 1.5;
-      
-      /* Default ratio */
-      --ratio: var(--ratio-fifth);
-      
-      /* Static Modular Scale (changes with --ratio) */
-      --s-3: calc(var(--s-2) / var(--ratio));
-      --s-2: calc(var(--s-1) / var(--ratio));
-      --s-1: calc(var(--s0) / var(--ratio));
-      --s0: 1rem;
-      --s1: calc(var(--s0) * var(--ratio));
-      --s2: calc(var(--s1) * var(--ratio));
-      --s3: calc(var(--s2) * var(--ratio));
-      --s4: calc(var(--s3) * var(--ratio));
-      --s5: calc(var(--s4) * var(--ratio));
-      
-      /* ============================================================
+
+                /* Ratio Presets */
+                --ratio-golden: 1.618;
+                --ratio-silver: 1.414;
+                --ratio-fifth: 1.5;
+
+                /* Default ratio */
+                --ratio: var(--ratio-fifth);
+
+                /* Static Modular Scale (changes with --ratio) */
+                --s-3: calc(var(--s-2) / var(--ratio));
+                --s-2: calc(var(--s-1) / var(--ratio));
+                --s-1: calc(var(--s0) / var(--ratio));
+                --s0: 1rem;
+                --s1: calc(var(--s0) * var(--ratio));
+                --s2: calc(var(--s1) * var(--ratio));
+                --s3: calc(var(--s2) * var(--ratio));
+                --s4: calc(var(--s3) * var(--ratio));
+                --s5: calc(var(--s4) * var(--ratio));
+
+                /* ============================================================
          THEME COLORS
          ============================================================ */
-      --color-bg: #0a0a0f;
-      --color-surface: #13131a;
-      --color-surface-raised: #1a1a24;
-      --color-text: #f0f0f5;
-      --color-text-muted: #9ca3af;
-      --color-accent: oklch(75% 0.18 168);
-      --color-accent-light: oklch(85% 0.15 168);
-      --color-accent-dark: oklch(60% 0.18 168);
-      --color-gold: oklch(80% 0.15 85);
-      --color-silver: oklch(75% 0.02 260);
-      --color-rose: oklch(70% 0.15 350);
-    }
-    
-    /* ============================================================
+                --color-bg: #0a0a0f;
+                --color-surface: #13131a;
+                --color-surface-raised: #1a1a24;
+                --color-text: #f0f0f5;
+                --color-text-muted: #9ca3af;
+                --color-accent: oklch(75% 0.18 168);
+                --color-accent-light: oklch(85% 0.15 168);
+                --color-accent-dark: oklch(60% 0.18 168);
+                --color-gold: oklch(80% 0.15 85);
+                --color-silver: oklch(75% 0.02 260);
+                --color-rose: oklch(70% 0.15 350);
+            }
+
+            /* ============================================================
        RESET & BASE
        ============================================================ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-    }
-    
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--color-bg);
-      color: var(--color-text);
-      font-size: var(--step-0);
-      line-height: 1.6;
-    }
-    
-    img {
-      max-width: 100%;
-      display: block;
-    }
-    
-    /* ============================================================
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+                background: var(--color-bg);
+                color: var(--color-text);
+                font-size: var(--step-0);
+                line-height: 1.6;
+            }
+
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            /* ============================================================
        VIEWPORT INDICATOR
        ============================================================ */
-    .viewport-indicator {
-      position: fixed;
-      top: var(--space-s);
-      right: var(--space-s);
-      background: var(--color-surface-raised);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: var(--space-2xs) var(--space-xs);
-      border-radius: 6px;
-      font-size: var(--step--2);
-      font-family: ui-monospace, monospace;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-    
-    /* ============================================================
+            .viewport-indicator {
+                position: fixed;
+                top: var(--space-s);
+                right: var(--space-s);
+                background: var(--color-surface-raised);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                padding: var(--space-2xs) var(--space-xs);
+                border-radius: 6px;
+                font-size: var(--step--2);
+                font-family: ui-monospace, monospace;
+                z-index: 1000;
+                backdrop-filter: blur(10px);
+            }
+
+            /* ============================================================
        SECTION: HERO
        Uses: Golden Ratio (dramatic), Fluid Type, Space Pair
        ============================================================ */
-    .hero {
-      --ratio: var(--ratio-golden);
-      
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      
-      /* 🔥 SPACE PAIR: Generous padding that EXPANDS dramatically on desktop */
-      padding: var(--space-xl-3xl);
-      
-      background: 
-        radial-gradient(ellipse at 30% 20%, oklch(40% 0.15 168 / 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, oklch(40% 0.12 280 / 0.2) 0%, transparent 50%),
-        var(--color-bg);
-    }
-    
-    .hero-content {
-      max-width: 50rem;
-    }
-    
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s-1); /* Static: consistent badge spacing */
-      padding: var(--s-2) var(--s0);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 100px;
-      font-size: var(--step--1);
-      color: var(--color-accent-light);
-      margin-bottom: var(--space-m);
-    }
-    
-    .hero-badge::before {
-      content: '';
-      width: var(--s-1);
-      height: var(--s-1);
-      background: var(--color-accent);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
-    }
-    
-    .hero h1 {
-      font-size: var(--step-6);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: var(--space-s-m);
-      
-      background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 50%, var(--color-text) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 8s linear infinite;
-    }
-    
-    @keyframes shimmer {
-      to { background-position: 200% center; }
-    }
-    
-    .hero p {
-      font-size: var(--step-1);
-      color: var(--color-text-muted);
-      max-width: 40ch;
-      margin: 0 auto var(--space-l);
-    }
-    
-    .hero-cta {
-      display: inline-flex;
-      gap: var(--s0); /* Static: consistent button spacing */
-    }
-    
-    .btn {
-      padding: var(--s-1) var(--s1);
-      border-radius: 8px;
-      font-size: var(--step-0);
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    
-    .btn-primary {
-      background: var(--color-accent);
-      color: var(--color-bg);
-    }
-    
-    .btn-primary:hover {
-      background: var(--color-accent-light);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px oklch(75% 0.18 168 / 0.3);
-    }
-    
-    .btn-secondary {
-      background: transparent;
-      color: var(--color-text);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.3);
-    }
-    
-    /* ============================================================
+            .hero {
+                --ratio: var(--ratio-golden);
+
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+                text-align: center;
+
+                /* 🔥 SPACE PAIR: Generous padding that EXPANDS dramatically on desktop */
+                padding: var(--space-xl-3xl);
+
+                background:
+                    radial-gradient(
+                        ellipse at 30% 20%,
+                        oklch(40% 0.15 168 / 0.3) 0%,
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        ellipse at 70% 80%,
+                        oklch(40% 0.12 280 / 0.2) 0%,
+                        transparent 50%
+                    ),
+                    var(--color-bg);
+            }
+
+            .hero-content {
+                max-width: 50rem;
+            }
+
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: var(--s-1); /* Static: consistent badge spacing */
+                padding: var(--s-2) var(--s0);
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 100px;
+                font-size: var(--step--1);
+                color: var(--color-accent-light);
+                margin-bottom: var(--space-m);
+            }
+
+            .hero-badge::before {
+                content: "";
+                width: var(--s-1);
+                height: var(--s-1);
+                background: var(--color-accent);
+                border-radius: 50%;
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                50% {
+                    opacity: 0.5;
+                    transform: scale(1.2);
+                }
+            }
+
+            .hero h1 {
+                font-size: var(--step-6);
+                font-weight: 700;
+                line-height: 1.1;
+                letter-spacing: -0.02em;
+                margin-bottom: var(--space-s-m);
+
+                background: linear-gradient(
+                    135deg,
+                    var(--color-text) 0%,
+                    var(--color-accent-light) 50%,
+                    var(--color-text) 100%
+                );
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: shimmer 8s linear infinite;
+            }
+
+            @keyframes shimmer {
+                to {
+                    background-position: 200% center;
+                }
+            }
+
+            .hero p {
+                font-size: var(--step-1);
+                color: var(--color-text-muted);
+                max-width: 40ch;
+                margin: 0 auto var(--space-l);
+            }
+
+            .hero-cta {
+                display: inline-flex;
+                gap: var(--s0); /* Static: consistent button spacing */
+            }
+
+            .btn {
+                padding: var(--s-1) var(--s1);
+                border-radius: 8px;
+                font-size: var(--step-0);
+                font-weight: 500;
+                text-decoration: none;
+                transition: all 0.2s ease;
+            }
+
+            .btn-primary {
+                background: var(--color-accent);
+                color: var(--color-bg);
+            }
+
+            .btn-primary:hover {
+                background: var(--color-accent-light);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px oklch(75% 0.18 168 / 0.3);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                color: var(--color-text);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .btn-secondary:hover {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+
+            /* ============================================================
        SECTION: FEATURES GRID
        Uses: Fluid Type, Space Pairs for responsive gaps
        ============================================================ */
-    .features {
-      /* 🔥 SPACE PAIR: Section padding that grows with viewport */
-      padding: var(--space-l-2xl);
-      background: var(--color-surface);
-    }
-    
-    .features-header {
-      text-align: center;
-      max-width: 45ch;
-      margin: 0 auto var(--space-l-xl);
-    }
-    
-    .features-header h2 {
-      font-size: var(--step-4);
-      margin-bottom: var(--space-xs);
-    }
-    
-    .features-header p {
-      color: var(--color-text-muted);
-      font-size: var(--step-0);
-    }
-    
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-      
-      /* 🔥 SPACE PAIR: Tight gaps on mobile, spacious on desktop */
-      gap: var(--space-s-l);
-      
-      max-width: 72rem;
-      margin: 0 auto;
-    }
-    
-    .feature-card {
-      background: var(--color-surface-raised);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 16px;
-      
-      /* 🔥 SPACE PAIR: Compact mobile, comfortable desktop */
-      padding: var(--space-m-l);
-      
-      transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255,255,255,0.1);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    }
-    
-    .feature-icon {
-      width: var(--space-l);
-      height: var(--space-l);
-      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-      border-radius: 12px;
-      margin-bottom: var(--space-s);
-      display: grid;
-      place-items: center;
-      font-size: var(--step-1);
-    }
-    
-    .feature-card h3 {
-      font-size: var(--step-1);
-      margin-bottom: var(--space-2xs);
-    }
-    
-    .feature-card p {
-      color: var(--color-text-muted);
-      font-size: var(--step--1);
-      line-height: 1.7;
-    }
-    
-    /* ============================================================
+            .features {
+                /* 🔥 SPACE PAIR: Section padding that grows with viewport */
+                padding: var(--space-l-2xl);
+                background: var(--color-surface);
+            }
+
+            .features-header {
+                text-align: center;
+                max-width: 45ch;
+                margin: 0 auto var(--space-l-xl);
+            }
+
+            .features-header h2 {
+                font-size: var(--step-4);
+                margin-bottom: var(--space-xs);
+            }
+
+            .features-header p {
+                color: var(--color-text-muted);
+                font-size: var(--step-0);
+            }
+
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                );
+
+                /* 🔥 SPACE PAIR: Tight gaps on mobile, spacious on desktop */
+                gap: var(--space-s-l);
+
+                max-width: 72rem;
+                margin: 0 auto;
+            }
+
+            .feature-card {
+                background: var(--color-surface-raised);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+
+                /* 🔥 SPACE PAIR: Compact mobile, comfortable desktop */
+                padding: var(--space-m-l);
+
+                transition: all 0.3s ease;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(255, 255, 255, 0.1);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+
+            .feature-icon {
+                width: var(--space-l);
+                height: var(--space-l);
+                background: linear-gradient(
+                    135deg,
+                    var(--color-accent) 0%,
+                    var(--color-accent-dark) 100%
+                );
+                border-radius: 12px;
+                margin-bottom: var(--space-s);
+                display: grid;
+                place-items: center;
+                font-size: var(--step-1);
+            }
+
+            .feature-card h3 {
+                font-size: var(--step-1);
+                margin-bottom: var(--space-2xs);
+            }
+
+            .feature-card p {
+                color: var(--color-text-muted);
+                font-size: var(--step--1);
+                line-height: 1.7;
+            }
+
+            /* ============================================================
        SECTION: TESTIMONIAL / QUOTE
        Uses: 🔄 REVERSE PAIR — More breathing room on mobile!
        ============================================================ */
-    .testimonial {
-      /* 🔄 REVERSE PAIR: Large padding on mobile, tighter on desktop */
-      /* Mobile users need content to breathe; desktop has more context */
-      padding: var(--space-2xl-l);
-      
-      background: 
-        radial-gradient(ellipse at 50% 0%, oklch(30% 0.1 350 / 0.3) 0%, transparent 60%),
-        var(--color-bg);
-    }
-    
-    .testimonial-inner {
-      max-width: 50rem;
-      margin: 0 auto;
-      text-align: center;
-    }
-    
-    .testimonial blockquote {
-      font-size: var(--step-3);
-      font-style: italic;
-      line-height: 1.5;
-      color: var(--color-text);
-      margin-bottom: var(--space-m);
-      position: relative;
-    }
-    
-    .testimonial blockquote::before {
-      content: '"';
-      position: absolute;
-      top: -0.5em;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: var(--step-7);
-      color: var(--color-rose);
-      opacity: 0.3;
-      font-family: Georgia, serif;
-    }
-    
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-s);
-    }
-    
-    .testimonial-avatar {
-      width: 3.5rem;
-      height: 3.5rem;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--color-rose), var(--color-accent));
-    }
-    
-    .testimonial-info {
-      text-align: left;
-    }
-    
-    .testimonial-name {
-      font-weight: 600;
-      font-size: var(--step-0);
-    }
-    
-    .testimonial-role {
-      color: var(--color-text-muted);
-      font-size: var(--step--1);
-    }
-    
-    /* ============================================================
+            .testimonial {
+                /* 🔄 REVERSE PAIR: Large padding on mobile, tighter on desktop */
+                /* Mobile users need content to breathe; desktop has more context */
+                padding: var(--space-2xl-l);
+
+                background:
+                    radial-gradient(
+                        ellipse at 50% 0%,
+                        oklch(30% 0.1 350 / 0.3) 0%,
+                        transparent 60%
+                    ),
+                    var(--color-bg);
+            }
+
+            .testimonial-inner {
+                max-width: 50rem;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .testimonial blockquote {
+                font-size: var(--step-3);
+                font-style: italic;
+                line-height: 1.5;
+                color: var(--color-text);
+                margin-bottom: var(--space-m);
+                position: relative;
+            }
+
+            .testimonial blockquote::before {
+                content: '"';
+                position: absolute;
+                top: -0.5em;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: var(--step-7);
+                color: var(--color-rose);
+                opacity: 0.3;
+                font-family: Georgia, serif;
+            }
+
+            .testimonial-author {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: var(--space-s);
+            }
+
+            .testimonial-avatar {
+                width: 3.5rem;
+                height: 3.5rem;
+                border-radius: 50%;
+                background: linear-gradient(
+                    135deg,
+                    var(--color-rose),
+                    var(--color-accent)
+                );
+            }
+
+            .testimonial-info {
+                text-align: left;
+            }
+
+            .testimonial-name {
+                font-weight: 600;
+                font-size: var(--step-0);
+            }
+
+            .testimonial-role {
+                color: var(--color-text-muted);
+                font-size: var(--step--1);
+            }
+
+            /* ============================================================
        SECTION: PRICING / COMPARISON
        Uses: Silver Ratio (dense, readable), Static spacing
        ============================================================ */
-    .pricing {
-      --ratio: var(--ratio-silver);
-      
-      padding: var(--space-l-xl);
-      background: var(--color-surface);
-    }
-    
-    .pricing-header {
-      text-align: center;
-      margin-bottom: var(--space-l);
-    }
-    
-    .pricing-header h2 {
-      font-size: var(--step-4);
-      margin-bottom: var(--space-xs);
-    }
-    
-    .pricing-header p {
-      color: var(--color-text-muted);
-    }
-    
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-      gap: var(--s1); /* Static: consistent card spacing regardless of viewport */
-      max-width: 64rem;
-      margin: 0 auto;
-    }
-    
-    .pricing-card {
-      background: var(--color-surface-raised);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 16px;
-      padding: var(--s2); /* Static: dense but readable padding */
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .pricing-card.featured {
-      border-color: var(--color-accent);
-      position: relative;
-    }
-    
-    .pricing-card.featured::before {
-      content: 'Most Popular';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--color-accent);
-      color: var(--color-bg);
-      padding: var(--s-2) var(--s0);
-      border-radius: 100px;
-      font-size: var(--step--2);
-      font-weight: 600;
-    }
-    
-    .pricing-tier {
-      font-size: var(--step--1);
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: var(--s-1);
-    }
-    
-    .pricing-price {
-      font-size: var(--step-4);
-      font-weight: 700;
-      margin-bottom: var(--s0);
-    }
-    
-    .pricing-price span {
-      font-size: var(--step--1);
-      color: var(--color-text-muted);
-      font-weight: 400;
-    }
-    
-    .pricing-features {
-      list-style: none;
-      padding: 0;
-      margin: var(--s1) 0;
-      flex-grow: 1;
-    }
-    
-    .pricing-features li {
-      padding: var(--s-1) 0; /* Static: tight, scannable list */
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: var(--step--1);
-      display: flex;
-      align-items: center;
-      gap: var(--s-1);
-    }
-    
-    .pricing-features li::before {
-      content: '✓';
-      color: var(--color-accent);
-      font-weight: bold;
-    }
-    
-    .pricing-card .btn {
-      width: 100%;
-      text-align: center;
-      margin-top: auto;
-    }
-    
-    /* ============================================================
+            .pricing {
+                --ratio: var(--ratio-silver);
+
+                padding: var(--space-l-xl);
+                background: var(--color-surface);
+            }
+
+            .pricing-header {
+                text-align: center;
+                margin-bottom: var(--space-l);
+            }
+
+            .pricing-header h2 {
+                font-size: var(--step-4);
+                margin-bottom: var(--space-xs);
+            }
+
+            .pricing-header p {
+                color: var(--color-text-muted);
+            }
+
+            .pricing-grid {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 300px), 1fr)
+                );
+                gap: var(
+                    --s1
+                ); /* Static: consistent card spacing regardless of viewport */
+                max-width: 64rem;
+                margin: 0 auto;
+            }
+
+            .pricing-card {
+                background: var(--color-surface-raised);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                padding: var(--s2); /* Static: dense but readable padding */
+                display: flex;
+                flex-direction: column;
+            }
+
+            .pricing-card.featured {
+                border-color: var(--color-accent);
+                position: relative;
+            }
+
+            .pricing-card.featured::before {
+                content: "Most Popular";
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: var(--color-accent);
+                color: var(--color-bg);
+                padding: var(--s-2) var(--s0);
+                border-radius: 100px;
+                font-size: var(--step--2);
+                font-weight: 600;
+            }
+
+            .pricing-tier {
+                font-size: var(--step--1);
+                color: var(--color-text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: var(--s-1);
+            }
+
+            .pricing-price {
+                font-size: var(--step-4);
+                font-weight: 700;
+                margin-bottom: var(--s0);
+            }
+
+            .pricing-price span {
+                font-size: var(--step--1);
+                color: var(--color-text-muted);
+                font-weight: 400;
+            }
+
+            .pricing-features {
+                list-style: none;
+                padding: 0;
+                margin: var(--s1) 0;
+                flex-grow: 1;
+            }
+
+            .pricing-features li {
+                padding: var(--s-1) 0; /* Static: tight, scannable list */
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: var(--step--1);
+                display: flex;
+                align-items: center;
+                gap: var(--s-1);
+            }
+
+            .pricing-features li::before {
+                content: "✓";
+                color: var(--color-accent);
+                font-weight: bold;
+            }
+
+            .pricing-card .btn {
+                width: 100%;
+                text-align: center;
+                margin-top: auto;
+            }
+
+            /* ============================================================
        SECTION: DOCUMENTATION / CODE
        Uses: Fifth Ratio (balanced), Static spacing for code
        ============================================================ */
-    .docs {
-      --ratio: var(--ratio-fifth);
-      
-      padding: var(--space-l-xl);
-      background: var(--color-bg);
-    }
-    
-    .docs-header {
-      text-align: center;
-      margin-bottom: var(--space-l);
-    }
-    
-    .docs-header h2 {
-      font-size: var(--step-4);
-      margin-bottom: var(--space-xs);
-    }
-    
-    .docs-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-      gap: var(--space-m-l);
-      max-width: 72rem;
-      margin: 0 auto;
-    }
-    
-    .docs-example {
-      background: var(--color-surface);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    
-    .docs-example-header {
-      padding: var(--s0) var(--s1);
-      background: var(--color-surface-raised);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      gap: var(--s-1);
-    }
-    
-    .docs-example-header::before {
-      content: '';
-      display: flex;
-      gap: 6px;
-    }
-    
-    .docs-example-header span {
-      font-size: var(--step--1);
-      color: var(--color-text-muted);
-      font-family: ui-monospace, monospace;
-    }
-    
-    .docs-example pre {
-      padding: var(--s1); /* Static: consistent code padding */
-      margin: 0;
-      overflow-x: auto;
-      font-family: ui-monospace, 'Fira Code', monospace;
-      font-size: var(--step--1);
-      line-height: 1.7;
-    }
-    
-    .docs-example code {
-      color: var(--color-text);
-    }
-    
-    .token-comment { color: #6b7280; }
-    .token-property { color: var(--color-accent-light); }
-    .token-value { color: var(--color-gold); }
-    .token-function { color: var(--color-rose); }
-    
-    /* ============================================================
+            .docs {
+                --ratio: var(--ratio-fifth);
+
+                padding: var(--space-l-xl);
+                background: var(--color-bg);
+            }
+
+            .docs-header {
+                text-align: center;
+                margin-bottom: var(--space-l);
+            }
+
+            .docs-header h2 {
+                font-size: var(--step-4);
+                margin-bottom: var(--space-xs);
+            }
+
+            .docs-content {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 400px), 1fr)
+                );
+                gap: var(--space-m-l);
+                max-width: 72rem;
+                margin: 0 auto;
+            }
+
+            .docs-example {
+                background: var(--color-surface);
+                border-radius: 16px;
+                overflow: hidden;
+            }
+
+            .docs-example-header {
+                padding: var(--s0) var(--s1);
+                background: var(--color-surface-raised);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                align-items: center;
+                gap: var(--s-1);
+            }
+
+            .docs-example-header::before {
+                content: "";
+                display: flex;
+                gap: 6px;
+            }
+
+            .docs-example-header span {
+                font-size: var(--step--1);
+                color: var(--color-text-muted);
+                font-family: ui-monospace, monospace;
+            }
+
+            .docs-example pre {
+                padding: var(--s1); /* Static: consistent code padding */
+                margin: 0;
+                overflow-x: auto;
+                font-family: ui-monospace, "Fira Code", monospace;
+                font-size: var(--step--1);
+                line-height: 1.7;
+            }
+
+            .docs-example code {
+                color: var(--color-text);
+            }
+
+            .token-comment {
+                color: #6b7280;
+            }
+            .token-property {
+                color: var(--color-accent-light);
+            }
+            .token-value {
+                color: var(--color-gold);
+            }
+            .token-function {
+                color: var(--color-rose);
+            }
+
+            /* ============================================================
        SECTION: RATIO PLAYGROUND
        Interactive demo of static ratio switching
        ============================================================ */
-    .playground {
-      padding: var(--space-l-xl);
-      background: var(--color-surface);
-    }
-    
-    .playground-header {
-      text-align: center;
-      margin-bottom: var(--space-l);
-    }
-    
-    .playground-header h2 {
-      font-size: var(--step-4);
-      margin-bottom: var(--space-xs);
-    }
-    
-    .ratio-switcher {
-      display: flex;
-      justify-content: center;
-      gap: var(--space-xs);
-      margin-bottom: var(--space-l);
-      flex-wrap: wrap;
-    }
-    
-    .ratio-btn {
-      padding: var(--space-2xs) var(--space-s);
-      background: var(--color-surface-raised);
-      border: 2px solid transparent;
-      border-radius: 8px;
-      color: var(--color-text);
-      font-size: var(--step--1);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .ratio-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    
-    .ratio-btn.active {
-      border-color: var(--color-accent);
-      background: oklch(75% 0.18 168 / 0.1);
-    }
-    
-    .ratio-btn .ratio-value {
-      display: block;
-      font-size: var(--step--2);
-      color: var(--color-text-muted);
-      margin-top: 2px;
-    }
-    
-    .playground-demo {
-      --ratio: var(--ratio-fifth);
-      
-      /* Redefine scale locally so it responds to local --ratio changes */
-      --s-3: calc(var(--s-2) / var(--ratio));
-      --s-2: calc(var(--s-1) / var(--ratio));
-      --s-1: calc(var(--s0) / var(--ratio));
-      --s0: 1rem;
-      --s1: calc(var(--s0) * var(--ratio));
-      --s2: calc(var(--s1) * var(--ratio));
-      --s3: calc(var(--s2) * var(--ratio));
-      --s4: calc(var(--s3) * var(--ratio));
-      --s5: calc(var(--s4) * var(--ratio));
-      
-      max-width: 40rem;
-      margin: 0 auto;
-      background: var(--color-surface-raised);
-      border-radius: 16px;
-      padding: var(--s2);
-      transition: all 0.4s ease;
-    }
-    
-    .playground-demo.golden { --ratio: var(--ratio-golden); }
-    .playground-demo.silver { --ratio: var(--ratio-silver); }
-    .playground-demo.fifth { --ratio: var(--ratio-fifth); }
-    
-    .scale-visual {
-      display: flex;
-      flex-direction: column;
-      gap: var(--s-1);
-    }
-    
-    .scale-step {
-      display: flex;
-      align-items: center;
-      gap: var(--s0);
-    }
-    
-    .scale-step-label {
-      width: 4rem;
-      font-family: ui-monospace, monospace;
-      font-size: var(--step--2);
-      color: var(--color-text-muted);
-    }
-    
-    .scale-step-bar {
-      height: var(--s0);
-      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-dark));
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-    
-    .scale-step[data-step="-2"] .scale-step-bar { width: var(--s-2); }
-    .scale-step[data-step="-1"] .scale-step-bar { width: var(--s-1); }
-    .scale-step[data-step="0"] .scale-step-bar { width: var(--s0); }
-    .scale-step[data-step="1"] .scale-step-bar { width: var(--s1); }
-    .scale-step[data-step="2"] .scale-step-bar { width: var(--s2); }
-    .scale-step[data-step="3"] .scale-step-bar { width: var(--s3); }
-    .scale-step[data-step="4"] .scale-step-bar { width: var(--s4); }
-    
-    .scale-step-value {
-      font-family: ui-monospace, monospace;
-      font-size: var(--step--2);
-      color: var(--color-accent);
-      min-width: 5rem;
-    }
-    
-    /* ============================================================
+            .playground {
+                padding: var(--space-l-xl);
+                background: var(--color-surface);
+            }
+
+            .playground-header {
+                text-align: center;
+                margin-bottom: var(--space-l);
+            }
+
+            .playground-header h2 {
+                font-size: var(--step-4);
+                margin-bottom: var(--space-xs);
+            }
+
+            .ratio-switcher {
+                display: flex;
+                justify-content: center;
+                gap: var(--space-xs);
+                margin-bottom: var(--space-l);
+                flex-wrap: wrap;
+            }
+
+            .ratio-btn {
+                padding: var(--space-2xs) var(--space-s);
+                background: var(--color-surface-raised);
+                border: 2px solid transparent;
+                border-radius: 8px;
+                color: var(--color-text);
+                font-size: var(--step--1);
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .ratio-btn:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .ratio-btn.active {
+                border-color: var(--color-accent);
+                background: oklch(75% 0.18 168 / 0.1);
+            }
+
+            .ratio-btn .ratio-value {
+                display: block;
+                font-size: var(--step--2);
+                color: var(--color-text-muted);
+                margin-top: 2px;
+            }
+
+            .playground-demo {
+                --ratio: var(--ratio-fifth);
+
+                /* Redefine scale locally so it responds to local --ratio changes */
+                --s-3: calc(var(--s-2) / var(--ratio));
+                --s-2: calc(var(--s-1) / var(--ratio));
+                --s-1: calc(var(--s0) / var(--ratio));
+                --s0: 1rem;
+                --s1: calc(var(--s0) * var(--ratio));
+                --s2: calc(var(--s1) * var(--ratio));
+                --s3: calc(var(--s2) * var(--ratio));
+                --s4: calc(var(--s3) * var(--ratio));
+                --s5: calc(var(--s4) * var(--ratio));
+
+                max-width: 40rem;
+                margin: 0 auto;
+                background: var(--color-surface-raised);
+                border-radius: 16px;
+                padding: var(--s2);
+                transition: all 0.4s ease;
+            }
+
+            .playground-demo.golden {
+                --ratio: var(--ratio-golden);
+            }
+            .playground-demo.silver {
+                --ratio: var(--ratio-silver);
+            }
+            .playground-demo.fifth {
+                --ratio: var(--ratio-fifth);
+            }
+
+            .scale-visual {
+                display: flex;
+                flex-direction: column;
+                gap: var(--s-1);
+            }
+
+            .scale-step {
+                display: flex;
+                align-items: center;
+                gap: var(--s0);
+            }
+
+            .scale-step-label {
+                width: 4rem;
+                font-family: ui-monospace, monospace;
+                font-size: var(--step--2);
+                color: var(--color-text-muted);
+            }
+
+            .scale-step-bar {
+                height: var(--s0);
+                background: linear-gradient(
+                    90deg,
+                    var(--color-accent),
+                    var(--color-accent-dark)
+                );
+                border-radius: 4px;
+                transition: width 0.4s ease;
+            }
+
+            .scale-step[data-step="-2"] .scale-step-bar {
+                width: var(--s-2);
+            }
+            .scale-step[data-step="-1"] .scale-step-bar {
+                width: var(--s-1);
+            }
+            .scale-step[data-step="0"] .scale-step-bar {
+                width: var(--s0);
+            }
+            .scale-step[data-step="1"] .scale-step-bar {
+                width: var(--s1);
+            }
+            .scale-step[data-step="2"] .scale-step-bar {
+                width: var(--s2);
+            }
+            .scale-step[data-step="3"] .scale-step-bar {
+                width: var(--s3);
+            }
+            .scale-step[data-step="4"] .scale-step-bar {
+                width: var(--s4);
+            }
+
+            .scale-step-value {
+                font-family: ui-monospace, monospace;
+                font-size: var(--step--2);
+                color: var(--color-accent);
+                min-width: 5rem;
+            }
+
+            /* ============================================================
        FOOTER
        ============================================================ */
-    .footer {
-      padding: var(--space-l);
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .footer p {
-      color: var(--color-text-muted);
-      font-size: var(--step--1);
-    }
-    
-    .footer a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-    
-    /* ============================================================
+            .footer {
+                padding: var(--space-l);
+                text-align: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .footer p {
+                color: var(--color-text-muted);
+                font-size: var(--step--1);
+            }
+
+            .footer a {
+                color: var(--color-accent);
+                text-decoration: none;
+            }
+
+            /* ============================================================
        ANNOTATIONS (for demo purposes)
        ============================================================ */
-    .annotation {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5em;
-      background: oklch(50% 0.15 280 / 0.2);
-      border: 1px solid oklch(60% 0.15 280 / 0.3);
-      padding: 0.2em 0.6em;
-      border-radius: 4px;
-      font-size: var(--step--2);
-      font-family: ui-monospace, monospace;
-      color: oklch(80% 0.1 280);
-      margin-left: 0.5em;
-      vertical-align: middle;
-    }
-    
-    .annotation.fluid {
-      background: oklch(50% 0.15 168 / 0.2);
-      border-color: oklch(60% 0.15 168 / 0.3);
-      color: oklch(80% 0.1 168);
-    }
-    
-    .annotation.pair {
-      background: oklch(50% 0.15 45 / 0.2);
-      border-color: oklch(60% 0.15 45 / 0.3);
-      color: oklch(85% 0.12 45);
-    }
-    
-    .annotation.reverse {
-      background: oklch(50% 0.15 350 / 0.2);
-      border-color: oklch(60% 0.15 350 / 0.3);
-      color: oklch(85% 0.1 350);
-    }
-    
-    /* ============================================================
+            .annotation {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5em;
+                background: oklch(50% 0.15 280 / 0.2);
+                border: 1px solid oklch(60% 0.15 280 / 0.3);
+                padding: 0.2em 0.6em;
+                border-radius: 4px;
+                font-size: var(--step--2);
+                font-family: ui-monospace, monospace;
+                color: oklch(80% 0.1 280);
+                margin-left: 0.5em;
+                vertical-align: middle;
+            }
+
+            .annotation.fluid {
+                background: oklch(50% 0.15 168 / 0.2);
+                border-color: oklch(60% 0.15 168 / 0.3);
+                color: oklch(80% 0.1 168);
+            }
+
+            .annotation.pair {
+                background: oklch(50% 0.15 45 / 0.2);
+                border-color: oklch(60% 0.15 45 / 0.3);
+                color: oklch(85% 0.12 45);
+            }
+
+            .annotation.reverse {
+                background: oklch(50% 0.15 350 / 0.2);
+                border-color: oklch(60% 0.15 350 / 0.3);
+                color: oklch(85% 0.1 350);
+            }
+
+            /* ============================================================
        RESPONSIVE ANNOTATIONS
        ============================================================ */
-    @media (max-width: 600px) {
-      .annotation {
-        display: none;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="viewport-indicator">
-    <span id="vw">—</span>px
-  </div>
+            @media (max-width: 600px) {
+                .annotation {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="viewport-indicator"><span id="vw">—</span>px</div>
 
-  <!-- ============================================================
+        <!-- ============================================================
        HERO: Golden Ratio (dramatic impact) + Fluid Type + Space Pair
        ============================================================ -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">
-        Elvish CSS v2.0
-      </div>
-      <h1>
-        Where Fluid Meets Fixed
-        <span class="annotation fluid">--step-6</span>
-      </h1>
-      <p>
-        A demonstration of Utopia's fluid scales dancing with Every Layout's 
-        mathematical ratios. Resize your browser to see the magic.
-        <span class="annotation pair">--space-xl-3xl padding</span>
-      </p>
-      <div class="hero-cta">
-        <a href="#playground" class="btn btn-primary">Try the Playground</a>
-        <a href="#docs" class="btn btn-secondary">View Code</a>
-      </div>
-    </div>
-  </section>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">Elvish CSS v2.0</div>
+                <h1>
+                    Where Fluid Meets Fixed
+                    <span class="annotation fluid">--step-6</span>
+                </h1>
+                <p>
+                    A demonstration of dynamic fluid scales dancing with static
+                    mathematical ratios. Resize your browser to see the magic.
+                    <span class="annotation pair">--space-xl-3xl padding</span>
+                </p>
+                <div class="hero-cta">
+                    <a href="#playground" class="btn btn-primary"
+                        >Try the Playground</a
+                    >
+                    <a href="#docs" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+        </section>
 
-  <!-- ============================================================
+        <!-- ============================================================
        FEATURES: Fluid spacing with Space Pairs
        ============================================================ -->
-  <section class="features">
-    <div class="features-header">
-      <h2>Fluid Features <span class="annotation fluid">--step-4</span></h2>
-      <p>Cards with responsive gaps that breathe on larger screens</p>
-    </div>
-    
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🌊</div>
-        <h3>Fluid Typography</h3>
-        <p>Font sizes that interpolate smoothly between viewport widths. No more media query soup.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">📐</div>
-        <h3>Space Pairs <span class="annotation pair">gap</span></h3>
-        <p>Define two sizes—the browser interpolates. Tight on mobile, spacious on desktop.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h3>Reverse Pairs</h3>
-        <p>Counter-intuitive power: spacing that shrinks as viewport grows. Perfect for mobile-first.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">φ</div>
-        <h3>Golden Ratio</h3>
-        <p>Dramatic, organic proportions for hero sections and high-impact moments.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">√2</div>
-        <h3>Silver Ratio</h3>
-        <p>Dense, readable proportions. Perfect for data-heavy interfaces and documentation.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">♪</div>
-        <h3>Perfect Fifth</h3>
-        <p>Musical harmony—the balanced middle ground between drama and density.</p>
-      </div>
-    </div>
-  </section>
+        <section class="features">
+            <div class="features-header">
+                <h2>
+                    Fluid Features
+                    <span class="annotation fluid">--step-4</span>
+                </h2>
+                <p>Cards with responsive gaps that breathe on larger screens</p>
+            </div>
 
-  <!-- ============================================================
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌊</div>
+                    <h3>Fluid Typography</h3>
+                    <p>
+                        Font sizes that interpolate smoothly between viewport
+                        widths. No more media query soup.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📐</div>
+                    <h3>
+                        Space Pairs <span class="annotation pair">gap</span>
+                    </h3>
+                    <p>
+                        Define two sizes—the browser interpolates. Tight on
+                        mobile, spacious on desktop.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Reverse Pairs</h3>
+                    <p>
+                        Counter-intuitive power: spacing that shrinks as
+                        viewport grows. Perfect for mobile-first.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">φ</div>
+                    <h3>Golden Ratio</h3>
+                    <p>
+                        Dramatic, organic proportions for hero sections and
+                        high-impact moments.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">√2</div>
+                    <h3>Silver Ratio</h3>
+                    <p>
+                        Dense, readable proportions. Perfect for data-heavy
+                        interfaces and documentation.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">♪</div>
+                    <h3>Perfect Fifth</h3>
+                    <p>
+                        Musical harmony—the balanced middle ground between drama
+                        and density.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
        TESTIMONIAL: Reverse Pair (more breathing room on mobile)
        ============================================================ -->
-  <section class="testimonial">
-    <div class="testimonial-inner">
-      <blockquote>
-        On mobile, this quote needs room to breathe. On desktop, the surrounding 
-        context provides visual anchoring, so we can tighten up.
-        <span class="annotation reverse">--space-2xl-l padding</span>
-      </blockquote>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar"></div>
-        <div class="testimonial-info">
-          <div class="testimonial-name">The Reverse Pair Philosophy</div>
-          <div class="testimonial-role">Mobile-first thinking, encoded in CSS</div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <section class="testimonial">
+            <div class="testimonial-inner">
+                <blockquote>
+                    On mobile, this quote needs room to breathe. On desktop, the
+                    surrounding context provides visual anchoring, so we can
+                    tighten up.
+                    <span class="annotation reverse"
+                        >--space-2xl-l padding</span
+                    >
+                </blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar"></div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">
+                            The Reverse Pair Philosophy
+                        </div>
+                        <div class="testimonial-role">
+                            Mobile-first thinking, encoded in CSS
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- ============================================================
+        <!-- ============================================================
        PRICING: Silver Ratio (dense, scannable, readable)
        ============================================================ -->
-  <section class="pricing">
-    <div class="pricing-header">
-      <h2>Pricing <span class="annotation">Silver Ratio (√2)</span></h2>
-      <p>Dense information, comfortably readable. Static spacing for consistent scanning.</p>
-    </div>
-    
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pricing-tier">Starter</div>
-        <div class="pricing-price">$0 <span>/ month</span></div>
-        <ul class="pricing-features">
-          <li>Fluid type scale</li>
-          <li>Fluid space scale</li>
-          <li>Static modular scale</li>
-          <li>3 ratio presets</li>
-        </ul>
-        <a href="#" class="btn btn-secondary">Get Started</a>
-      </div>
-      
-      <div class="pricing-card featured">
-        <div class="pricing-tier">Professional</div>
-        <div class="pricing-price">$29 <span>/ month</span></div>
-        <ul class="pricing-features">
-          <li>Everything in Starter</li>
-          <li>Space pairs (one-up)</li>
-          <li>Custom space pairs</li>
-          <li>Reverse pairs</li>
-          <li>Container query variants</li>
-        </ul>
-        <a href="#" class="btn btn-primary">Start Free Trial</a>
-      </div>
-      
-      <div class="pricing-card">
-        <div class="pricing-tier">Enterprise</div>
-        <div class="pricing-price">$99 <span>/ month</span></div>
-        <ul class="pricing-features">
-          <li>Everything in Pro</li>
-          <li>Custom ratio presets</li>
-          <li>Priority support</li>
-          <li>Figma plugin</li>
-          <li>Team collaboration</li>
-        </ul>
-        <a href="#" class="btn btn-secondary">Contact Sales</a>
-      </div>
-    </div>
-  </section>
+        <section class="pricing">
+            <div class="pricing-header">
+                <h2>
+                    Pricing <span class="annotation">Silver Ratio (√2)</span>
+                </h2>
+                <p>
+                    Dense information, comfortably readable. Static spacing for
+                    consistent scanning.
+                </p>
+            </div>
 
-  <!-- ============================================================
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-price">$0 <span>/ month</span></div>
+                    <ul class="pricing-features">
+                        <li>Fluid type scale</li>
+                        <li>Fluid space scale</li>
+                        <li>Static modular scale</li>
+                        <li>3 static ratio presets</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get Started</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-price">$5 <span>/ month</span></div>
+                    <ul class="pricing-features">
+                        <li>Everything in Starter</li>
+                        <li>Space pairs (one-up)</li>
+                        <li>Custom space pairs</li>
+                        <li>Reverse pairs</li>
+                        <li>Container query variants</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Contact Us</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Pro</li>
+                        <li>Custom ratio presets</li>
+                        <li>Priority support</li>
+                        <li>Figma plugin</li>
+                        <li>Team collaboration</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
        DOCS: Fifth Ratio (balanced, technical)
        ============================================================ -->
-  <section class="docs" id="docs">
-    <div class="docs-header">
-      <h2>Code Examples <span class="annotation">Fifth Ratio (1.5)</span></h2>
-      <p>Balanced proportions for technical documentation</p>
-    </div>
-    
-    <div class="docs-content">
-      <div class="docs-example">
-        <div class="docs-example-header">
-          <span>fluid-typography.css</span>
-        </div>
-        <pre><code><span class="token-comment">/* Fluid: scales with viewport */</span>
+        <section class="docs" id="docs">
+            <div class="docs-header">
+                <h2>
+                    Code Examples
+                    <span class="annotation">Fifth Ratio (1.5)</span>
+                </h2>
+                <p>Balanced proportions for technical documentation</p>
+            </div>
+
+            <div class="docs-content">
+                <div class="docs-example">
+                    <div class="docs-example-header">
+                        <span>fluid-typography.css</span>
+                    </div>
+                    <pre><code><span class="token-comment">/* Fluid: scales with viewport */</span>
 <span class="token-property">h1</span> { <span class="token-property">font-size</span>: <span class="token-function">var</span>(<span class="token-value">--step-5</span>); }
 <span class="token-property">h2</span> { <span class="token-property">font-size</span>: <span class="token-function">var</span>(<span class="token-value">--step-4</span>); }
 <span class="token-property">body</span> { <span class="token-property">font-size</span>: <span class="token-function">var</span>(<span class="token-value">--step-0</span>); }
@@ -929,13 +1049,13 @@
 
 <span class="token-comment">/* Result: 18px → 20px base,
    scaling proportionally */</span></code></pre>
-      </div>
-      
-      <div class="docs-example">
-        <div class="docs-example-header">
-          <span>space-pairs.css</span>
-        </div>
-        <pre><code><span class="token-comment">/* Space Pair: two sizes, one variable */</span>
+                </div>
+
+                <div class="docs-example">
+                    <div class="docs-example-header">
+                        <span>space-pairs.css</span>
+                    </div>
+                    <pre><code><span class="token-comment">/* Space Pair: two sizes, one variable */</span>
 <span class="token-property">.hero</span> {
   <span class="token-property">padding</span>: <span class="token-function">var</span>(<span class="token-value">--space-xl-3xl</span>);
   <span class="token-comment">/* 54px on mobile → 120px on desktop */</span>
@@ -945,13 +1065,13 @@
   <span class="token-property">gap</span>: <span class="token-function">var</span>(<span class="token-value">--space-s-l</span>);
   <span class="token-comment">/* 18px tight → 40px spacious */</span>
 }</code></pre>
-      </div>
-      
-      <div class="docs-example">
-        <div class="docs-example-header">
-          <span>reverse-pairs.css</span>
-        </div>
-        <pre><code><span class="token-comment">/* Reverse: SHRINKS as viewport grows */</span>
+                </div>
+
+                <div class="docs-example">
+                    <div class="docs-example-header">
+                        <span>reverse-pairs.css</span>
+                    </div>
+                    <pre><code><span class="token-comment">/* Reverse: SHRINKS as viewport grows */</span>
 <span class="token-property">.quote</span> {
   <span class="token-property">padding</span>: <span class="token-function">var</span>(<span class="token-value">--space-2xl-l</span>);
   <span class="token-comment">/* 72px mobile → 40px desktop */</span>
@@ -962,13 +1082,13 @@
   <span class="token-property">gap</span>: <span class="token-function">var</span>(<span class="token-value">--space-l-s</span>);
   <span class="token-comment">/* Touch-friendly → mouse-friendly */</span>
 }</code></pre>
-      </div>
-      
-      <div class="docs-example">
-        <div class="docs-example-header">
-          <span>static-ratios.css</span>
-        </div>
-        <pre><code><span class="token-comment">/* Static: same size at ALL viewports */</span>
+                </div>
+
+                <div class="docs-example">
+                    <div class="docs-example-header">
+                        <span>static-ratios.css</span>
+                    </div>
+                    <pre><code><span class="token-comment">/* Static: same size at ALL viewports */</span>
 <span class="token-property">.pricing</span> {
   <span class="token-property">--ratio</span>: <span class="token-function">var</span>(<span class="token-value">--ratio-silver</span>);
   <span class="token-property">padding</span>: <span class="token-function">var</span>(<span class="token-value">--s2</span>);
@@ -979,128 +1099,127 @@
   <span class="token-property">--ratio</span>: <span class="token-function">var</span>(<span class="token-value">--ratio-golden</span>);
   <span class="token-comment">/* Dramatic proportions */</span>
 }</code></pre>
-      </div>
-    </div>
-  </section>
+                </div>
+            </div>
+        </section>
 
-  <!-- ============================================================
+        <!-- ============================================================
        PLAYGROUND: Interactive ratio switching
        ============================================================ -->
-  <section class="playground" id="playground">
-    <div class="playground-header">
-      <h2>Ratio Playground</h2>
-      <p>Click to see how the static scale changes with different ratios</p>
-    </div>
-    
-    <div class="ratio-switcher">
-      <button class="ratio-btn" data-ratio="golden">
-        Golden
-        <span class="ratio-value">φ = 1.618</span>
-      </button>
-      <button class="ratio-btn active" data-ratio="fifth">
-        Fifth
-        <span class="ratio-value">1.5</span>
-      </button>
-      <button class="ratio-btn" data-ratio="silver">
-        Silver
-        <span class="ratio-value">√2 = 1.414</span>
-      </button>
-    </div>
-    
-    <div class="playground-demo fifth">
-      <div class="scale-visual">
-        <div class="scale-step" data-step="-2">
-          <span class="scale-step-label">--s-2</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="-1">
-          <span class="scale-step-label">--s-1</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="0">
-          <span class="scale-step-label">--s0</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="1">
-          <span class="scale-step-label">--s1</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="2">
-          <span class="scale-step-label">--s2</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="3">
-          <span class="scale-step-label">--s3</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-        <div class="scale-step" data-step="4">
-          <span class="scale-step-label">--s4</span>
-          <div class="scale-step-bar"></div>
-          <span class="scale-step-value"></span>
-        </div>
-      </div>
-    </div>
-  </section>
+        <section class="playground" id="playground">
+            <div class="playground-header">
+                <h2>Ratio Playground</h2>
+                <p>
+                    Click to see how the static scale changes with different
+                    ratios
+                </p>
+            </div>
 
-  <!-- ============================================================
+            <div class="ratio-switcher">
+                <button class="ratio-btn" data-ratio="golden">
+                    Golden
+                    <span class="ratio-value">φ = 1.618</span>
+                </button>
+                <button class="ratio-btn active" data-ratio="fifth">
+                    Fifth
+                    <span class="ratio-value">1.5</span>
+                </button>
+                <button class="ratio-btn" data-ratio="silver">
+                    Silver
+                    <span class="ratio-value">√2 = 1.414</span>
+                </button>
+            </div>
+
+            <div class="playground-demo fifth">
+                <div class="scale-visual">
+                    <div class="scale-step" data-step="-2">
+                        <span class="scale-step-label">--s-2</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="-1">
+                        <span class="scale-step-label">--s-1</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="0">
+                        <span class="scale-step-label">--s0</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="1">
+                        <span class="scale-step-label">--s1</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="2">
+                        <span class="scale-step-label">--s2</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="3">
+                        <span class="scale-step-label">--s3</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                    <div class="scale-step" data-step="4">
+                        <span class="scale-step-label">--s4</span>
+                        <div class="scale-step-bar"></div>
+                        <span class="scale-step-value"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
        FOOTER
        ============================================================ -->
-  <footer class="footer">
-    <p>
-      Built with <a href="#">Elvish CSS</a> — Fluid scales from 
-      <a href="https://utopia.fyi">Utopia</a>, layout philosophy from 
-      <a href="https://every-layout.dev">Every Layout</a>
-    </p>
-  </footer>
+        <footer class="footer">
+            <p>Built with <a href="#">Elvish CSS</a></p>
+        </footer>
 
-  <script>
-    // Viewport indicator
-    function updateVW() {
-      document.getElementById('vw').textContent = window.innerWidth;
-    }
-    updateVW();
-    window.addEventListener('resize', updateVW);
-    
-    // Ratio switcher
-    const demo = document.querySelector('.playground-demo');
-    const buttons = document.querySelectorAll('.ratio-btn');
-    
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        demo.classList.remove('golden', 'silver', 'fifth');
-        demo.classList.add(btn.dataset.ratio);
-        
-        updateScaleValues();
-      });
-    });
-    
-    // Update scale values display
-    function updateScaleValues() {
-      const steps = document.querySelectorAll('.scale-step');
-      steps.forEach(step => {
-        const bar = step.querySelector('.scale-step-bar');
-        const valueEl = step.querySelector('.scale-step-value');
-        const computed = getComputedStyle(bar).width;
-        valueEl.textContent = computed;
-      });
-    }
-    
-    // Initial update
-    setTimeout(updateScaleValues, 100);
-    
-    // Update on resize for fluid values elsewhere
-    window.addEventListener('resize', () => {
-      updateScaleValues();
-    });
-  </script>
-</body>
+        <script>
+            // Viewport indicator
+            function updateVW() {
+                document.getElementById("vw").textContent = window.innerWidth;
+            }
+            updateVW();
+            window.addEventListener("resize", updateVW);
+
+            // Ratio switcher
+            const demo = document.querySelector(".playground-demo");
+            const buttons = document.querySelectorAll(".ratio-btn");
+
+            buttons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    buttons.forEach((b) => b.classList.remove("active"));
+                    btn.classList.add("active");
+
+                    demo.classList.remove("golden", "silver", "fifth");
+                    demo.classList.add(btn.dataset.ratio);
+
+                    updateScaleValues();
+                });
+            });
+
+            // Update scale values display
+            function updateScaleValues() {
+                const steps = document.querySelectorAll(".scale-step");
+                steps.forEach((step) => {
+                    const bar = step.querySelector(".scale-step-bar");
+                    const valueEl = step.querySelector(".scale-step-value");
+                    const computed = getComputedStyle(bar).width;
+                    valueEl.textContent = computed;
+                });
+            }
+
+            // Initial update
+            setTimeout(updateScaleValues, 100);
+
+            // Update on resize for fluid values elsewhere
+            window.addEventListener("resize", () => {
+                updateScaleValues();
+            });
+        </script>
+    </body>
 </html>
